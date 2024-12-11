@@ -1,0 +1,24 @@
+Package: fluxfixer
+Type: Package
+Title: Post-processing Sap Flow Data
+Version: 0.0.0.9000
+Authors@R: person("Yoshiaki", "Hata", email = "yoshiakihata0806@gmail.com",
+  role = c("aut", "cre"))
+Author: Yoshiaki Hata
+Maintainer: Yoshiaki Hata <yoshiakihata0806@gmail.com>
+Description: Post-processing Sap Flow Data.
+    See the fluxfixer website for more information, documentation and examples.
+License: GPL-3
+Encoding: UTF-8
+LazyData: true
+Imports: 
+    dplyr (>= 1.0.7),
+    gsignal (>= 0.3-4),
+    lubridate (>= 1.7.9),
+    ranger (>= 0.13.1),
+    tidyr (>= 1.1.4),
+    xts (>= 0.12.1),
+    zoo (>= 1.8-8)
+RoxygenNote: 7.1.2
+Depends: 
+    R (>= 2.10)
