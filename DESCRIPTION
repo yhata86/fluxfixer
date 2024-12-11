@@ -8,7 +8,7 @@ Author: Yoshiaki Hata
 Maintainer: Yoshiaki Hata <yoshiakihata0806@gmail.com>
 Description: Post-processing Sap Flow Data.
     See the fluxfixer website for more information, documentation and examples.
-License: GPL-3
+License: MIT
 Encoding: UTF-8
 LazyData: true
 Imports: 
@@ -22,3 +22,5 @@ Imports:
 RoxygenNote: 7.1.2
 Depends: 
     R (>= 2.10)
+URL: https://github.com/yhata86/fluxfixer
+BugReports: https://github.com/yhata86/fluxfixer/issues
