@@ -63,7 +63,7 @@ calc_dtmax_pd_ed <-
       wndw <-
         all_data %>%
         dplyr::filter(time >= wndw_head & time <= wndw_tail & !is.na(dT) &
-                        hour(time_lag) < thres_hour &
+                        lubridate::hour(time_lag) < thres_hour &
                         Rs_in < thres_rs)
 
       if(nrow(wndw) < min_n_wndw) next
@@ -226,7 +226,8 @@ calc_dtmax_30min <-
 
     daily_dTmax_FV <-
       data %>%
-      dplyr::transmute(time_0500 = time - hours(5) - minutes(30),
+      dplyr::transmute(time_0500 = time - lubridate::hours(5) -
+                         lubridate::minutes(30),
                        dt = dt) %>%
       zoo::read.zoo() %>%
       xts::as.xts(tzone = timezone) %>%
@@ -268,8 +269,8 @@ calc_dtmax_30min <-
     dTmax <-
       data %>%
       dplyr::select(time, dt) %>%
-      dplyr::mutate(time_0500 = time - hours(5) - minutes(30),
-                    time_lag = time - minutes(30)) %>%
+      dplyr::mutate(time_0500 = time - lubridate::hours(5) - lubridate::minutes(30),
+                    time_lag = time - lubridate::minutes(30)) %>%
       merge.data.frame(., daily_dTmax_FV, by.x = "time_0500", by.y = "time",
                        all = TRUE) %>%
       merge.data.frame(., daily_dTmax_PD_MW_DA_DR_ED,
