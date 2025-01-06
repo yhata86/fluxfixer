@@ -82,7 +82,7 @@ rf_cv <- function(df, name_label,
     }
   }
 
-  print("Cross varidation was finished.")
+  message("Cross varidation was finished.")
   return(CV_result)
 }
 
@@ -159,7 +159,7 @@ rf_est <-
                      replace = rf_replace,
                      seed = ran_seed)
 
-    print("Random forest construction finished.")
+    message("Random forest construction finished.")
 
     MSE_test <-
       predict(RF_dT,
@@ -203,7 +203,7 @@ rf_est <-
         data.frame(avg = .)
     }
 
-    print("Random forest prediction finished.")
+    message("Random forest prediction finished.")
 
     list(MSE = MSE_test, stats = df_output) %>% return()
   }

@@ -222,7 +222,7 @@ calc_dtmax_30min <-
                        VPD = vctr_vpd)
 
     ## FV dTmax calculation
-    print("FV dTmax calculaton started.")
+    message("FV dTmax calculaton started.")
 
     daily_dTmax_FV <-
       data %>%
@@ -238,26 +238,26 @@ calc_dtmax_30min <-
       dplyr::rename(time = Index, dtmax_fv = ".") %>%
       dplyr::mutate(dtmax_fv = zoo::na.approx(dtmax_fv, na.rm = FALSE))
 
-    print("FV dTmax calculaton finished.")
+    message("FV dTmax calculaton finished.")
 
     ## PD and ED dTmax calculation
-    print("PD and ED dTmax calculaton started.")
+    message("PD and ED dTmax calculaton started.")
 
     daily_dTmax_PD_ED <-
       calc_dtmax_pd_ed(data$time, data$dt, data$Rs_in, data$VPD)
 
-    print("PD and ED dTmax calculaton finished.")
+    message("PD and ED dTmax calculaton finished.")
 
     ## MW, DA, and DR dTmax calculations
-    print("MW, DA, and DR dTmax calculaton started.")
+    message("MW, DA, and DR dTmax calculaton started.")
 
     daily_dTmax_MW_DA_DR <-
       calc_dtmax_mw_da_dr(daily_dTmax_PD_ED$time, daily_dTmax_PD_ED$dTmax_PD)
 
-    print("MW, DA, and DR dTmax calculatons finished.")
+    message("MW, DA, and DR dTmax calculatons finished.")
 
     ## aggregate estimated values
-    print("dTmax time series aggregation started.")
+    message("dTmax time series aggregation started.")
     daily_dTmax_PD_MW_DA_DR_ED <-
       data.frame(time_lag = daily_dTmax_PD_ED$time,
                  dtmax_pd = daily_dTmax_PD_ED$dTmax_PD,
@@ -280,7 +280,7 @@ calc_dtmax_30min <-
       dplyr::select(time, dt,
                     dtmax_fv, dtmax_pd, dtmax_mw, dtmax_da, dtmax_dr, dtmax_ed)
 
-    print("dTmax time series aggregation finished.")
+    message("dTmax time series aggregation finished.")
 
     ## output
     return(dTmax)

@@ -50,7 +50,7 @@ remove_outlier <-
            filter_noise = FALSE, wndw_size_noise = 13,
            inv_sigma_gauss_noise = 0.01) {
 
-    print("Outlier removal process started.")
+    message("Outlier removal process started.")
 
     time_head_mea <- vctr_time[1]
     time_tail_mea <- vctr_time[length(vctr_time)]
@@ -62,7 +62,7 @@ remove_outlier <-
                     dT_mod1 = ifelse(dT > thres_max_dt, -9999, dT_mod1),
                     dT_mod2 = dT_mod1)
 
-    print("Abnormally low dT values were removed.")
+    message("Abnormally low dT values were removed.")
 
     if(!is.null(list_time_err_head)) {
       for (i in 1:length(list_time_err_head)) {
@@ -73,7 +73,7 @@ remove_outlier <-
                                          dT_mod2))
       }
 
-      print("Manually specified error values were removed.")
+      message("Manually specified error values were removed.")
     }
 
     data_dT <- data_dT %>% dplyr::mutate(dT_mod3 = dT_mod2)
@@ -125,7 +125,7 @@ remove_outlier <-
                                          dT_mod2_drft_mod, dT_mod3))
       }
 
-      print("Short-term drift correction was finished.")
+      message("Short-term drift correction was finished.")
     }
 
     ## filter noise
@@ -139,13 +139,13 @@ remove_outlier <-
         dplyr::mutate(dT_mod3 = gsignal::conv(dT_mod3, g_filter,
                                               shape = "same"))
 
-      print("Filtering white noise was finished.")
+      message("Filtering white noise was finished.")
     } else {
-      print("Filtering white noise was skipped.")
+      message("Filtering white noise was skipped.")
     }
 
     ## separate each sub-period and normalize time series to remove outliers
-    print("z-score outlier removal started.")
+    message("z-score outlier removal started.")
 
     n_valid <- function(vctr) { length(na.omit(vctr)) }
     data_dT <-
@@ -216,12 +216,12 @@ remove_outlier <-
       n_outliers <- data_dT %>% dplyr::pull(flag_out_z) %>% sum()
 
       if(n_outliers > 1) {
-        print(paste0(n_outliers,
-                     " z-score outliers were detected. Continue this process."))
+        message(n_outliers,
+                " z-score outliers were detected. Continue this process.")
       } else if(n_outliers == 1) {
-        print("1 z-score outlier was detected. Continue this process.")
+        message("1 z-score outlier was detected. Continue this process.")
       } else {
-        print("No z-score outlier was detected.")
+        message("No z-score outlier was detected.")
       }
     }
 
@@ -229,7 +229,7 @@ remove_outlier <-
       data_dT %>%
       tidyr::replace_na(replace = list(dT_z = -9999))
 
-    print("z-score outlier removal finished.")
+    message("z-score outlier removal finished.")
 
     ## correct z-score time series during short damping periods
 
@@ -296,7 +296,7 @@ remove_outlier <-
           dplyr::pull(time)
 
         if(length(list_time_sd_peak) <= 1) {
-          print("There are less than two peaks.")
+          message("There are less than two peaks.")
           break
         }
 
@@ -368,7 +368,7 @@ remove_outlier <-
           dplyr::filter(ratio < thres_ratio_damp) %>%
           pull(time_end)
 
-        print(paste0("Short damping periods were detected at ",
+        message("Short damping periods were detected at ",
                      list_time_damp_head))
 
         for (i_damp in n_damp) {
@@ -425,13 +425,12 @@ remove_outlier <-
     dT_avg_ref <- median(list_dT_avg_ref, na.rm = TRUE)
     dT_sd_ref <- median(list_dT_sd_ref, na.rm = TRUE)
 
-    print("Refenrence values for correcting long-term shifting were determined.")
-    print(paste0("Refenrence value for dT average: ",
-                 round(dT_avg_ref, digits = 5)))
-    print(paste0("Refenrence value for dT standard deviation: ",
-                 round(dT_sd_ref, digits = 5)))
+    message("Refenrence values for correcting long-term shifting were determined.")
+    message("Refenrence value for dT average: ", round(dT_avg_ref, digits = 5))
+    message("Refenrence value for dT standard deviation: ",
+            round(dT_sd_ref, digits = 5))
 
-    print("Outlier removal process was finished successfully.")
+    message("Outlier removal process was finished successfully.")
     return(data_dT)
   }
 
