@@ -11,29 +11,25 @@
 #' @param list_subsample Subsample ratio
 #' @param list_feature list vector of feature variables
 #' @param rf_replace replace sampling of non-replace sampling in random forest
-#' @param rf_predict_all do prediction by constructed random forest
 #' @param frac_train Fraction of training data set sampling
 #' @param ran_seed Random seed of random forest
+#' @param nfold To be filled!
 #' @param ntree The number of trees in random forest
 #' @param err The label of error or missing values
-#'
-#' @examples
-#' # Construct random forest structure
-#' result <-
-#'   rf_est(df, name_label, min_nodesize, m_try, subsample, list_feature,
-#'          rf_replace = TRUE, rf_predict_all = FALSE,
-#'          frac_train = 0.75, ran_seed = 12345, ntree = 500, err = -9999)
 
 ## cross validation function
 rf_cv <- function(df, name_label,
-                  list_min_nodesize, list_mtry, list_subsample,
+                  list_min_nodesize, list_m_try, list_subsample,
                   list_feature, rf_replace = TRUE, frac_train = 0.75,
                   nfold = 10, ntree = 500, ran_seed = 12345, err = -9999) {
+  ## avoid "No visible binding for global variable" notes
+  . <- NULL
+
   ## settings
   set.seed(ran_seed)
 
   ## filter data
-  data <- df %>% dplyr::filter(!!sym(name_label) != err)
+  data <- df %>% dplyr::filter(!!rlang::sym(name_label) != err)
 
   n_data <- nrow(data)
   rownum_train <- sample(n_data, size = n_data * frac_train)
@@ -41,18 +37,18 @@ rf_cv <- function(df, name_label,
 
   train_feature <-
     train %>%
-    dplyr::select(all_of(list_feature)) %>%
+    dplyr::select(dplyr::all_of(list_feature)) %>%
     as.matrix()
   train_target <-
     train %>%
-    dplyr::select(all_of(name_label)) %>%
+    dplyr::select(dplyr::all_of(name_label)) %>%
     as.matrix()
 
   CV_result <- data.frame(NULL)
 
   ## start CV
   for (i_min_nodesize in 1:length(list_min_nodesize)) {
-    for (i_mtry in 1:length(list_mtry)) {
+    for (i_mtry in 1:length(list_m_try)) {
       for (i_subsample in 1:length(list_subsample)) {
         list_MSE_OOB <- NULL
         for (i_nfold in 1:nfold) {
@@ -60,7 +56,7 @@ rf_cv <- function(df, name_label,
             ranger::ranger(x = train_feature,
                            y = train_target,
                            min.node.size = list_min_nodesize[i_min_nodesize],
-                           mtry = list_mtry[i_mtry],
+                           mtry = list_m_try[i_mtry],
                            sample.fraction = list_subsample[i_subsample],
                            replace = rf_replace,
                            num.trees = ntree,
@@ -69,7 +65,7 @@ rf_cv <- function(df, name_label,
         }
         CV_result <-
           data.frame(min_nodesize = list_min_nodesize[i_min_nodesize],
-                     mtry = list_mtry[i_mtry],
+                     mtry = list_m_try[i_mtry],
                      subsample = list_subsample[i_subsample],
                      ntree = ntree,
                      MSE_OOB = mean(list_MSE_OOB)) %>%
@@ -106,23 +102,28 @@ rf_cv <- function(df, name_label,
 #' @param ran_seed Random seed of random forest
 #' @param ntree The number of trees in random forest
 #' @param err The label of error or missing values
-#'
-#' @examples
-#' # Construct random forest structure
-#' result <-
-#'   rf_est(df, name_label, min_nodesize, m_try, subsample, list_feature,
-#'          rf_replace = TRUE, rf_predict_all = FALSE,
-#'          frac_train = 0.75, ran_seed = 12345, ntree = 500, err = -9999)
 
 rf_est <-
   function(df, name_label, min_nodesize, m_try, subsample, list_feature,
            rf_replace = TRUE, rf_predict_all = FALSE,
            frac_train = 0.75, ran_seed = 12345, ntree = 500, err = -9999) {
+    ## avoid "No visible binding for global variable" notes
+    . <- NULL
+    target <- NULL
+    avg <- NULL
+    SE <- NULL
+    target_noisy <- NULL
+    coef_IQR <- NULL
+    flag_out <- NULL
+    Q1 <- NULL
+    Q3 <- NULL
+    IQR <- NULL
+
     ## settings
     set.seed(ran_seed)
 
     ## filter data
-    data <- df %>% dplyr::filter(!!sym(name_label) != err)
+    data <- df %>% dplyr::filter(!!rlang::sym(name_label) != err)
 
     ## create train and test data set
     n_data <- nrow(data)
@@ -132,20 +133,20 @@ rf_est <-
 
     train_feature <-
       train %>%
-      dplyr::select(all_of(list_feature)) %>%
+      dplyr::select(dplyr::all_of(list_feature)) %>%
       as.matrix()
     train_target <-
       train %>%
-      dplyr::select(all_of(name_label)) %>%
+      dplyr::select(dplyr::all_of(name_label)) %>%
       as.matrix()
 
     test_feature <-
       test %>%
-      dplyr::select(all_of(list_feature)) %>%
+      dplyr::select(dplyr::all_of(list_feature)) %>%
       as.matrix()
     test_target <-
       test %>%
-      dplyr::select(all_of(name_label)) %>%
+      dplyr::select(dplyr::all_of(name_label)) %>%
       as.matrix()
 
     ## construct random forest
@@ -162,9 +163,9 @@ rf_est <-
     message("Random forest construction finished.")
 
     MSE_test <-
-      predict(RF_dT,
-              data = test_feature,
-              predict.all = FALSE) %>%
+      stats::predict(RF_dT,
+                     data = test_feature,
+                     predict.all = FALSE) %>%
       .$predictions %>%
       data.frame(avg = .) %>%
       dplyr::mutate(target = test_target,
@@ -172,22 +173,22 @@ rf_est <-
       dplyr::summarise(MSE = mean(SE))
 
     pred_dT <-
-      predict(RF_dT,
-              data = df,
-              predict.all = rf_predict_all)
+      stats::predict(RF_dT,
+                     data = df,
+                     predict.all = rf_predict_all)
 
     if(rf_predict_all == TRUE) {
       df_output <-
         pred_dT$predictions %>%
         as.data.frame() %>%
-        dplyr::transmute(med = apply(., MARGIN = 1, FUN = median),
-                         Q1 = apply(., MARGIN = 1, FUN = quantile,
+        dplyr::transmute(med = apply(., MARGIN = 1, FUN = stats::median),
+                         Q1 = apply(., MARGIN = 1, FUN = stats::quantile,
                                     probs = 0.25),
-                         Q3 = apply(., MARGIN = 1, FUN = quantile,
+                         Q3 = apply(., MARGIN = 1, FUN = stats::quantile,
                                     probs = 0.75),
                          IQR = Q3 - Q1)
 
-      df_output$target_noisy <- dplyr::pull(df, !!sym(name_label))
+      df_output$target_noisy <- dplyr::pull(df, !!rlang::sym(name_label))
 
       df_output <-
         df_output %>%

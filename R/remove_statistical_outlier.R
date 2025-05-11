@@ -21,24 +21,7 @@
 #' @param wndw_size_noise Window size of gaussian window
 #' @param inv_sigma_gauss_noise Parameter for gaussian window
 #'
-#' @examples
-#' # Remove outliers
-#' library(lubridate)
-#'
-#' time_test <- dt_noisy$time
-#' dt_test <- dt_noisy$dt
-#'
-#' prd_tail <- list(ymd_hm("2013/05/14 13:00"))
-#' err_head <- list(ymd_hm("2013/05/14 13:00"),
-#'                  ymd_hm("2016/12/14 12:30"))
-#' err_tail <- list(ymd_hm("2013/05/14 13:00"),
-#'                  ymd_hm("2016/12/14 21:00"))
-#' drft_head <- list(ymd_hm("2013/05/14 13:30"))
-#' drft_tail <- list(ymd_hm("2013/05/17 15:00"))
-#'
-#' result <-
-#'   remove_outlier(time_test, dt_test, prd_tail, err_head, err_tail,
-#'                  drft_head, drft_tail)
+#' @importFrom rlang :=
 
 remove_outlier <-
   function(vctr_time, vctr_dt, list_time_prd_tail,
@@ -49,6 +32,33 @@ remove_outlier <-
            thres_z = 5.0, check_damping = TRUE, thres_ratio_damp = 0.5,
            filter_noise = FALSE, wndw_size_noise = 13,
            inv_sigma_gauss_noise = 0.01) {
+    ## avoid "No visible binding for global variable" notes
+    dT <- NULL
+    dT_mod1 <- NULL
+    time <- NULL
+    dT_mod2 <- NULL
+    q05_drft <- NULL
+    . <- NULL
+    q95_drft <- NULL
+    q05_ref <- NULL
+    q95_ref <- NULL
+    dT_mod2_drft_mod <- NULL
+    dT_mod3 <- NULL
+    dT_mod4 <- NULL
+    dT_mod4_prd <- NULL
+    dT_n_prd <- NULL
+    dT_avg_prd <- NULL
+    dT_sd_prd <- NULL
+    dT_avg <- NULL
+    dT_sd <- NULL
+    dT_z_prd <- NULL
+    dT_z <- NULL
+    flag_out_z <- NULL
+    ratio <- NULL
+    time_start <- NULL
+    time_end <- NULL
+    dT_z_prd <- NULL
+
 
     message("Outlier removal process started.")
 
@@ -68,7 +78,7 @@ remove_outlier <-
       for (i in 1:length(list_time_err_head)) {
         data_dT <-
           data_dT %>%
-          dplyr::mutate(dT_mod2 = ifelse(between(time, list_time_err_head[[i]],
+          dplyr::mutate(dT_mod2 = ifelse(dplyr::between(time, list_time_err_head[[i]],
                                                  list_time_err_tail[[i]]), -9999,
                                          dT_mod2))
       }
@@ -85,33 +95,33 @@ remove_outlier <-
 
         data_dT <-
           data_dT %>%
-          dplyr::mutate(!!colname_drft := ifelse(between(time,
+          dplyr::mutate(!!colname_drft := ifelse(dplyr::between(time,
                                                          list_time_drft_head[[i]],
                                                          list_time_drft_tail[[i]]),
                                                  dT_mod2, -9999),
-                        !!colname_ref := ifelse(between(time,
+                        !!colname_ref := ifelse(dplyr::between(time,
                                                         list_time_drft_head[[i]] -
                                                           lubridate::days(3),
                                                         list_time_drft_head[[i]] -
                                                           lubridate::minutes(30)) |
-                                                  between(time,
+                                                  dplyr::between(time,
                                                           list_time_drft_tail[[i]] +
                                                             lubridate::minutes(30),
                                                           list_time_drft_tail[[i]] +
-                                                            days(3)),
+                                                            lubridate::days(3)),
                                                 dT_mod2, -9999)) %>%
           dplyr::na_if(-9999)
 
         ## calculate 5th and 95th percentile for drift correction
         data_dT %>% {
           dplyr::pull(., !!colname_drft) %>%
-            quantile(0.05, na.rm = TRUE, names = FALSE) ->> q05_drft
+            stats::quantile(0.05, na.rm = TRUE, names = FALSE) ->> q05_drft
           dplyr::pull(., !!colname_drft) %>%
-            quantile(0.95, na.rm = TRUE, names = FALSE) ->> q95_drft
+            stats::quantile(0.95, na.rm = TRUE, names = FALSE) ->> q95_drft
           dplyr::pull(., !!colname_ref) %>%
-            quantile(0.05, na.rm = TRUE, names = FALSE) ->> q05_ref
+            stats::quantile(0.05, na.rm = TRUE, names = FALSE) ->> q05_ref
           dplyr::pull(., !!colname_ref) %>%
-            quantile(0.95, na.rm = TRUE, names = FALSE) ->> q95_ref
+            stats::quantile(0.95, na.rm = TRUE, names = FALSE) ->> q95_ref
         }
 
         ## drift correction
@@ -120,7 +130,7 @@ remove_outlier <-
           dplyr::mutate(dT_mod2_drft_mod =
                           (get(colname_drft) - q05_drft) / (q95_drft - q05_drft) *
                           (q95_ref - q05_ref) + q05_ref,
-                        dT_mod3 = ifelse(between(time, list_time_drft_head[[i]],
+                        dT_mod3 = ifelse(dplyr::between(time, list_time_drft_head[[i]],
                                                  list_time_drft_tail[[i]]),
                                          dT_mod2_drft_mod, dT_mod3))
       }
@@ -147,7 +157,7 @@ remove_outlier <-
     ## separate each sub-period and normalize time series to remove outliers
     message("z-score outlier removal started.")
 
-    n_valid <- function(vctr) { length(na.omit(vctr)) }
+    n_valid <- function(vctr) { length(stats::na.omit(vctr)) }
     data_dT <-
       data_dT %>%
       dplyr::mutate(dT_mod4 = dT_mod3,
@@ -194,7 +204,7 @@ remove_outlier <-
                                             dT_avg_prd),
                         dT_sd_prd = zoo::rollapply(dT_mod4_prd,
                                                    width = wndw_size,
-                                                   FUN = sd, fill = NA,
+                                                   FUN = stats::sd, fill = NA,
                                                    na.rm = TRUE,
                                                    partial = min_n_wndw),
                         dT_sd_prd = ifelse(dT_n_prd < min_n_wndw, NA,
@@ -237,6 +247,24 @@ remove_outlier <-
     ## use this function only in this script; this has not been generalized.
     check_short_damping <-
       function(df, window_size = 720, inv_sigma_gauss = 0.01) {
+        ## avoid "No visible binding for global variable" notes
+        time <- NULL
+        dT_z <- NULL
+        dT_sd <- NULL
+        dT_avg <- NULL
+        dT_avg_smth <- NULL
+        dT_avg_smth_diff1 <- NULL
+        flag_dT_avg_peak <- NULL
+        dT_sd_smth <- NULL
+        dT_sd_smth_diff1 <- NULL
+        flag_dT_sd_peak <- NULL
+        dT_avg_smth_diff2 <- NULL
+        dT_sd_smth_diff2 <- NULL
+        dT_sd_head <- NULL
+        . <- NULL
+        dT_sd_tail <- NULL
+        dT_sd_peak <- NULL
+
         list_time_start <- NULL
         list_time_peak <- NULL
         list_time_end <- NULL
@@ -265,18 +293,18 @@ remove_outlier <-
           dplyr::mutate(dT_avg_smth = ifelse(dT_z > -9999, dT_avg, NA),
                         dT_avg_smth = zoo::na.approx(dT_avg_smth, na.rm = FALSE),
                         dT_avg_smth = gsignal::conv(dT_avg_smth, g_filter, shape = "same"),
-                        dT_avg_smth_diff1 = dT_avg_smth - lag(dT_avg_smth),
-                        dT_avg_smth_diff2 = dT_avg_smth_diff1 - lag(dT_avg_smth_diff1),
+                        dT_avg_smth_diff1 = dT_avg_smth - stats::lag(dT_avg_smth),
+                        dT_avg_smth_diff2 = dT_avg_smth_diff1 - stats::lag(dT_avg_smth_diff1),
                         flag_dT_avg_peak = ifelse(dT_avg_smth_diff1 == 0, 1, 0),
-                        flag_dT_avg_peak = ifelse(dT_avg_smth_diff1 * lead(dT_avg_smth_diff1) < 0,
+                        flag_dT_avg_peak = ifelse(dT_avg_smth_diff1 * dplyr::lead(dT_avg_smth_diff1) < 0,
                                                   1, flag_dT_avg_peak),
                         dT_sd_smth = ifelse(dT_z > -9999, dT_sd, NA),
                         dT_sd_smth = zoo::na.approx(dT_sd_smth, na.rm = FALSE),
                         dT_sd_smth = gsignal::conv(dT_sd_smth, g_filter, shape = "same"),
-                        dT_sd_smth_diff1 = dT_sd_smth - lag(dT_sd_smth),
-                        dT_sd_smth_diff2 = dT_sd_smth_diff1 - lag(dT_sd_smth_diff1),
+                        dT_sd_smth_diff1 = dT_sd_smth - stats::lag(dT_sd_smth),
+                        dT_sd_smth_diff2 = dT_sd_smth_diff1 - stats::lag(dT_sd_smth_diff1),
                         flag_dT_sd_peak = ifelse(dT_sd_smth_diff1 == 0, 1, 0),
-                        flag_dT_sd_peak = ifelse(dT_sd_smth_diff1 * lead(dT_sd_smth_diff1) < 0,
+                        flag_dT_sd_peak = ifelse(dT_sd_smth_diff1 * dplyr::lead(dT_sd_smth_diff1) < 0,
                                                  1, flag_dT_sd_peak))
 
         ## detect peak position
@@ -296,58 +324,64 @@ remove_outlier <-
           dplyr::pull(time)
 
         if(length(list_time_sd_peak) <= 1) {
-          message("There are less than two peaks.")
-          break
-        }
+          message("There are less than two peaks. Skip damping detection.")
+          data.frame(time_start = list_time_start,
+                     time_peak = list_time_peak,
+                     time_end = list_time_end,
+                     ratio = list_ratio) %>%
+            return()
+        } else {
+          ## detect possible damping periods
+          for (i in 1:length(list_time_sd_dpeak)) {
+            target_time_sd_dpeak <- list_time_sd_dpeak[i]
+            num_time_sd_peak <- which(list_time_sd_peak == target_time_sd_dpeak)
 
-        ## detect possible damping periods
-        for (i in 1:length(list_time_sd_dpeak)) {
-          target_time_sd_dpeak <- list_time_sd_dpeak[i]
-          num_time_sd_peak <- which(list_time_sd_peak == target_time_sd_dpeak)
-
-          if(num_time_sd_peak == 1) {
-            damp_head <- time_mea_start + minutes(30)
-            damp_tail <- list_time_sd_peak[num_time_sd_peak + 1] - minutes(30)
-          } else if(num_time_sd_peak == length(list_time_sd_peak)) {
-            damp_head <- list_time_sd_peak[num_time_sd_peak - 1] + minutes(30)
-            damp_tail <- time_mea_end - minutes(30)
-          } else {
-            damp_head <- list_time_sd_peak[num_time_sd_peak - 1] + minutes(30)
-            damp_tail <- list_time_sd_peak[num_time_sd_peak + 1] - minutes(30)
-          }
-
-          num_time_avg_peak <-
-            which(list_time_avg_upeak >= damp_head & list_time_avg_upeak <= damp_tail)
-
-          data %>%
-            dplyr::filter(time >= damp_head & time <= damp_tail) %>% {
-              dplyr::slice_head(.) %>% dplyr::pull(dT_sd_smth) ->> dT_sd_head
-              dplyr::slice_tail(.) %>% dplyr::pull(dT_sd_smth) ->> dT_sd_tail
-              dplyr::filter(., time == target_time_sd_dpeak) %>%
-                dplyr::pull(dT_sd_smth) ->> dT_sd_peak
+            if(num_time_sd_peak == 1) {
+              damp_head <- time_mea_start + lubridate::minutes(30)
+              damp_tail <- list_time_sd_peak[num_time_sd_peak + 1] - lubridate::minutes(30)
+            } else if(num_time_sd_peak == length(list_time_sd_peak)) {
+              damp_head <- list_time_sd_peak[num_time_sd_peak - 1] + lubridate::minutes(30)
+              damp_tail <- time_mea_end - lubridate::minutes(30)
+            } else {
+              damp_head <- list_time_sd_peak[num_time_sd_peak - 1] + lubridate::minutes(30)
+              damp_tail <- list_time_sd_peak[num_time_sd_peak + 1] - lubridate::minutes(30)
             }
 
-          dT_sd_peak_ratio <-
-            round((dT_sd_peak / dT_sd_head + dT_sd_peak / dT_sd_tail) / 2, digits = 5)
+            num_time_avg_peak <-
+              which(list_time_avg_upeak >= damp_head &
+                      list_time_avg_upeak <= damp_tail)
 
-          if(length(num_time_avg_peak) >= 1) {
-            list_time_start <- c(list_time_start, damp_head)
-            list_time_peak <- c(list_time_peak, target_time_sd_dpeak)
-            list_time_end <- c(list_time_end, damp_tail)
-            list_ratio <- c(list_ratio, dT_sd_peak_ratio)
+            data %>%
+              dplyr::filter(time >= damp_head & time <= damp_tail) %>% {
+                dplyr::slice_head(.) %>% dplyr::pull(dT_sd_smth) ->> dT_sd_head
+                dplyr::slice_tail(.) %>% dplyr::pull(dT_sd_smth) ->> dT_sd_tail
+                dplyr::filter(., time == target_time_sd_dpeak) %>%
+                  dplyr::pull(dT_sd_smth) ->> dT_sd_peak
+              }
+
+            dT_sd_peak_ratio <-
+              round((dT_sd_peak / dT_sd_head + dT_sd_peak / dT_sd_tail) / 2,
+                    digits = 5)
+
+            if(length(num_time_avg_peak) >= 1) {
+              list_time_start <- c(list_time_start, damp_head)
+              list_time_peak <- c(list_time_peak, target_time_sd_dpeak)
+              list_time_end <- c(list_time_end, damp_tail)
+              list_ratio <- c(list_ratio, dT_sd_peak_ratio)
+            }
           }
+
+          ## convert integer to POSIX
+          attributes(list_time_start) <- attributes(target_time_sd_dpeak)
+          attributes(list_time_peak) <- attributes(target_time_sd_dpeak)
+          attributes(list_time_end) <- attributes(target_time_sd_dpeak)
+
+          data.frame(time_start = list_time_start,
+                     time_peak = list_time_peak,
+                     time_end = list_time_end,
+                     ratio = list_ratio) %>%
+            return()
         }
-
-        ## convert integer to POSIX
-        attributes(list_time_start) <- attributes(target_time_sd_dpeak)
-        attributes(list_time_peak) <- attributes(target_time_sd_dpeak)
-        attributes(list_time_end) <- attributes(target_time_sd_dpeak)
-
-        data.frame(time_start = list_time_start,
-                   time_peak = list_time_peak,
-                   time_end = list_time_end,
-                   ratio = list_ratio) %>%
-          return()
       }
 
     if(check_damping == TRUE) {
@@ -361,15 +395,14 @@ remove_outlier <-
         list_time_damp_head <-
           prd_damp %>%
           dplyr::filter(ratio < thres_ratio_damp) %>%
-          pull(time_start)
+          dplyr::pull(time_start)
 
         list_time_damp_tail <-
           prd_damp %>%
           dplyr::filter(ratio < thres_ratio_damp) %>%
-          pull(time_end)
+          dplyr::pull(time_end)
 
-        message("Short damping periods were detected at ",
-                     list_time_damp_head))
+        message("Short damping periods were detected at ", list_time_damp_head)
 
         for (i_damp in n_damp) {
           data_dT <-
@@ -406,7 +439,7 @@ remove_outlier <-
                                              dT_mod4, NA)) %>%
           dplyr::pull(dT_mod4_prd) %>% {
             mean(., na.rm = TRUE) ->> list_dT_avg_ref[[i]]
-            sd(., na.rm = TRUE) ->> list_dT_sd_ref[[i]]
+            stats::sd(., na.rm = TRUE) ->> list_dT_sd_ref[[i]]
           }
 
       } else {
@@ -417,13 +450,13 @@ remove_outlier <-
                                              dT_mod4, NA)) %>%
           dplyr::pull(dT_mod4_prd) %>% {
             mean(., na.rm = TRUE) ->> list_dT_avg_ref[[i]]
-            sd(., na.rm = TRUE) ->> list_dT_sd_ref[[i]]
+            stats::sd(., na.rm = TRUE) ->> list_dT_sd_ref[[i]]
           }
       }
     }
 
-    dT_avg_ref <- median(list_dT_avg_ref, na.rm = TRUE)
-    dT_sd_ref <- median(list_dT_sd_ref, na.rm = TRUE)
+    dT_avg_ref <- stats::median(list_dT_avg_ref, na.rm = TRUE)
+    dT_sd_ref <- stats::median(list_dT_sd_ref, na.rm = TRUE)
 
     message("Refenrence values for correcting long-term shifting were determined.")
     message("Refenrence value for dT average: ", round(dT_avg_ref, digits = 5))
