@@ -18,12 +18,22 @@
 #' @param err The label of error or missing values
 
 ## cross validation function
-rf_cv <- function(df, name_label,
-                  list_min_nodesize, list_m_try, list_subsample,
-                  list_feature, rf_replace = TRUE, frac_train = 0.75,
+rf_cv <- function(df, name_label, list_feature,
+                  list_min_nodesize = c(5), list_m_try = NULL,
+                  list_subsample = c(0.1),
+                  rf_replace = TRUE, frac_train = 0.75,
                   nfold = 10, ntree = 500, ran_seed = 12345, err = -9999) {
   ## avoid "No visible binding for global variable" notes
   . <- NULL
+
+  ## check input values
+  if(length(list_feature) <= 1) {
+    stop("the number of input features must be two or more")
+  }
+
+  if(is.null(list_m_try)) {
+    list_m_try <- seq(2, length(list_feature))
+  }
 
   ## settings
   set.seed(ran_seed)
@@ -48,7 +58,7 @@ rf_cv <- function(df, name_label,
 
   ## start CV
   for (i_min_nodesize in 1:length(list_min_nodesize)) {
-    for (i_mtry in 1:length(list_m_try)) {
+    for (i_m_try in 1:length(list_m_try)) {
       for (i_subsample in 1:length(list_subsample)) {
         list_MSE_OOB <- NULL
         for (i_nfold in 1:nfold) {
@@ -56,7 +66,7 @@ rf_cv <- function(df, name_label,
             ranger::ranger(x = train_feature,
                            y = train_target,
                            min.node.size = list_min_nodesize[i_min_nodesize],
-                           mtry = list_m_try[i_mtry],
+                           mtry = list_m_try[i_m_try],
                            sample.fraction = list_subsample[i_subsample],
                            replace = rf_replace,
                            num.trees = ntree,
@@ -65,7 +75,7 @@ rf_cv <- function(df, name_label,
         }
         CV_result <-
           data.frame(min_nodesize = list_min_nodesize[i_min_nodesize],
-                     mtry = list_m_try[i_mtry],
+                     mtry = list_m_try[i_m_try],
                      subsample = list_subsample[i_subsample],
                      ntree = ntree,
                      MSE_OOB = mean(list_MSE_OOB)) %>%
@@ -78,7 +88,7 @@ rf_cv <- function(df, name_label,
     }
   }
 
-  message("Cross varidation was finished.")
+  message("cross varidation finished")
   return(CV_result)
 }
 
@@ -104,8 +114,8 @@ rf_cv <- function(df, name_label,
 #' @param err The label of error or missing values
 
 rf_est <-
-  function(df, name_label, min_nodesize, m_try, subsample, list_feature,
-           rf_replace = TRUE, rf_predict_all = FALSE,
+  function(df, name_label, list_feature, min_nodesize, m_try, subsample,
+           rf_predict_all = FALSE, rf_replace = TRUE,
            frac_train = 0.75, ran_seed = 12345, ntree = 500, err = -9999) {
     ## avoid "No visible binding for global variable" notes
     . <- NULL
@@ -160,7 +170,7 @@ rf_est <-
                      replace = rf_replace,
                      seed = ran_seed)
 
-    message("Random forest construction finished.")
+    message("random forest construction finished")
 
     MSE_test <-
       stats::predict(RF_dT,
@@ -204,9 +214,9 @@ rf_est <-
         data.frame(avg = .)
     }
 
-    message("Random forest prediction finished.")
+    message("random forest prediction finished")
 
-    list(MSE = MSE_test, stats = df_output) %>% return()
+    list(mse = MSE_test, stats = df_output) %>% return()
   }
 
 
