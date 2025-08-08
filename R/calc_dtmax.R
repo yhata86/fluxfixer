@@ -162,6 +162,8 @@ calc_dtmax_pd <-
     vctr_time_output <-
       seq(time_head_output, time_tail_output, by = "1 day")
 
+    vctr_time_output[length(vctr_time_output)] <- vctr_time[length(vctr_time)]
+
     n_point <- length(vctr_time)
     n_day <- length(vctr_time_output)
 
@@ -1010,20 +1012,29 @@ calc_dtmax_all <-
     if(length(vctr_time) != length(vctr_dt)) {
       stop("input timestamp and dT time series must be the same length")
     }
-    if(!is.null(vctr_radi) & length(vctr_time) != length(vctr_radi)) {
-      stop("input timestamp and radiation time series must be the same length")
+
+    if(!is.null(vctr_radi)) {
+      if(length(vctr_time) != length(vctr_radi)) {
+        stop("input timestamp and radiation time series must be the same length")
+      }
+
+      if(anyNA(vctr_radi) == TRUE) {
+        stop("one or more NA values exist in the input radiation time series")
+      }
     }
-    if(!is.null(vctr_vpd) & length(vctr_time) != length(vctr_vpd)) {
-      stop("input timestamp and VPD time series must be the same length")
-    }
-    if(!is.null(vctr_radi) & anyNA(vctr_radi) == TRUE) {
-      stop("one or more NA values exist in the input radiation time series")
-    }
-    if(!is.null(vctr_vpd) & anyNA(vctr_vpd) == TRUE) {
-      stop("one or more NA values exist in the input VPD time series")
-    }
-    if(!is.null(vctr_vpd) & min(vctr_vpd) < 0) {
-      stop("negative VPD values are not allowed")
+
+    if(!is.null(vctr_vpd)) {
+      if(length(vctr_time) != length(vctr_vpd)) {
+        stop("input timestamp and VPD time series must be the same length")
+      }
+
+      if(anyNA(vctr_vpd) == TRUE) {
+        stop("one or more NA values exist in the input VPD time series")
+      }
+
+      if(min(vctr_vpd) < 0) {
+        stop("negative VPD values are not allowed")
+      }
     }
 
     ## select methods
@@ -1153,8 +1164,7 @@ calc_dtmax_all <-
 
     if(output_daily) {
       if(is.null(daily_dTmax)) {
-        daily_dTmax <-
-          daily_dTmax_SP
+        daily_dTmax <- daily_dTmax_SP
       } else if(do_sp) {
         daily_dTmax <-
           daily_dTmax %>%
@@ -1168,15 +1178,21 @@ calc_dtmax_all <-
 
       message("dTmax time series aggregation finished")
 
-      ## output
       return(daily_dTmax)
     } else {
+      ## avoid NA row addition to the end of output data frame
+      vctr_time_temp <-
+        c(vctr_time,
+          vctr_time[length(vctr_time)] + lubridate::minutes(interval_time))
+
+      vctr_dT_temp <- c(vctr_dt, NA)
+
       dTmax <-
-        data.frame(time = vctr_time,
-                   dt = vctr_dt) %>%
+        data.frame(time = vctr_time_temp,
+                   dt = vctr_dT_temp) %>%
         dplyr::mutate(time_lag = time - lubridate::minutes(interval_time))
 
-      if(do_sp) dTmax$dtmax_sp <- dTmax_SP$dtmax_sp
+      if(do_sp) dTmax$dtmax_sp <- c(dTmax_SP$dtmax_sp, NA)
 
       if(!is.null(daily_dTmax)) {
         dTmax <-
@@ -1185,9 +1201,12 @@ calc_dtmax_all <-
           dplyr::select(time, dt, dplyr::contains("dtmax"))
       }
 
+      dTmax <-
+        dTmax %>%
+        dplyr::filter(time <= vctr_time[length(vctr_time)])
+
       message("dTmax time series aggregation finished")
 
-      ## output
       return(dTmax)
     }
   }
