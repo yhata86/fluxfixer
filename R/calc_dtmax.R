@@ -1229,7 +1229,7 @@ calc_dtmax_mw_dr <-
 #'  is `TRUE`, dT is returned in daily steps. If `output_daily` is `FALSE`
 #'  (default), this column is not output.
 #'
-#' * The other columns, which have the prefix ""dtmax_"", provide the dTmax
+#' * The other columns, which have the prefix "dtmax_", provide the dTmax
 #'  calculated by the methods specified in `method`. The last two letters of
 #'  the column name represent the name of the dTmax estimation method. "sp",
 #'  "pd", "mw", "dr", and "ed" represent the successive predawn, daily predawn,
