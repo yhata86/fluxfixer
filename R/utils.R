@@ -105,7 +105,7 @@ calc_sw_in_toa <-
 #'
 #' @param vctr A vector to be evaluated.
 #' @param label_err A numeric value representing a missing value in the input
-#'  vector. Default is -9999.
+#'  vector(s). Default is -9999.
 #'
 #' @returns
 #' An integer indicating the number of the input vector elements without
