@@ -1,139 +1,251 @@
-#' Cross varidation for random forest structure
+#' Tune hyperparameters used in a random forest model
 #'
-#' @description rf_cv() constructs randow forest model trained from
-#'   time series of temperature difference between granier-type sap flow probes
-#'   for detecting outliers in the time series
+#' @description `rf_fit()` conducts an out-of-bag evaluation for
+#'  hyperparameters used in constructing the random forest model using a grid
+#'  search approach.
 #'
-#' @param df Data frame containing dT time series
-#' @param name_label Input column names
-#' @param list_min_nodesize Minimum number of random forest node size
-#' @param list_m_try The number of input column candidate
-#' @param list_subsample Subsample ratio
-#' @param list_feature list vector of feature variables
-#' @param rf_replace replace sampling of non-replace sampling in random forest
-#' @param frac_train Fraction of training data set sampling
-#' @param ran_seed Random seed of random forest
-#' @param nfold To be filled!
-#' @param ntree The number of trees in random forest
-#' @param err The label of error or missing values
+#' @inheritParams n_valid
+#' @param df A data frame including label (explained variable) and feature
+#'  (explanatory variables) time series for model input. It is acceptable to
+#'  include missing values in each column.
+#' @param colname_label A character representing the name of the column for the
+#'  label time series.
+#' @param vctr_colname_feature A vector of characters indicating the name of
+#'  the feature time series columns. If `NULL` (default), all columns excluding
+#'  the label column specified as `colname_label` in the input data frame are
+#'  used as feature columns.
+#' @param vctr_min_nodesize A vector of positive integers indicating candidates
+#'  of a hyperparameter defining the minimal node size (the minimum number of
+#'  data points included in each leaf node). Default is `c(5)`.
+#' @param vctr_m_try A vector of positive integers indicating candidates of a
+#'  hyperparameter defining the number of features to be used in splitting
+#'  each node. If `NULL` (default), integers between two and the number of all
+#'  feature variables are tested.
+#' @param vctr_subsample A vector of numerical values between 0 and 1,
+#'  indicating candidates of a hyperparameter defining the fraction of input
+#'  training data points to be sampled in constructing the random forest.
+#'  Default is `c(0.1)`.
+#' @param frac_train A numerical value between 0 and 1, defining the fraction
+#'  of data points to be categorized as training data. The other data points
+#'  are classified as test data. Default is 0.75.
+#' @param n_tree An integer representing the number of trees in the random
+#'  forest. Default is 500.
+#' @param ran_seed An integer representing the random seed. Default is 12345.
+#'
+#' @returns
+#' A data frame with columns below:
+#'
+#' * The first column, `min_nodesize`, gives one of the `vctr_min_nodesize`
+#'  hyperparameter values tested in each model construction during
+#'  out-of-bag evaluation.
+#'
+#' * The second column, `m_try`, gives one of the `vctr_m_try` hyperparameter
+#'  values tested in each model construction during out-of-bag evaluation.
+#'
+#' * The third column, `subsample`, gives one of the `vctr_subsample`
+#'  hyperparameter values tested in each model construction during
+#'  out-of-bag evaluation.
+#'
+#' * The fourth column, `MSE_OOB`, provides the mean squared error between the
+#'  predicted and original values in out-of-bag data in each model construction
+#'  during the evaluation.
+#'
+#' @author Yoshiaki Hata
 
-## cross validation function
-rf_cv <- function(df, name_label, list_feature,
-                  list_min_nodesize = c(5), list_m_try = NULL,
-                  list_subsample = c(0.1),
-                  rf_replace = TRUE, frac_train = 0.75,
-                  nfold = 10, ntree = 500, ran_seed = 12345, err = -9999) {
-  ## avoid "No visible binding for global variable" notes
-  . <- NULL
+rf_fit <-
+  function(df, colname_label, vctr_colname_feature = NULL,
+           vctr_min_nodesize = c(5), vctr_m_try = NULL,
+           vctr_subsample = c(0.1), frac_train = 0.75,
+           n_tree = 500, ran_seed = 12345, label_err = -9999) {
+    ## avoid "No visible binding for global variable" notes
+    . <- NULL
 
-  ## check input values
-  if(length(list_feature) <= 1) {
-    stop("the number of input features must be two or more")
-  }
+    ## check input values
+    if(!is.null(vctr_colname_feature) & length(vctr_colname_feature) <= 1) {
+      stop("The number of input features must be two or more")
+    }
 
-  if(is.null(list_m_try)) {
-    list_m_try <- seq(2, length(list_feature))
-  }
+    ## feature name determination
+    if(is.null(vctr_colname_feature)) {
+      vctr_colname_feature <- colnames(df) %>% .[. != colname_label]
+    }
 
-  ## settings
-  set.seed(ran_seed)
+    if(is.null(vctr_m_try)) {
+      vctr_m_try <- seq(2, length(vctr_colname_feature))
+    }
 
-  ## filter data
-  data <- df %>% dplyr::filter(!!rlang::sym(name_label) != err)
+    ## settings
+    set.seed(ran_seed)
 
-  n_data <- nrow(data)
-  rownum_train <- sample(n_data, size = n_data * frac_train)
-  train <- data[rownum_train, ]
+    ## filter data
+    data <-
+      df %>%
+      dplyr::filter(!!rlang::sym(colname_label) != label_err) %>%
+      dplyr::na_if(label_err)
 
-  train_feature <-
-    train %>%
-    dplyr::select(dplyr::all_of(list_feature)) %>%
-    as.matrix()
-  train_target <-
-    train %>%
-    dplyr::select(dplyr::all_of(name_label)) %>%
-    as.matrix()
+    n_data <- nrow(data)
+    rownum_train <- sample(n_data, size = n_data * frac_train)
+    train <- data[rownum_train, ]
 
-  CV_result <- data.frame(NULL)
+    train_feature <-
+      train %>%
+      dplyr::select(dplyr::all_of(vctr_colname_feature)) %>%
+      as.matrix()
+    train_target <-
+      train %>%
+      dplyr::select(dplyr::all_of(colname_label)) %>%
+      as.matrix()
 
-  ## start CV
-  for (i_min_nodesize in 1:length(list_min_nodesize)) {
-    for (i_m_try in 1:length(list_m_try)) {
-      for (i_subsample in 1:length(list_subsample)) {
-        list_MSE_OOB <- NULL
-        for (i_nfold in 1:nfold) {
+    CV_result <- data.frame(NULL)
+
+    ## start CV
+    message("--- MSE: Mean square error for out-of-bag data")
+    message("--- Hyperparameter set: [m_try, min_nodesize, subsample]")
+
+    for (i_min_nodesize in 1:length(vctr_min_nodesize)) {
+      for (i_m_try in 1:length(vctr_m_try)) {
+        for (i_subsample in 1:length(vctr_subsample)) {
+          ran_seed <- ran_seed + 1
+
           CV_model <-
             ranger::ranger(x = train_feature,
                            y = train_target,
-                           min.node.size = list_min_nodesize[i_min_nodesize],
-                           mtry = list_m_try[i_m_try],
-                           sample.fraction = list_subsample[i_subsample],
-                           replace = rf_replace,
-                           num.trees = ntree,
-                           seed = ran_seed + nfold - 1)
-          list_MSE_OOB <- c(list_MSE_OOB, CV_model$prediction.error)
-        }
+                           min.node.size = vctr_min_nodesize[i_min_nodesize],
+                           mtry = vctr_m_try[i_m_try],
+                           sample.fraction = vctr_subsample[i_subsample],
+                           num.trees = n_tree,
+                           seed = ran_seed)
         CV_result <-
-          data.frame(min_nodesize = list_min_nodesize[i_min_nodesize],
-                     mtry = list_m_try[i_m_try],
-                     subsample = list_subsample[i_subsample],
-                     ntree = ntree,
-                     MSE_OOB = mean(list_MSE_OOB)) %>%
+          data.frame(min_nodesize = vctr_min_nodesize[i_min_nodesize],
+                     m_try = vctr_m_try[i_m_try],
+                     subsample = vctr_subsample[i_subsample],
+                     MSE_OOB = CV_model$prediction.error) %>%
           dplyr::bind_rows(CV_result, .)
 
-        CV_result %>%
-          dplyr::slice_tail() %>%
-          print()
+        message("--- MSE: ", round(CV_model$prediction.error, 10),
+                ", Hyperparameter set: [",
+                vctr_m_try[i_m_try], ", ", vctr_min_nodesize[i_min_nodesize],
+                ", ", vctr_subsample[i_subsample], "]")
+        }
       }
     }
+    return(CV_result)
   }
 
-  message("cross varidation finished")
-  return(CV_result)
-}
 
-
-
-#' Construct random forest structure for outlier removal
+#' Predict targeted time series by a random forest model
 #'
-#' @description rf_est() constructs randow forest model trained from
-#'   time series of temperature difference between granier-type sap flow probes
-#'   for detecting outliers in the time series
+#' @description `rf_pred()` constructs a random forest model using optimal
+#'  hyperparameters previously determined by out-of-bag evaluation to estimate
+#'  the targeted time series.
 #'
-#' @param df Data frame containing dT time series
-#' @param name_label Input column names
-#' @param min_nodesize Minimum number of random forest node size
-#' @param m_try The number of input column candidate
-#' @param subsample Subsample ratio
-#' @param list_feature list vector of feature variables
-#' @param rf_replace replace sampling of non-replace sampling in random forest
-#' @param rf_predict_all do prediction by constructed random forest
-#' @param frac_train Fraction of training data set sampling
-#' @param ran_seed Random seed of random forest
-#' @param ntree The number of trees in random forest
-#' @param err The label of error or missing values
+#' @inheritParams rf_fit
+#' @param min_nodesize A positive integer indicating the minimal node size (the
+#'  minimum number of data points included in each leaf node). This
+#'  hyperparameter should be previously optimized by out-of-bag evaluation.
+#' @param m_try A positive integer indicating the number of features to be used
+#'  in splitting each node. This hyperparameter should be previously optimized
+#'  by out-of-bag evaluation.
+#' @param subsample A numerical value between 0 and 1, indicating the fraction
+#'  of input training data points to be sampled in constructing the random
+#'  forest. This hyperparameter should be previously optimized by
+#'  out-of-bag evaluation.
+#' @param do_outlier_detection A boolean. If `TRUE` (default), this function
+#'  predicts the time series to detect outliers; else, this function estimates
+#'  the time series to fill gaps.
+#' @param coef_iqr A positive value defining a multiplier of the interquartile
+#'  range (IQR). If the value to be checked is less than Q1 (first quartile) -
+#'  `coef_iqr` * IQR or
+#'  more than Q3 (third quartile) + `coef_iqr` * IQR, the value is detected as
+#'  an outlier. Default is 1.5.
+#'
+#' @returns
+#' A list with two elements. The first element `mse` is the mean squared error
+#' between predicted and original values in the test data set. The second
+#' element `stats` is a data frame, and its contents differ depending on
+#' `do_outlier_detection`.
+#'
+#' If `do_outlier_detection` is `TRUE`, the data frame outputs with columns
+#' below:
+#'
+#' * The first column, `cleaned`, gives the cleaned time series after replacing
+#'  the detected outliers with the value specified by `label_error`.
+#'
+#' * The second column, `flag_out`, gives a flag variable time series
+#'  indicating the status of the cleaned time series (0: the input data point
+#'  is not originally missing and not detected as an outlier; 1: the input data
+#'  point is not originally missing but detected as an outlier; 2: the input
+#'  data point is originally missing).
+#'
+#' * The third column, `med`, gives the ensemble median time series calculated
+#'  from estimated values at each time point for each tree in the constructed
+#'  random forest.
+#'
+#' * The fourth column, `q1`, gives the ensemble Q1 (first quartile) time
+#'  series calculated from estimated values at each time point for each tree in
+#'  the constructed random forest.
+#'
+#' * The fifth column, `q3`, gives the ensemble Q3 (third quartile) time series
+#'  calculated from estimated values at each time point for each tree in the
+#'  constructed random forest.
+#'
+#' If `do_outlier_detection` is `FALSE`, the data frame outputs with columns
+#' below:
+#'
+#' * The first column, `gapfilled`, gives the gap-filled time series, where
+#'  missing values are replaced with the predicted values from the random
+#'  forest model.
+#'
+#' * The second column, `avg_predicted`, gives the ensemble mean time series
+#'  calculated from estimated values at each time point for each tree in the
+#'  constructed random forest.
+#'
+#' * The third column, `sd_predicted`, gives the ensemble mean time series
+#'  calculated from estimated values at each time point for each tree in the
+#'  constructed random forest.
+#'
+#' @author Yoshiaki Hata
 
-rf_est <-
-  function(df, name_label, list_feature, min_nodesize, m_try, subsample,
-           rf_predict_all = FALSE, rf_replace = TRUE,
-           frac_train = 0.75, ran_seed = 12345, ntree = 500, err = -9999) {
+rf_pred <-
+  function(df, colname_label, vctr_colname_feature = NULL,
+           min_nodesize, m_try, subsample, do_outlier_detection = TRUE,
+           frac_train = 0.75, n_tree = 500, ran_seed = 12345, coef_iqr = 1.5,
+           label_err = -9999) {
     ## avoid "No visible binding for global variable" notes
     . <- NULL
     target <- NULL
     avg <- NULL
     SE <- NULL
     target_noisy <- NULL
-    coef_IQR <- NULL
     flag_out <- NULL
-    Q1 <- NULL
-    Q3 <- NULL
-    IQR <- NULL
+    q1 <- NULL
+    q3 <- NULL
+    iqr <- NULL
+    cleaned <- NULL
+    med <- NULL
+    target_input <- NULL
+    avg_predicted <- NULL
+    gapfilled <- NULL
+    sd_predicted <- NULL
 
     ## settings
     set.seed(ran_seed)
 
+    ## check input values
+    if(!is.null(vctr_colname_feature) & length(vctr_colname_feature) <= 1) {
+      stop("The number of input features must be two or more")
+    }
+
+    ## feature name determination
+    if(is.null(vctr_colname_feature)) {
+      vctr_colname_feature <- colnames(df) %>% .[. != colname_label]
+    }
+
     ## filter data
-    data <- df %>% dplyr::filter(!!rlang::sym(name_label) != err)
+    data <-
+      df %>%
+      dplyr::filter(!!rlang::sym(colname_label) != label_err) %>%
+      dplyr::na_if(label_err)
 
     ## create train and test data set
     n_data <- nrow(data)
@@ -143,20 +255,20 @@ rf_est <-
 
     train_feature <-
       train %>%
-      dplyr::select(dplyr::all_of(list_feature)) %>%
+      dplyr::select(dplyr::all_of(vctr_colname_feature)) %>%
       as.matrix()
     train_target <-
       train %>%
-      dplyr::select(dplyr::all_of(name_label)) %>%
+      dplyr::select(dplyr::all_of(colname_label)) %>%
       as.matrix()
 
     test_feature <-
       test %>%
-      dplyr::select(dplyr::all_of(list_feature)) %>%
+      dplyr::select(dplyr::all_of(vctr_colname_feature)) %>%
       as.matrix()
     test_target <-
       test %>%
-      dplyr::select(dplyr::all_of(name_label)) %>%
+      dplyr::select(dplyr::all_of(colname_label)) %>%
       as.matrix()
 
     ## construct random forest
@@ -165,12 +277,9 @@ rf_est <-
                      y = train_target,
                      min.node.size = min_nodesize,
                      mtry = m_try,
-                     num.trees = ntree,
+                     num.trees = n_tree,
                      sample.fraction = subsample,
-                     replace = rf_replace,
                      seed = ran_seed)
-
-    message("random forest construction finished")
 
     MSE_test <-
       stats::predict(RF_dT,
@@ -185,156 +294,241 @@ rf_est <-
     pred_dT <-
       stats::predict(RF_dT,
                      data = df,
-                     predict.all = rf_predict_all)
+                     predict.all = TRUE)
 
-    if(rf_predict_all == TRUE) {
+    if(do_outlier_detection == TRUE) {
       df_output <-
         pred_dT$predictions %>%
         as.data.frame() %>%
         dplyr::transmute(med = apply(., MARGIN = 1, FUN = stats::median),
-                         Q1 = apply(., MARGIN = 1, FUN = stats::quantile,
+                         q1 = apply(., MARGIN = 1, FUN = stats::quantile,
                                     probs = 0.25),
-                         Q3 = apply(., MARGIN = 1, FUN = stats::quantile,
+                         q3 = apply(., MARGIN = 1, FUN = stats::quantile,
                                     probs = 0.75),
-                         IQR = Q3 - Q1)
+                         iqr = q3 - q1)
 
-      df_output$target_noisy <- dplyr::pull(df, !!rlang::sym(name_label))
+      df_output$target_noisy <- dplyr::pull(df, !!rlang::sym(colname_label))
 
       df_output <-
         df_output %>%
-        dplyr::mutate(flag_out = ifelse(target_noisy != err &
-                                          (target_noisy < Q1 - coef_IQR * IQR |
-                                             target_noisy > Q3 + coef_IQR * IQR),
+        dplyr::mutate(flag_out = ifelse(target_noisy != label_err &
+                                          (target_noisy < q1 - coef_iqr * iqr |
+                                             target_noisy > q3 + coef_iqr *
+                                             iqr),
                                         1, 0),
-                      flag_out = ifelse(target_noisy == err, 2, flag_out),
-                      target_cleaned = ifelse(flag_out == 1, err, target_noisy))
+                      flag_out = ifelse(target_noisy == label_err, 2, flag_out),
+                      cleaned = ifelse(flag_out == 1, label_err,
+                                       target_noisy)) %>%
+        dplyr::select(cleaned, flag_out, med, q1, q3)
     } else {
       df_output <-
         pred_dT$predictions %>%
-        data.frame(avg = .)
+        as.data.frame() %>%
+        dplyr::transmute(avg_predicted = apply(., MARGIN = 1,
+                                               FUN = mean),
+                         sd_predicted = apply(., MARGIN = 1, FUN = stats::sd))
+
+      df_output$target_input <- dplyr::pull(df, !!rlang::sym(colname_label))
+
+      df_output <-
+        df_output %>%
+        dplyr::mutate(gapfilled = ifelse(target_input == label_err,
+                                         avg_predicted, target_input)) %>%
+        dplyr::select(gapfilled, avg_predicted, sd_predicted)
     }
-
-    message("random forest prediction finished")
-
     list(mse = MSE_test, stats = df_output) %>% return()
   }
 
 
+#' Remove outliers detected by a random forest model
+#'
+#' @description `remove_rf_outlier()` detects and removes outliers by a random
+#'  forest model whose hyperparameters are calibrated using a grid search
+#'  approach and out-of-bag evaluation.
+#'
+#' @details
+#' A random forest model is constructed for the targeted time series to remove
+#' outliers. Users can input any feature from the dataset, and out-of-bag
+#' evaluation is used to determine the hyperparameters. This evaluation is
+#' applied to a training dataset separated from the entire input data. To
+#' reduce the computational cost, the only hyperparameter used by default for
+#' grid search is the number of candidate features. To reduce the risk of
+#' learning noise, the training data sampling ratio is set to 0.1 by default.
+#' After determining the optimal hyperparameters, they are used to construct
+#' the optimal random forest model. Output values are obtained from 500
+#' (default) trees, and the first quartile (Q1), third quartile (Q3), and
+#' interquartile range (IQR) of the output values at each time point are
+#' calculated. If the targeted value is less than Q1 − 1.5IQR or more than Q3 +
+#' 1.5IQR (default), the data point is identified as an outlier and removed.
+#'
+#' @inheritParams rf_fit
+#' @inheritParams rf_pred
+#'
+#' @returns
+#' A list with two elements. The first element `mse` is the mean squared error
+#' between predicted and original values in the test data set. The second
+#' element `stats` is a data frame with columns below:
+#'
+#' * The first column, `cleaned`, gives the cleaned time series after replacing
+#'  the detected outliers with the value specified by `label_error`.
+#'
+#' * The second column, `flag_out`, gives a flag variable time series
+#'  indicating the status of the cleaned time series (0: the input data point
+#'  is not originally missing and not detected as an outlier; 1: the input data
+#'  point is not originally missing but detected as an outlier; 2: the input
+#'  data point is originally missing).
+#'
+#' * The third column, `med`, gives the ensemble median time series calculated
+#'  from estimated values at each time point for each tree in the constructed
+#'  random forest.
+#'
+#' * The fourth column, `q1`, gives the ensemble Q1 (first quartile) time
+#'  series calculated from estimated values at each time point for each tree
+#'  in the constructed random forest.
+#'
+#' * The fifth column, `q3`, gives the ensemble Q3 (third quartile) time series
+#'  calculated from estimated values at each time point for each tree in the
+#'  constructed random forest.
+#'
+#' @author Yoshiaki Hata
+#'
+#' @export
 
-## Not run
-## After running outlier removal function
-#
-# list_feature_dT <- c("rs", "ta", "vpd", "hrmin")
-# n_feature_dT <- length(list_feature_dT)
-#
-# list_min_nodesize_1st <- c(5)
-# list_mtry_1st <- seq(2, n_feature_dT - 1)
-# list_subsample_1st <- c(0.1)
-#
-# list_min_nodesize_2nd <- c(5)
-# list_mtry_2nd <- seq(2, n_feature_dT - 1)
-# list_subsample_2nd <- c(1)
-# coef_IQR <- 1.5
-#
-# CV_dT_noisy <-
-#   dt_noisy %>%
-#   select(rs, ta, vpd) %>%
-#   bind_cols(rslt_test_1) %>%
-#   rf_cv(., "dT_z",
-#         list_min_nodesize_1st, list_mtry_1st, list_subsample_1st,
-#         list_feature_dT, rf_replace = FALSE)
-#
-# CV_dT_noisy %>%
-#   filter(subsample == list_subsample_1st[1]) %>%
-#   arrange(MSE_OOB) %>%
-#   head(1) %>% {
-#     pull(., min_nodesize) ->> min_nodesize_dT
-#     pull(., mtry) ->> mtry_dT
-#     pull(., subsample) ->> subsample_dT
-#   }
-#
-#
-# ## random forest for outlier detection
-# RF_1st <-
-#   dt_noisy %>%
-#   select(rs, ta, vpd) %>%
-#   bind_cols(rslt_test_1) %>%
-#   rf_est(., "dT_z",
-#          min_nodesize_dT, mtry_dT, subsample_dT,
-#          list_feature_dT, rf_replace = FALSE, rf_predict_all = TRUE)
-#
-# dt_process <-
-#   rslt_test_1 %>%
-#   mutate(med = RF_1st$stats$med,
-#          Q1 = RF_1st$stats$Q1,
-#          Q3 = RF_1st$stats$Q3,
-#          IQR = RF_1st$stats$IQR,
-#          flag_out = RF_1st$stats$flag_out,
-#          dT_z_mod1 = RF_1st$stats$target_cleaned)
-#
-#
-# time_head <- ymd_hm("2013/08/01 00:30")
-# time_tail <- ymd_hm("2013/09/01 00:00")
-#
-# dt_process %>%
-#   na_if(-9999) %>%
-#   ggplot()+
-#   theme_classic()+
-#   labs(x = "",
-#        y = bquote( Standardized~Delta*italic("T")~(degree*C) ))+
-#   theme(axis.title.y = element_text(size = 10),
-#         axis.text.x = element_text(size = 8, colour = "black"),
-#         axis.text.y = element_text(size = 8, colour = "black"),
-#         legend.position = "none")+
-#   scale_x_datetime(limits = c(time_head, time_tail))+
-#   scale_color_manual(values = c("grey", "red3", "royalblue"), name = "")+
-#   geom_line(aes(time, med), col = "red3", lwd = 1, alpha = 0.6)+
-#   geom_ribbon(aes(time, ymin = Q1 - coef_IQR * IQR, ymax = Q3 + coef_IQR * IQR),
-#               fill = "orange", alpha = 0.6)+
-#   geom_point(aes(time, dT_z, col = as.factor(flag_out)), size = 3, alpha = 0.6)
-#
-#
-## random forest for gap-filling
-# CV_dT_cleaned <-
-#   dt_noisy %>%
-#   select(rs, ta, vpd) %>%
-#   bind_cols(dt_process, .) %>%
-#   rf_cv(., "dT_z_mod1",
-#         list_min_nodesize_2nd, list_mtry_2nd, list_subsample_2nd,
-#         list_feature_dT)
-#
-# CV_dT_cleaned %>%
-#   filter(subsample == list_subsample_2nd[1]) %>%
-#   arrange(MSE_OOB) %>%
-#   head(1) %>% {
-#     pull(., min_nodesize) ->> min_nodesize_dT
-#     pull(., mtry) ->> mtry_dT
-#     pull(., subsample) ->> subsample_dT
-#   }
-#
-# RF_2nd <-
-#   dt_noisy %>%
-#   select(rs, ta, vpd) %>%
-#   bind_cols(rslt_test_1) %>%
-#   rf_est(dt_process, "dT_z_mod1",
-#          min_nodesize_dT, mtry_dT, subsample_dT,
-#          list_feature_dT, rf_replace = TRUE, rf_predict_all = FALSE)
-#
-# MSE_test_RF_2nd_dT_La1_01 <- RF_2nd$MSE %>% as.numeric()
-#
-# ## gap-fill and convert standardized dT to real dT
-# data_dT_La1_01 %<>%
-#   mutate(dT_z_pred = RF_2nd$stats$avg,
-#          dT_z_mod2 = ifelse(dT_z_mod1 == -9999, NA, dT_z_mod1),
-#          dT_z_mod2 = na.approx(dT_z_mod2, maxgap = 1, na.rm = FALSE),
-#          dT_z_mod2 = ifelse(is.na(dT_z_mod2), dT_z_pred, dT_z_mod2)) %>%
-#   replace_na(list(dT_mod2 = -9999, dT_mod3 = -9999)) %>%
-#   mutate(dT_mod4 = dT_z_mod2 * dT_sd_ref_La1_01 + dT_avg_ref_La1_01,
-#          QC_dT = ifelse(dT_mod3 != dT_mod2, 1, 0),
-#          QC_dT = ifelse(flag_out >= 1, 2, QC_dT))
+remove_rf_outlier <-
+  function(df, colname_label, vctr_colname_feature = NULL,
+           vctr_min_nodesize = c(5), vctr_m_try = NULL,
+           vctr_subsample = c(0.1), frac_train = 0.75,
+           n_tree = 500, ran_seed = 12345, coef_iqr = 1.5, label_err = -9999) {
+    ## avoid "No visible binding for global variable" notes
+    . <- NULL
+    MSE_OOB <- NULL
+    min_nodesize <- NULL
+    m_try <- NULL
+    subsample <- NULL
+
+    message("Random forest outlier detection started")
+    message("--- Hyperparameter optimization using grid search started")
+
+    CV_rslt <-
+      rf_fit(df, colname_label, vctr_colname_feature,
+             vctr_min_nodesize, vctr_m_try, vctr_subsample,
+             frac_train = frac_train, n_tree = n_tree,
+             ran_seed = ran_seed, label_err = label_err) %>%
+      dplyr::arrange(MSE_OOB) %>%
+      dplyr::slice_head(.)
+
+    min_nodesize_opt <- dplyr::pull(CV_rslt, min_nodesize)
+    m_try_opt <- dplyr::pull(CV_rslt, m_try)
+    subsample_opt <- dplyr::pull(CV_rslt, subsample)
+
+    message("--- Optimal hyperparameter set: [", m_try_opt, ", ",
+            min_nodesize_opt, ", ", subsample_opt, "]")
+    message("--- Hyperparameter optimization using grid search finished")
+    message("--- Random forest construction started")
+
+    result <-
+      rf_pred(df, colname_label, vctr_colname_feature,
+              min_nodesize = min_nodesize_opt,
+              m_try = m_try_opt, subsample = subsample_opt,
+              do_outlier_detection = TRUE,
+              frac_train = frac_train, n_tree = n_tree,
+              coef_iqr = coef_iqr, label_err = label_err)
+
+    message("--- Random forest construction finished")
+    message("Random forest outlier detection finished")
+    return(result)
+  }
 
 
+#' Fill missing values with a random forest model
+#'
+#' @description `fill_gaps()` replaces all missing values in a target time
+#'  series with values estimated by a random forest model whose hyperparameters
+#'  are calibrated using a grid search approach and out-of-bag evaluation.
+#'
+#' @details
+#' A random forest model is constructed for the targeted time series to fill
+#' missing values. Users can input any feature from the dataset, and out-of-bag
+#' evaluation is used to determine the hyperparameters. This evaluation is
+#' applied to a training dataset separated from the entire input data. To
+#' reduce the computational cost, the only hyperparameter used by default for
+#' grid search is the number of candidate features. After determining the
+#' optimal hyperparameters, they are used to construct the optimal random
+#' forest model. Predicted time series are equal to the average of 500
+#' (default) tree outputs at each time point. If the input targeted value is
+#' missing, the predicted value is used for the imputation.
+#'
+#' @inheritParams rf_fit
+#' @inheritParams rf_pred
+#' @param vctr_subsample A vector of numerical values between 0 and 1,
+#'  indicating candidates of a hyperparameter defining the fraction of input
+#'  training data points to be sampled in constructing the random forest.
+#'  Default is `c(1)`.
+#'
+#' @returns
+#' A list with two elements. The first element `mse` is the mean squared error
+#' between predicted and original values in the test data set. The second
+#' element `stats` is a data frame with columns below:
+#'
+#' * The first column, `gapfilled`, gives the gap-filled time series, where
+#'  missing values are replaced with the predicted values from the random
+#'  forest model.
+#'
+#' * The second column, `avg_predicted`, gives the ensemble mean time series
+#'  calculated from estimated values at each time point for each tree in the
+#'  constructed random forest.
+#'
+#' * The third column, `sd_predicted`, gives the ensemble mean time series
+#'  calculated from estimated values at each time point for each tree in the
+#'  constructed random forest.
+#'
+#' @author Yoshiaki Hata
+#'
+#' @export
 
+fill_gaps <-
+  function(df, colname_label, vctr_colname_feature = NULL,
+           vctr_min_nodesize = c(5), vctr_m_try = NULL,
+           vctr_subsample = c(1), frac_train = 0.75,
+           n_tree = 500, ran_seed = 12345, label_err = -9999) {
+    ## avoid "No visible binding for global variable" notes
+    . <- NULL
+    MSE_OOB <- NULL
+    min_nodesize <- NULL
+    m_try <- NULL
+    subsample <- NULL
 
+    message("Random forest-based gap-filling started")
+    message("--- Hyperparameter optimization using grid search started")
 
+    CV_rslt <-
+      rf_fit(df, colname_label, vctr_colname_feature,
+             vctr_min_nodesize, vctr_m_try, vctr_subsample,
+             frac_train = frac_train, n_tree = n_tree,
+             ran_seed = ran_seed, label_err = label_err) %>%
+      dplyr::arrange(MSE_OOB) %>%
+      dplyr::slice_head(.)
+
+    min_nodesize_opt <- dplyr::pull(CV_rslt, min_nodesize)
+    m_try_opt <- dplyr::pull(CV_rslt, m_try)
+    subsample_opt <- dplyr::pull(CV_rslt, subsample)
+
+    message("--- Optimal hyperparameter set: [", m_try_opt, ", ",
+            min_nodesize_opt, ", ", subsample_opt, "]")
+    message("--- Hyperparameter optimization using grid search finished")
+    message("--- Random forest construction started")
+
+    result <-
+      rf_pred(df, colname_label, vctr_colname_feature,
+              min_nodesize = min_nodesize_opt,
+              m_try = m_try_opt,
+              subsample = subsample_opt,
+              do_outlier_detection = FALSE,
+              frac_train = frac_train, n_tree = n_tree,
+              ran_seed = ran_seed, label_err = label_err)
+
+    message("--- Random forest construction finished")
+    message("Random forest-based gap-filling finished")
+    return(result)
+  }
 
