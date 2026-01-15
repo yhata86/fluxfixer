@@ -45,15 +45,6 @@
 #'  the same time step as the input timestamp. If `output_daily` is `TRUE`,
 #'  the dTmax is returned in daily steps.
 #'
-#' @examples
-#' ## Load data
-#' data(dt_gf)
-#' time <- dt_gf$time[seq(1, 48 * 10)]
-#' dt <- dt_gf$dt[seq(1, 48 * 10)]
-#'
-#' ## Calculate dTmax from gap-filled dT time series
-#' result <- calc_dtmax_sp(time, dt)
-#'
 #' @author Yoshiaki Hata
 #'
 #' @seealso `calc_dtmax`, `calc_dtmax_pd`, `calc_dtmax_mw`, `calc_dtmax_dr`,
@@ -178,16 +169,6 @@ calc_dtmax_sp <-
 #'  predawn method. If `output_daily` is `FALSE` (default), this column has
 #'  the same time step as the input timestamp. If `output_daily` is `TRUE`,
 #'  the dTmax is returned in daily steps.
-
-#' @examples
-#' ## Load data
-#' data(dt_gf)
-#' time <- dt_gf$time[seq(1, 48 * 10)]
-#' dt <- dt_gf$dt[seq(1, 48 * 10)]
-#' radi <- dt_gf$sw_in[seq(1, 48 * 10)]
-#'
-#' ## Calculate dTmax from gap-filled dT time series
-#' result <- calc_dtmax_pd(time, dt, radi)
 #'
 #' @author Yoshiaki Hata
 #'
@@ -352,18 +333,6 @@ calc_dtmax_pd <-
 #'  environmental dependent method. If `output_daily` is `FALSE` (default),
 #'  this column has the same time step as the input timestamp. If
 #'  `output_daily` is `TRUE`, the dTmax is returned in daily steps.
-#'
-#' @examples
-#' ## Load data
-#' data(dt_gf)
-#' time <- dt_gf$time[seq(1, 48 * 10)]
-#' dt <- dt_gf$dt[seq(1, 48 * 10)]
-#' radi <- dt_gf$sw_in[seq(1, 48 * 10)]
-#' ta <- dt_gf$ta[seq(1, 48 * 10)]
-#' vpd <- dt_gf$vpd[seq(1, 48 * 10)]
-#'
-#' ## Calculate dTmax from gap-filled dT time series
-#' result <- calc_dtmax_ed(time, dt, radi, ta, vpd, thres_vpd = 6.0)
 #'
 #' @author Yoshiaki Hata
 #'
@@ -739,16 +708,6 @@ calc_dtmax_pd_ed <-
 #'  same time step as the input timestamp. If `output_daily` is `TRUE`,
 #'  the dTmax is returned in daily steps.
 #'
-#' @examples
-#' ## Load data
-#' data(dt_gf)
-#' time <- dt_gf$time[seq(1, 48 * 10)]
-#' dt <- dt_gf$dt[seq(1, 48 * 10)]
-#' radi <- dt_gf$sw_in[seq(1, 48 * 10)]
-#'
-#' ## Calculate dTmax from gap-filled dT time series
-#' result <- calc_dtmax_mw(vctr_time = time, vctr_dt = dt, vctr_radi = radi)
-#'
 #' @author Yoshiaki Hata
 #'
 #' @seealso `calc_dtmax`, `calc_dtmax_sp`, `calc_dtmax_pd`, `calc_dtmax_dr`,
@@ -894,21 +853,10 @@ calc_dtmax_mw <-
 #'  the same time step as the input timestamp. If `output_daily` is `TRUE`,
 #'  the dTmax is returned in daily steps.
 #'
-#' @examples
-#' ## Load data
-#'
-#' data(dt_gf)
-#' time <- dt_gf$time[seq(1, 48 * 10)]
-#' dt <- dt_gf$dt[seq(1, 48 * 10)]
-#' radi <- dt_gf$sw_in[seq(1, 48 * 10)]
-#'
-#' ## Calculate dTmax from gap-filled dT time series
-#' result <- calc_dtmax_dr(vctr_time = time, vctr_dt = dt, vctr_radi = radi)
-#'
 #' @author Yoshiaki Hata
 #'
 #' @seealso `calc_dtmax`, `calc_dtmax_sp`, `calc_dtmax_pd`, `calc_dtmax_mw`,
-#'  `calc_dtmax_ed`,
+#'  `calc_dtmax_ed`
 #'
 #' @include utils.R
 
@@ -1248,7 +1196,7 @@ calc_dtmax_mw_dr <-
 #' vpd <- dt_gf$vpd[seq(1, 48 * 10)]
 #'
 #' ## Calculate dTmax from gap-filled dT time series
-#' result <- calc_dtmax(vctr_time, dt, radi, ta, vpd, thres_vpd = 6.0)
+#' result <- calc_dtmax(time, dt, radi, ta, vpd, thres_vpd = 6.0)
 #'
 #' @include utils.R
 #'
