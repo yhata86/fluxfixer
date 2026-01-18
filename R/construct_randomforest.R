@@ -169,7 +169,7 @@ rf_fit <-
 #' below:
 #'
 #' * The first column, `cleaned`, gives the cleaned time series after replacing
-#'  the detected outliers with the value specified by `label_error`.
+#'  the detected outliers with the value specified by `label_err`.
 #'
 #' * The second column, `flag_out`, gives a flag variable time series
 #'  indicating the status of the cleaned time series (0: the input data point
@@ -348,18 +348,20 @@ rf_pred <-
 #'
 #' @details
 #' A random forest model is constructed for the targeted time series to remove
-#' outliers. Users can input any feature from the dataset, and out-of-bag
-#' evaluation is used to determine the hyperparameters. This evaluation is
-#' applied to a training dataset separated from the entire input data. To
-#' reduce the computational cost, the only hyperparameter used by default for
-#' grid search is the number of candidate features. To reduce the risk of
-#' learning noise, the training data sampling ratio is set to 0.1 by default.
-#' After determining the optimal hyperparameters, they are used to construct
-#' the optimal random forest model. Output values are obtained from 500
-#' (default) trees, and the first quartile (Q1), third quartile (Q3), and
-#' interquartile range (IQR) of the output values at each time point are
-#' calculated. If the targeted value is less than Q1 − 1.5IQR or more than Q3 +
-#' 1.5IQR (default), the data point is identified as an outlier and removed.
+#' outliers. The time series is assumed to be stationary, so detrending is
+#' needed before inputting if it has a trend. Users can input any feature from
+#' the dataset, and out-of-bag evaluation is used to determine the
+#' hyperparameters. This evaluation is applied to a training dataset separated
+#' from the entire input data. To reduce the computational cost, the only
+#' hyperparameter used by default for grid search is the number of candidate
+#' features. To reduce the risk of learning noise, the training data sampling
+#' ratio is set to 0.1 by default. After determining the optimal
+#' hyperparameters, they are used to construct the optimal random forest model.
+#' Output values are obtained from 500 (default) trees, and the first quartile
+#' (Q1), third quartile (Q3), and interquartile range (IQR) of the output
+#' values at each time point are calculated. If the targeted value is less
+#' than Q1 − 1.5IQR or more than Q3 + 1.5IQR (default), the data point is
+#' identified as an outlier and removed.
 #'
 #' @inheritParams rf_fit
 #' @inheritParams rf_pred
@@ -370,7 +372,7 @@ rf_pred <-
 #' element `stats` is a data frame with columns below:
 #'
 #' * The first column, `cleaned`, gives the cleaned time series after replacing
-#'  the detected outliers with the value specified by `label_error`.
+#'  the detected outliers with the value specified by `label_err`.
 #'
 #' * The second column, `flag_out`, gives a flag variable time series
 #'  indicating the status of the cleaned time series (0: the input data point
@@ -389,6 +391,17 @@ rf_pred <-
 #' * The fifth column, `q3`, gives the ensemble Q3 (third quartile) time series
 #'  calculated from estimated values at each time point for each tree in the
 #'  constructed random forest.
+#'
+#' @examples
+#' ## Load data
+#' data(dt_noisy)
+#' df_raw <- dt_noisy[c(12097:14400), ]
+#'
+#' ## Remove outliers
+#' result <-
+#'   remove_rf_outlier(df = df_raw, colname_label = "dt",
+#'                     vctr_colname_feature = c("sw_in", "vpd", "swc", "p"),
+#'                     coef_iqr = 3.0)$stats
 #'
 #' @author Yoshiaki Hata
 #'
@@ -448,15 +461,17 @@ remove_rf_outlier <-
 #'
 #' @details
 #' A random forest model is constructed for the targeted time series to fill
-#' missing values. Users can input any feature from the dataset, and out-of-bag
-#' evaluation is used to determine the hyperparameters. This evaluation is
-#' applied to a training dataset separated from the entire input data. To
-#' reduce the computational cost, the only hyperparameter used by default for
-#' grid search is the number of candidate features. After determining the
-#' optimal hyperparameters, they are used to construct the optimal random
-#' forest model. Predicted time series are equal to the average of 500
-#' (default) tree outputs at each time point. If the input targeted value is
-#' missing, the predicted value is used for the imputation.
+#' missing values. The time series is assumed to be stationary, so detrending
+#' is needed before inputting if it has a trend. Users can input any feature
+#' from the dataset, and out-of-bag evaluation is used to determine the
+#' hyperparameters. This evaluation is applied to a training dataset separated
+#' from the entire input data. To reduce the computational cost, the only
+#' hyperparameter used by default for grid search is the number of candidate
+#' features. After determining the optimal hyperparameters, they are used to
+#' construct the optimal random forest model. Predicted time series are equal
+#' to the average of 500 (default) tree outputs at each time point. If the
+#' input targeted value is missing, the predicted value is used for the
+#' imputation.
 #'
 #' @inheritParams rf_fit
 #' @inheritParams rf_pred
@@ -481,6 +496,19 @@ remove_rf_outlier <-
 #' * The third column, `sd_predicted`, gives the ensemble mean time series
 #'  calculated from estimated values at each time point for each tree in the
 #'  constructed random forest.
+#'
+#' @examples
+#' ## Load data
+#' data(dt_noisy)
+#' df_raw <- dt_noisy[c(13105:15024), ]
+#'
+#' ## Remove error values for making data gaps
+#' df_raw$dt <- ifelse(df_raw$dt > 9.5, df_raw$dt, -9999)
+#'
+#' ## Fill data gaps
+#' result <-
+#'   fill_gaps(df = df_raw, colname_label = "dt",
+#'             vctr_colname_feature = c("sw_in", "vpd", "swc", "ta"))$stats
 #'
 #' @author Yoshiaki Hata
 #'

@@ -64,7 +64,9 @@ get_interval <- function(vctr_time) {
 #'  as.POSIXct("2026/01/02", tz = timezone), by = "30 min")
 #'
 #' ## Obtain global solar radiation at Lambir Hills National Park in Malaysia
-#' result <- calc_sw_in_toa(time, 4.201007, 114.039079, 120)
+#' result <-
+#'  calc_sw_in_toa(vctr_time = time, lat = 4.201007, lon = 114.039079,
+#'                 std_meridian = 120)
 #'
 #' @author Yoshiaki Hata
 #'
@@ -159,9 +161,10 @@ n_valid <-
 #'  used in transforming the original time series into the Z-score time series.
 #'  The length of the vector must match that of the timestamp vector. The unit
 #'  of the time series must match that of `vctr_avg`.
-#' @param wndw_size_conv An integer indicating the number of data points
-#'  included in a moving window. Default is 48 * 15, implying that the window
-#'  size is 15 days if the time interval of the input timestamp is 30 minutes.
+#' @param wndw_size_conv A positive integer indicating the number of data
+#'  points included in a moving window. THeefault is 48 * 15, meaning that the
+#'  window size is 15 days if the time interval of the input timestamp is 30
+#'  minutes.
 #' @param inv_sigma_conv A positive value defining a Gaussian window width. The
 #'  width of the Gaussian window is inversely proportional to this parameter.
 #'  Default is 0.01.

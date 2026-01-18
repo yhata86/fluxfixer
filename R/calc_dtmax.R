@@ -147,10 +147,10 @@ calc_dtmax_sp <-
 #'  match that of the input radiation time series.
 #' @param thres_hour_pd An integer from 0 to 23. The threshold hour of the day
 #'  which defines the end of predawn in local time (default is 8).
-#' @param min_n_wndw_dtmax The minimum number of data points for calculating
-#'  statistics using a moving window (default is 3). If the number of data
-#'  points is less than this threshold, the statistics are not calculated in
-#'  the window.
+#' @param min_n_wndw_dtmax A positive integer indicating the minimum number of
+#'  data points for calculating statistics using a moving window (default is
+#'  3). If the number of data points is less than this threshold, the
+#'  statistics are not calculated in the window.
 #'
 #' @returns
 #' A data frame with columns below:
@@ -673,8 +673,9 @@ calc_dtmax_pd_ed <-
 #'  `vctr_time_daily`. If this argument is `NULL` (default), `vctr_time`,
 #'  `vctr_dt`, and `vctr_radi` must be provided to conduct the daily predawn
 #'  method previously.
-#' @param wndw_size_dtmax A window size (days) for determining moving window
-#'  maximum values of dTmax. Default is 11 (days).
+#' @param wndw_size_dtmax A positive integer indicating the window size (days)
+#'  for determining moving window maximum values of dTmax. Default is 11
+#'  (days).
 #' @param vctr_time Only valid when `vctr_dtmax_pd` is `NULL`. A timestamp
 #'  vector of class POSIXct or POSIXt. This vector indicates the timings of the
 #'  end of each measurement in local time. Any interval (typically 15 to 60
@@ -1189,14 +1190,16 @@ calc_dtmax_mw_dr <-
 #' @examples
 #' ## Load data
 #' data(dt_gf)
-#' time <- dt_gf$time[seq(1, 48 * 10)]
-#' dt <- dt_gf$dt[seq(1, 48 * 10)]
-#' radi <- dt_gf$sw_in[seq(1, 48 * 10)]
-#' ta <- dt_gf$ta[seq(1, 48 * 10)]
-#' vpd <- dt_gf$vpd[seq(1, 48 * 10)]
+#' time <- dt_gf$time[1:480]
+#' dt <- dt_gf$dt[1:480]
+#' radi <- dt_gf$sw_in[1:480]
+#' ta <- dt_gf$ta[1:480]
+#' vpd <- dt_gf$vpd[1:480]
 #'
 #' ## Calculate dTmax from gap-filled dT time series
-#' result <- calc_dtmax(time, dt, radi, ta, vpd, thres_vpd = 6.0)
+#' result <-
+#'  calc_dtmax(vctr_time = time, vctr_dt = dt, vctr_radi = radi, vctr_ta = ta,
+#'             vctr_vpd = vpd, thres_vpd = 6.0)
 #'
 #' @include utils.R
 #'

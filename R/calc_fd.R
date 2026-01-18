@@ -43,8 +43,8 @@
 #' dt <- dt_gf$dt
 #' dtmax <- dtmax$dtmax_sp
 #'
-#' ## Calculate Fd
-#' result <- calc_fd(dt, dtmax)
+#' ## Calculate sap flux density
+#' result <- calc_fd(vctr_dt = dt, vctr_dtmax = dtmax)
 #'
 #' @author Yoshiaki Hata
 #'
