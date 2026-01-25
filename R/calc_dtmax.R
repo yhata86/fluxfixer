@@ -94,8 +94,9 @@ calc_dtmax_sp <-
       zoo::read.zoo() %>%
       xts::as.xts(tzone = timezone) %>%
       xts::apply.daily(function(x) sapply(x, max, na.rm = TRUE)) %>%
-      dplyr::na_if(-Inf) %>%
       zoo::fortify.zoo() %>%
+      dplyr::mutate(dplyr::across(tidyselect::where(is.numeric),
+                                  ~dplyr::na_if(., -Inf))) %>%
       dplyr::rename(time = Index, dtmax_sp = ".") %>%
       dplyr::filter(time >= vctr_time[1] &
                       time <= vctr_time[length(vctr_time)]) %>%

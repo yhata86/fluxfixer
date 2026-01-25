@@ -199,7 +199,8 @@ modify_short_drift <-
                                                 vctr_time_drft_tail[[i]] +
                                                   lubridate::days(n_day_ref)),
                                dT, label_err)) %>%
-        dplyr::na_if(label_err)
+        dplyr::mutate(dplyr::across(tidyselect::where(is.numeric),
+                                    ~dplyr::na_if(., label_err)))
 
       ## calculate 5th and 95th percentile for drift correction
       vctr_drft <- data_dT %>% dplyr::pull(., !!colname_drft)
@@ -504,7 +505,8 @@ remove_zscore_outlier <-
 
           data_dT <-
             data_dT %>%
-            dplyr::na_if(label_err) %>%
+            dplyr::mutate(dplyr::across(tidyselect::where(is.numeric),
+                                        ~dplyr::na_if(., label_err))) %>%
             dplyr::mutate(dT_n_prd = zoo::rollapply(dT_mod_prd,
                                                     width = wndw_size_z,
                                                     FUN = n_valid, fill = NA,
@@ -532,7 +534,8 @@ remove_zscore_outlier <-
       } else {
         data_dT <-
           data_dT %>%
-          dplyr::na_if(label_err) %>%
+          dplyr::mutate(dplyr::across(tidyselect::where(is.numeric),
+                                      ~dplyr::na_if(., label_err))) %>%
           dplyr::mutate(dT_n = zoo::rollapply(dT_mod,
                                                   width = wndw_size_z,
                                                   FUN = n_valid, fill = NA,

@@ -84,7 +84,8 @@ rf_fit <-
     data <-
       df %>%
       dplyr::filter(!!rlang::sym(colname_label) != label_err) %>%
-      dplyr::na_if(label_err)
+      dplyr::mutate(dplyr::across(tidyselect::where(is.numeric),
+                                  ~dplyr::na_if(., label_err)))
 
     n_data <- nrow(data)
     rownum_train <- sample(n_data, size = n_data * frac_train)
@@ -248,7 +249,8 @@ rf_pred <-
     data <-
       df %>%
       dplyr::filter(!!rlang::sym(colname_label) != label_err) %>%
-      dplyr::na_if(label_err)
+      dplyr::mutate(dplyr::across(tidyselect::where(is.numeric),
+                                  ~dplyr::na_if(., label_err)))
 
     ## create train and test data set
     n_data <- nrow(data)

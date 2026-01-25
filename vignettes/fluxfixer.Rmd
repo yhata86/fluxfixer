@@ -168,7 +168,8 @@ time_head <- as.POSIXct("2012/09/01 00:30", tz = "Etc/GMT-8")
 time_tail <- as.POSIXct("2013/09/01 00:00", tz = "Etc/GMT-8")
 
 dt_noisy %>% 
-  dplyr::na_if(-9999) %>% 
+  dplyr::mutate(dplyr::across(tidyselect::where(is.numeric),
+                              ~dplyr::na_if(., -9999))) %>% 
   ggplot2::ggplot()+
   scale_x_datetime(limits = c(time_head, time_tail))+
   geom_point(aes(time, dt), col = "royalblue")
@@ -245,7 +246,8 @@ time_head <- as.POSIXct("2012/09/01 00:30", tz = "Etc/GMT-8")
 time_tail <- as.POSIXct("2013/09/01 00:00", tz = "Etc/GMT-8")
 
 result %>% 
-  dplyr::na_if(-9999) %>% 
+  dplyr::mutate(dplyr::across(tidyselect::where(is.numeric),
+                              ~dplyr::na_if(., -9999))) %>% 
   ggplot2::ggplot()+
   scale_x_datetime(limits = c(time_head, time_tail))+
   geom_point(aes(time, raw), col = "royalblue", alpha = 0.01)+

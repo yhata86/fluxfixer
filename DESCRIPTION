@@ -23,6 +23,7 @@ Imports:
     rlang (>= 1.1.3),
     stats (>= 4.0.3),
     tidyr (>= 1.1.4),
+    tidyselect (>= 1.2.0),
     xts (>= 0.12.1),
     zoo (>= 1.8-8)
 RoxygenNote: 7.1.2

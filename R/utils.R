@@ -219,7 +219,8 @@ check_short_attenuation <-
                  dT_z = vctr_z,
                  dT_avg = vctr_avg,
                  dT_sd = vctr_sd) %>%
-      dplyr::na_if(label_err)
+      dplyr::mutate(dplyr::across(tidyselect::where(is.numeric),
+                                  ~dplyr::na_if(., label_err)))
 
     time_mea_start <-
       data %>%
