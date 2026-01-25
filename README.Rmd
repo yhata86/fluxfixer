@@ -13,29 +13,217 @@ knitr::opts_chunk$set(
 )
 ```
 
-# fluxfixer
+# fluxfixer <img src="man/figures/logo.png" align="right" height="120" alt="" />
 
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of fluxfixer is to post-process sap flux data semi-automatically. 
-Notably, this package can detect outliers and fill data gaps automatically by 
-machine learning method, which uses meteorological variables as input.
- Also, fluxfixer offers various functions that can detect aberrant structural
- changes in time series dynamics, correct such time series, and calculate sap
- flux density with different methods for deriving zero-flow conditions.
+## Overview
 
-## Caution
+The goal of fluxfixer is to automatically post-process sap flow data measured by the thermal dissipation method.
 
-This is alpha-version package and under developing. I recommend you to install
-the later version.
+Notably, this package can detect outliers and fill data gaps using a machine learning method that takes environmental variables as input.
+These quality control protocols can also be applied to other types of raw time series with many artifacts.
+
+fluxfixer provides various functions that can detect aberrant structural changes in time series dynamics, correct such time series, and calculate sap flux density with different methods for deriving zero-flow conditions.
+
+Basically, you can conduct the whole process by executing only one function, `run_fluxfixer()`. Optionally, you can apply each process step-by-step using the functions such as:
+
+* `check_absolute_limits()` eliminates physically unreasonable values.
+* `modify_short_drift()` corrects short-term signal drifts.
+* `filter_highfreq_noise()` filters high-frequency noise from the time series.
+* `remove_zscore_outlier()` detects and removes outliers by Z-score transformation.
+* `remove_rf_outlier()` detects and removes outliers by a random forest model.
+* `fill_gaps()` imputes all missing values in the time series by a random forest model.
+* `retrieve_ts()` converts a standardized Z-score time series into a time series in its original units while conducting detrending and signal damping correction.
+
+For sap flow data processing:
+
+* `calc_dtmax()` estimates the reference values of observed temperature difference between probes under zero-flow conditions (dTmax) with multiple methods.
+* `calc_fd()` calculates sap flux density, considering the heartwood correction.
+
+You can learn more about how to use them in `browseVignettes("fluxfixer")`.
+
 
 ## Installation
 
-You can install the development version of fluxfixer like so:
+You can install the latest version of fluxfixer from
+[CRAN](https://cran.r-project.org/) with:
 
-``` r
-remotes::install_github("yhata86/fluxfixer")
-library(fluxfixer)
+``` {r cran, eval = FALSE}
+install.packages("fluxfixer")
 ```
+
+Or, you can install the development version from [GitHub](https://github.com/)
+with:
+
+``` {r github, eval = FALSE}
+# install.packages("remotes")
+remotes::install_github("yhata86/fluxfixer")
+```
+
+
+## Example
+
+``` {r example_lib, echo = FALSE, message = FALSE, warning = FALSE}
+library(fluxfixer)
+library(ggplot2)
+library(dplyr)
+library(ggtext)
+```
+
+Assume that you have conducted a sap flow measurement in Malaysia from Sep. 2012 to Aug. 2013, and obtained a half-hourly time series below:
+
+``` {r example_raw, echo = FALSE, warning = FALSE}
+data("dt_noisy")
+
+label_date <-
+  paste0(c("Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May",
+           "Jun", "Jul"),
+         "          ")
+
+dt_noisy %>% 
+  dplyr::na_if(-9999) %>% 
+  ggplot2::ggplot()+
+  theme_classic()+
+  labs(x = "",
+       y = bquote( Delta*italic("T")~(degree*C) ))+
+  theme(axis.title.y = element_text(size = 18),
+        axis.text.x = element_text(size = 14, colour = "black"),
+        axis.text.y = element_text(size = 14, colour = "black"),
+        axis.ticks.length = unit(2, "mm"))+
+  scale_x_datetime(date_breaks = "1 month", date_labels = label_date,
+                   expand = expansion(0, 0))+
+  scale_y_continuous(limits = c(-1, 22), breaks = seq(0, 20, by = 5),
+                     labels = c(0, "", 10, "", 20), expand = expansion(0, 0))+
+
+  geom_point(aes(time, dt), col = "royalblue")
+```
+
+where $\Delta T$ is the temperature difference between sap flow probes, which will be used in calculating the sap flux density ($F_\mathrm{d}$).
+
+You may feel upset since the time series has:
+
+* many values near zero due to power supply shortages
+* short-term drift in May, just after sensor replacement
+* Long-term trend of the daily maximum value because of sensor degradation
+
+Do not worry.
+fluxfixer can rescue this time series and output a continuous, stationary time series.
+
+To begin with, you prepare a dataset containing raw $\Delta T$ and other environmental variables, and specify the timestamps of the events.
+
+``` {r example_setting}
+## Load sample data
+data("dt_noisy")
+
+## Specify the period of the short-term drift
+time_drft_head <- as.POSIXct("2013/05/14 13:30", tz = "Etc/GMT-8")
+time_drft_tail <- as.POSIXct("2013/05/17 15:00", tz = "Etc/GMT-8")
+
+## Specify the sensor replacement timing
+time_prd_tail <- as.POSIXct("2013/05/14 13:00", tz = "Etc/GMT-8")
+```
+
+Then, the only thing you need is to execute `run_fluxfixer()` as:
+
+``` {r example_run, message = FALSE}
+## Run all processes automatically
+result <-
+  run_fluxfixer(df = dt_noisy,
+                colname_time = "time",
+                colname_target = "dt",
+                vctr_time_drft_head = time_drft_head,
+                vctr_time_drft_tail = time_drft_tail,
+                vctr_time_prd_tail = time_prd_tail,
+                detrend = TRUE)
+```
+
+You can derive a data frame containing the post-processed time series below.
+
+``` {r example_gf, echo = FALSE, warning = FALSE}
+result %>% 
+  ggplot2::ggplot()+
+  theme_classic()+
+  labs(x = "",
+       y = bquote( Delta*italic("T")~(degree*C) ))+
+  theme(axis.title.y = element_text(size = 18),
+        axis.text.x = element_text(size = 14, colour = "black"),
+        axis.text.y = element_text(size = 14, colour = "black"),
+        axis.ticks.length = unit(2, "mm"),
+        legend.position = "none")+
+  scale_x_datetime(date_breaks = "1 month", date_labels = label_date,
+                   expand = expansion(0, 0))+
+  scale_y_continuous(limits = c(-1, 22), breaks = seq(0, 20, by = 5),
+                     labels = c(0, "", 10, "", 20), expand = expansion(0, 0))+
+  geom_point(aes(time, raw), col = "royalblue", alpha = 0.01)+
+  geom_point(aes(time, processed), col = "orange", alpha = 0.1)+
+  annotate("text", x = as.POSIXct("2013/06/01 00:00", tz = "Etc/GMT-8"),
+           y = 16, col = "royalblue", label = "Input", size = 8, hjust = 0)+
+    annotate("text", x = as.POSIXct("2013/06/01 00:00", tz = "Etc/GMT-8"),
+           y = 7.5, col = "orange", label = "Output", size = 8, hjust = 0)
+    
+```
+
+The output data frame also contains $F_\mathrm{d}$ time series, which you ultimately want.
+Here is an example of the post-processed half-hourly $F_\mathrm{d}$ time series in Feb. 2013.
+
+
+``` {r example_fd, echo = FALSE, warning = FALSE}
+time_head <- as.POSIXct("2013/02/01 00:00", tz = "Etc/GMT-8")
+time_tail <- as.POSIXct("2013/02/28 23:30", tz = "Etc/GMT-8")
+
+label_date <- as.character(seq(1, 28, by = 2))
+
+time_na_head_01 <- as.POSIXct("2013/02/01 00:00", tz = "Etc/GMT-8")
+time_na_tail_01 <- as.POSIXct("2013/02/02 17:30", tz = "Etc/GMT-8")
+time_na_head_02 <- as.POSIXct("2013/02/03 16:30", tz = "Etc/GMT-8")
+time_na_tail_02 <- as.POSIXct("2013/02/03 17:30", tz = "Etc/GMT-8")
+time_na_head_03 <- as.POSIXct("2013/02/07 19:00", tz = "Etc/GMT-8")
+time_na_tail_03 <- as.POSIXct("2013/02/08 08:00", tz = "Etc/GMT-8")
+time_na_head_04 <- as.POSIXct("2013/02/14 04:00", tz = "Etc/GMT-8")
+time_na_tail_04 <- as.POSIXct("2013/02/23 09:00", tz = "Etc/GMT-8")
+time_na_head_05 <- as.POSIXct("2013/02/27 06:30", tz = "Etc/GMT-8")
+time_na_tail_05 <- as.POSIXct("2013/02/28 23:30", tz = "Etc/GMT-8")
+
+result %>% 
+  ggplot2::ggplot()+
+  theme_classic()+
+  labs(x = "Day of month",
+       y = "*F*<sub>d</sub> (&times;10<sup>-5</sup> m<sup>3</sup> m<sup>-2</sup> s<sup>-1</sup>)")+
+  theme(axis.title.x = element_text(size = 18),
+        axis.title.y = element_markdown(size = 18),
+        axis.text.x = element_text(size = 14, colour = "black"),
+        axis.text.y = element_text(size = 14, colour = "black"),
+        axis.ticks.length = unit(2, "mm"),
+        legend.position = "none")+
+  scale_x_datetime(limits = c(time_head, time_tail), date_breaks = "2 days",
+                   date_labels = label_date, expand = expansion(0, 0))+
+  scale_y_continuous(limits = c(0, 8), breaks = seq(0, 7.5, by = 2.5),
+                     labels = c(0, "", 5, ""), expand = expansion(0, 0))+
+  annotate("rect", xmin = time_na_head_01, xmax = time_na_tail_01,
+           ymin = -Inf, ymax = Inf, fill = "gray90")+
+  annotate("rect", xmin = time_na_head_02, xmax = time_na_tail_02,
+           ymin = -Inf, ymax = Inf, fill = "gray90")+
+  annotate("rect", xmin = time_na_head_03, xmax = time_na_tail_03,
+           ymin = -Inf, ymax = Inf, fill = "gray90")+
+  annotate("rect", xmin = time_na_head_04, xmax = time_na_tail_04,
+           ymin = -Inf, ymax = Inf, fill = "gray90")+
+  annotate("rect", xmin = time_na_head_05, xmax = time_na_tail_05,
+           ymin = -Inf, ymax = Inf, fill = "gray90")+
+  geom_line(aes(time, fd_sp * 10^5), col = "deepskyblue1", lwd = 0.8, alpha = 0.8)+
+  annotate("text", x = as.POSIXct("2013/02/18 18:00", tz = "Etc/GMT-8"),
+           y = 7.5, col = "gray40", label = "Gap-filled", size = 6,
+           hjust = 0.5, vjust = 1)
+
+```
+
+The shaded area represents the gap-filled period by the random forest model.
+You can see that the imputed time series reproduced the diurnal cycle of the non-imputed time series successfully.
+
+
+## License
+
+This package is open-source and released under the MIT License.
+See the LICENSE file for more details.
 

@@ -1,26 +1,48 @@
 Package: fluxfixer
 Type: Package
-Title: Post-processing Sap Flow Data
+Title: A Sophisticated Post-processing Framework for Sap Flow Data
 Version: 0.0.0.9000
 Authors@R: person("Yoshiaki", "Hata", email = "yoshiakihata0806@gmail.com",
-  role = c("aut", "cre"))
+  role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0001-7703-0863"))
 Author: Yoshiaki Hata
 Maintainer: Yoshiaki Hata <yoshiakihata0806@gmail.com>
-Description: Post-processing Sap Flow Data.
-    See the fluxfixer website for more information, documentation and examples.
-License: MIT
+Description: Provides a flexible framework for post-processing thermal
+  dissipation sap flow data using statistical methods and machine learning,
+  including anomaly correction, outlier removal, gap-filling, and sap flux
+  density calculation. This framework can also apply to other raw time series
+  with various artifacts.
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports: 
     dplyr (>= 1.0.7),
     gsignal (>= 0.3-4),
     lubridate (>= 1.7.9),
+    magrittr (>= 2.0.3),
     ranger (>= 0.13.1),
+    rlang (>= 1.1.3),
+    stats (>= 4.0.3),
     tidyr (>= 1.1.4),
     xts (>= 0.12.1),
     zoo (>= 1.8-8)
 RoxygenNote: 7.1.2
 Depends: 
-    R (>= 2.10)
+    R (>= 4.0)
 URL: https://github.com/yhata86/fluxfixer
 BugReports: https://github.com/yhata86/fluxfixer/issues
+Suggests: 
+    knitr,
+    rmarkdown,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+Collate: 
+    'utils.R'
+    'calc_dtmax.R'
+    'calc_fd.R'
+    'construct_randomforest.R'
+    'datasets.R'
+    'fluxfixer-package.R'
+    'remove_statistical_outlier.R'
+    'run_fluxfixer.R'
+    'utils-pipe.R'
+VignetteBuilder: knitr
