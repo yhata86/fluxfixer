@@ -306,17 +306,18 @@ filter_highfreq_noise <-
 #'  moving window.
 #'
 #' @details
-#' The input time series is normalized using a moving window, and the data
+#' The input time series is standardized using a moving window, and the data
 #' values are converted to Z-scores. In this step, the width of the moving
 #' window is set to 15 days by default, centered on the target time point,
-#' and normalization is performed individually for each time point in the time
-#' series. The upper and lower limits of the Z-score (default: ±5) are set, and
-#' data points outside that range are removed as outliers. After the outliers
-#' have been removed, the Z-score is returned to the original value using the
-#' original mean and standard deviation time series, and normalization is
-#' performed again using a moving window to remove additional outliers. These
-#' procedures are repeated until either no more outliers are removed or the
-#' maximum number of iterations (default 10) is reached.
+#' and standardization is performed individually for each time point in the
+#' time series. The upper and lower limits of the Z-score (default: ±5) are
+#' set, and data points outside that range are removed as outliers. After the
+#' outliers have been removed, the Z-score is returned to the original value
+#' using the original mean and standard deviation time series, and
+#' standardization is performed again using a moving window to remove
+#' additional outliers. These procedures are repeated until either no more
+#' outliers are removed or the maximum number of iterations (default 10) is
+#' reached.
 #'
 #' Users can define sub-periods across the entire time series using
 #' `vctr_time_prd_tail`, and the Z-score conversion is performed in each
@@ -327,7 +328,7 @@ filter_highfreq_noise <-
 #' difference between sap flow probes) time series may yield a signal that is
 #' attenuated for only a short period, for example, when rainfall continues for
 #' days, causing the moving window mean (or standard deviation) to increase
-#' (or decrease). In such cases, normalization will cause the Z-score time
+#' (or decrease). In such cases, standardization  will cause the Z-score time
 #' series immediately before and after the rainfall to be unnaturally
 #' distorted, hindering the construction of the random forest model. If
 #' `modify_z` is `TRUE`, after the outlier removal, this function modifies the
@@ -764,12 +765,13 @@ calc_ref_stats <-
 #'
 #' @details
 #' Retrieving a time series with its original units is conducted by multiplying
-#' a Z-score to standard deviation, following by adding average. If the average
-#' and standard deviation time series are the same as those in converting the
-#' original time series into the Z-score time series, the original values with
-#' the original average and standard deviation are retrieved. If reference
-#' values of the average and/or standard deviation are used, the output time
-#' series are detrended and/or applied to signal damping correction.
+#' a Z-score by the standard deviation, followed by adding the average. If the
+#' average and standard deviation time series are the same as those in
+#' converting the original time series into the Z-score time series, the
+#' original values with the original average and standard deviation are
+#' retrieved. If reference values of the average and/or standard deviation are
+#' used, the output time series are detrended and/or applied to signal damping
+#' correction.
 #'
 #' @inheritParams calc_ref_stats
 #' @param vctr_target_z A vector of Z-score time series to be converted.
@@ -778,12 +780,12 @@ calc_ref_stats <-
 #'  acceptable but automatically gap-filled by interpolation during the
 #'  retrieving process. The length of the vector must match that of
 #'  `vctr_target_z`. The unit of the time series must match that of time series
-#'  to be output. Default is `NULL`.
+#'  to be output. Default is `NA`.
 #' @param vctr_target_sd A vector of standard deviation time series. Missing
 #'  values are acceptable but automatically gap-filled by interpolation during
 #'  the retrieving process. The length of the vector must match that of
 #'  `vctr_target_z`. The unit of the time series must match that of time series
-#'  to be output. Default is `NULL`.
+#'  to be output. Default is `NA`.
 #' @param detrend A boolean. If `TRUE`, detrending is applied and the reference
 #'  average specified by `avg_ref` is used to convert Z-score time series into
 #'  the time series with the reference average in its original units; else, the
@@ -829,7 +831,7 @@ calc_ref_stats <-
 #' @export
 
 retrieve_ts <-
-  function(vctr_target_z, vctr_target_avg = NULL, vctr_target_sd = NULL,
+  function(vctr_target_z, vctr_target_avg = NA, vctr_target_sd = NA,
            detrend = FALSE, correct_damping = FALSE,
            avg_ref = NULL, sd_ref = NULL, label_err = -9999) {
     ## avoid "No visible binding for global variable" notes
@@ -848,20 +850,20 @@ retrieve_ts <-
     }
 
     if(detrend == TRUE & correct_damping == FALSE &
-       (is.null(avg_ref) | is.null(vctr_target_sd))) {
+       (is.null(avg_ref) | length(vctr_target_sd) == 1)) {
       stop("Both the reference average and the original standard deviation \n
            time series must be provided to apply detrending and retrieval.")
     }
 
     if(detrend == FALSE & correct_damping == TRUE &
-       (is.null(vctr_target_avg) | is.null(sd_ref))) {
+       (length(vctr_target_avg) == 1 | is.null(sd_ref))) {
       stop("Both the original average time series and the reference standard \n
            deviation time series must be provided to apply signal damping \n
            and retrieval.")
     }
 
     if(detrend == FALSE & correct_damping == FALSE &
-       (is.null(vctr_target_avg) | is.null(vctr_target_sd))) {
+       (length(vctr_target_avg) == 1 | length(vctr_target_sd) == 1)) {
       stop("Both the original average and standard deviation time series \n
            must be provided to apply retrieval.")
     }
