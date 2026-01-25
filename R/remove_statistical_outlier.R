@@ -62,7 +62,10 @@ remove_manually <-
 #'  the lower limit. Default is 3.0. The data points with values below the
 #'  threshold are considered outliers and removed. The unit of the threshold
 #'  must match that of the input time series.
-#' @param thres_al_max Maximum value of the acceptable range of the target vector
+#' @param thres_al_max A threshold value for the input time series to define
+#'  the upper limit. Default is 50.0. The data points with values above the
+#'  threshold are considered outliers and removed. The unit of the threshold
+#'  must match that of the input time series.
 #'
 #' @returns
 #' A vector of cleaned time series. The length of the time series is the same
@@ -233,14 +236,14 @@ modify_short_drift <-
 #'
 #' @inheritParams modify_short_drift
 #' @param vctr_time_noise A timestamp vector of class POSIXct or POSIXt,
-#'  indicating when high-frequency noise exists in a targeted time series.
+#'  indicating when high-frequency noise exists in the targeted time series.
 #' @param wndw_size_noise A positive integer indicating the number of data
-#'  points included in a moving Gaussian window. The default is 13, meaning
-#'  that the window size is 6.5 hours if the time interval of the input
-#'  timestamp is 30 minutes.
-#' @param inv_sigma_noise A positive value defining a Gaussian window width.
-#'  The width of the Gaussian window is inversely proportional to this
-#'  parameter. Default is 0.01.
+#'  points included in a moving Gaussian window for the high-frequency noise
+#'  filtering. The default is 13, meaning that the window size is 6.5 hours if
+#'  the time interval of the input timestamp is 30 minutes.
+#' @param inv_sigma_noise A positive value defining a Gaussian window width for
+#'  the high-frequency noise filtering. The width of the Gaussian window is
+#'  inversely proportional to this parameter. Default is 0.01.
 #'
 #' @returns
 #' A vector of the noise-filtered time series. The length of the time series is
@@ -357,15 +360,15 @@ filter_highfreq_noise <-
 #'  they only need to specify the end time stamps of the first two sub-periods.
 #'  Default is `NULL`.
 #' @param n_calc_max A positive integer indicating the maximum number of
-#'  outlier detection iterations. Default is 10.
+#'  Z-score outlier detection iterations. Default is 10.
 #' @param wndw_size_z A positive integer indicating the number of data points
-#'  included in a moving window. The default is 48 * 15, meaning that the
-#'  window size is 15 days if the time interval of the input timestamp is 30
-#'  minutes.
+#'  included in a moving window for the Z-score outlier removal. The default is
+#'  48 * 15, meaning that the window size is 15 days if the time interval of
+#'  the input timestamp is 30 minutes.
 #' @param min_n_wndw_z A positive integer indicating the minimum number of data
-#'  points for calculating statistics using a moving window (default is 5). If
-#'  the number of data points is less than this threshold, the statistics are
-#'  not calculated in the window.
+#'  points for calculating statistics using a moving window (default is 5)  for
+#'  the Z-score outlier removal. If the number of data points is less than this
+#'  threshold, the statistics are not calculated in the window.
 #' @param thres_z A positive threshold value for the Z-score time series to
 #'  define outliers. Default is 5.0. The data points with Z-scores (absolute
 #'  values) above the threshold are considered outliers and removed.
@@ -375,12 +378,14 @@ filter_highfreq_noise <-
 #'  of class POSIXct or POSIXt, indicating the timings when the short-term
 #'  signal attenuation correction is applied. Default is `NULL`.
 #' @param wndw_size_conv Only valid if `modify_z` is `TRUE`. A positive integer
-#'  indicating the number of data points included in a moving window. The
-#'  default is 48 * 15, meaning that the window size is 15 days if the time
-#'  interval of the input timestamp is 30 minutes.
+#'  indicating the number of data points included in a moving window for the
+#'  short-term signal attenuation detection. The default is 48 * 15, meaning
+#'  that the window size is 15 days if the time interval of the input timestamp
+#'  is 30 minutes.
 #' @param inv_sigma_conv Only valid if `modify_z` is `TRUE`. A positive value
-#'  defining a Gaussian window width. The width of the Gaussian window is
-#'  inversely proportional to this parameter. Default is 0.01.
+#'  defining a Gaussian window width for the short-term signal attenuation
+#'  detection. The width of the Gaussian window is inversely proportional to
+#'  this parameter. Default is 0.01.
 #' @param thres_ratio Only valid if `modify_z` is `TRUE`. A positive threshold
 #'  value of the ratio for determining whether the signal attenuation
 #'  correction is applied to each detected attenuation period. The ratio
@@ -658,9 +663,10 @@ remove_zscore_outlier <-
 #'
 #' @inheritParams remove_zscore_outlier
 #' @param wndw_size_ref A positive integer indicating the number of data points
-#'  included in calculating the average and standard deviation. The default is
-#'  48 * 15, meaning that the first 15 days of each sub-period are used in the
-#'  calculation when the time interval of the input timestamp is 30 minutes.
+#'  included in calculating the average and standard deviation for their
+#'  reference value determination. The default is 48 * 15, meaning that the
+#'  first 15 days of each sub-period are used in the calculation when the time
+#'  interval of the input timestamp is 30 minutes.
 #'
 #' @returns
 #' A vector of two components. The first one is the reference average, and the

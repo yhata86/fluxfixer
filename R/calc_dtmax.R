@@ -1164,7 +1164,7 @@ calc_dtmax_mw_dr <-
 #'  methods. "sp", "pd", "mw", "dr", and "ed" represent the successive predawn,
 #'  daily predawn, moving window, double regression, and environmental
 #'  dependent method, respectively. Default is
-#'  `c("sp", "pd", "mw", "dr", "ed")`.
+#'  `c("sp")`.
 #'
 #' @returns
 #' A data frame with columns below:
@@ -1199,7 +1199,8 @@ calc_dtmax_mw_dr <-
 #' ## Calculate dTmax from gap-filled dT time series
 #' result <-
 #'  calc_dtmax(vctr_time = time, vctr_dt = dt, vctr_radi = radi, vctr_ta = ta,
-#'             vctr_vpd = vpd, thres_vpd = 6.0)
+#'             vctr_vpd = vpd, method = c("sp", "pd", "mw", "dr", "ed"),
+#'             thres_vpd = 6.0)
 #'
 #' @include utils.R
 #'
@@ -1207,7 +1208,7 @@ calc_dtmax_mw_dr <-
 
 calc_dtmax <-
   function(vctr_time, vctr_dt, vctr_radi = NULL, vctr_ta = NULL,
-           vctr_vpd = NULL, method = c("sp", "pd", "mw", "dr", "ed"),
+           vctr_vpd = NULL, method = c("sp"),
            thres_hour_sp = 5, thres_radi = 100, thres_ta = 1.0,
            thres_vpd = 1.0, thres_cv = 0.005, thres_hour_pd = 8,
            min_n_wndw_dtmax = 3, wndw_size_dtmax = 11,

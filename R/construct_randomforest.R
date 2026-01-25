@@ -11,26 +11,29 @@
 #' @param colname_label A character representing the name of the column for the
 #'  label time series.
 #' @param vctr_colname_feature A vector of characters indicating the name of
-#'  the feature time series columns. If `NULL` (default), all columns excluding
-#'  the label column specified as `colname_label` in the input data frame are
-#'  used as feature columns.
+#'  the feature time series columns used in constructing a random forest model.
+#'  If `NULL` (default), all columns excluding the label column specified as
+#'  `colname_label` in the input data frame are used as feature columns.
 #' @param vctr_min_nodesize A vector of positive integers indicating candidates
-#'  of a hyperparameter defining the minimal node size (the minimum number of
-#'  data points included in each leaf node). Default is `c(5)`.
+#'  of a hyperparameter for the random forest model, defining the minimal node
+#'  size (the minimum number of data points included in each leaf node).
+#'  Default is `c(5)`.
 #' @param vctr_m_try A vector of positive integers indicating candidates of a
-#'  hyperparameter defining the number of features to be used in splitting
-#'  each node. If `NULL` (default), integers between two and the number of all
-#'  feature variables are tested.
+#'  hyperparameter for the random forest model, defining the number of features
+#'  to be used in splitting each node. If `NULL` (default), integers between
+#'  two and the number of all feature variables are tested.
 #' @param vctr_subsample A vector of numerical values between 0 and 1,
-#'  indicating candidates of a hyperparameter defining the fraction of input
-#'  training data points to be sampled in constructing the random forest.
-#'  Default is `c(0.1)`.
+#'  indicating candidates of a hyperparameter for the random forest model,
+#'  defining the fraction of input training data points to be sampled in
+#'  constructing the random forest. Default is `c(0.1)`.
 #' @param frac_train A numerical value between 0 and 1, defining the fraction
-#'  of data points to be categorized as training data. The other data points
-#'  are classified as test data. Default is 0.75.
+#'  of data points to be categorized as training data for the random forest
+#'  model construction. The other data points are classified as test data.
+#'  Default is 0.75.
 #' @param n_tree An integer representing the number of trees in the random
 #'  forest. Default is 500.
-#' @param ran_seed An integer representing the random seed. Default is 12345.
+#' @param ran_seed An integer representing the random seed for the random
+#'  forest model construction. Default is 12345.
 #'
 #' @returns
 #' A data frame with columns below:
@@ -157,7 +160,7 @@ rf_fit <-
 #'  range (IQR). If the value to be checked is less than Q1 (first quartile) -
 #'  `coef_iqr` * IQR or
 #'  more than Q3 (third quartile) + `coef_iqr` * IQR, the value is detected as
-#'  an outlier. Default is 1.5.
+#'  a random forest outlier. Default is 1.5.
 #'
 #' @returns
 #' A list with two elements. The first element `mse` is the mean squared error
@@ -365,6 +368,10 @@ rf_pred <-
 #'
 #' @inheritParams rf_fit
 #' @inheritParams rf_pred
+#' @param vctr_subsample_outlier A vector of numerical values between 0 and 1,
+#'  indicating candidates of a hyperparameter for the random forest model,
+#'  defining the fraction of input training data points to be sampled in
+#'  constructing the random forest. Default is `c(0.1)`.
 #'
 #' @returns
 #' A list with two elements. The first element `mse` is the mean squared error
@@ -410,7 +417,7 @@ rf_pred <-
 remove_rf_outlier <-
   function(df, colname_label, vctr_colname_feature = NULL,
            vctr_min_nodesize = c(5), vctr_m_try = NULL,
-           vctr_subsample = c(0.1), frac_train = 0.75,
+           vctr_subsample_outlier = c(0.1), frac_train = 0.75,
            n_tree = 500, ran_seed = 12345, coef_iqr = 1.5, label_err = -9999) {
     ## avoid "No visible binding for global variable" notes
     . <- NULL
@@ -424,7 +431,7 @@ remove_rf_outlier <-
 
     CV_rslt <-
       rf_fit(df, colname_label, vctr_colname_feature,
-             vctr_min_nodesize, vctr_m_try, vctr_subsample,
+             vctr_min_nodesize, vctr_m_try, vctr_subsample_outlier,
              frac_train = frac_train, n_tree = n_tree,
              ran_seed = ran_seed, label_err = label_err) %>%
       dplyr::arrange(MSE_OOB) %>%
@@ -475,10 +482,10 @@ remove_rf_outlier <-
 #'
 #' @inheritParams rf_fit
 #' @inheritParams rf_pred
-#' @param vctr_subsample A vector of numerical values between 0 and 1,
-#'  indicating candidates of a hyperparameter defining the fraction of input
-#'  training data points to be sampled in constructing the random forest.
-#'  Default is `c(1)`.
+#' @param vctr_subsample_gf A vector of numerical values between 0 and 1,
+#'  indicating candidates of a hyperparameter for the random forest model,
+#'  defining the fraction of input training data points to be sampled in
+#'  constructing the random forest. Default is `c(1)`.
 #'
 #' @returns
 #' A list with two elements. The first element `mse` is the mean squared error
@@ -517,7 +524,7 @@ remove_rf_outlier <-
 fill_gaps <-
   function(df, colname_label, vctr_colname_feature = NULL,
            vctr_min_nodesize = c(5), vctr_m_try = NULL,
-           vctr_subsample = c(1), frac_train = 0.75,
+           vctr_subsample_gf = c(1), frac_train = 0.75,
            n_tree = 500, ran_seed = 12345, label_err = -9999) {
     ## avoid "No visible binding for global variable" notes
     . <- NULL
@@ -531,7 +538,7 @@ fill_gaps <-
 
     CV_rslt <-
       rf_fit(df, colname_label, vctr_colname_feature,
-             vctr_min_nodesize, vctr_m_try, vctr_subsample,
+             vctr_min_nodesize, vctr_m_try, vctr_subsample_gf,
              frac_train = frac_train, n_tree = n_tree,
              ran_seed = ran_seed, label_err = label_err) %>%
       dplyr::arrange(MSE_OOB) %>%
