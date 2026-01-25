@@ -6,6 +6,8 @@
 <!-- badges: start -->
 
 [![R-CMD-check](https://github.com/yhata86/fluxfixer/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yhata86/fluxfixer/actions/workflows/R-CMD-check.yaml)
+[![Codecov test
+coverage](https://codecov.io/gh/yhata86/fluxfixer/graph/badge.svg)](https://app.codecov.io/gh/yhata86/fluxfixer)
 <!-- badges: end -->
 
 ## Overview

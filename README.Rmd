@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/yhata86/fluxfixer/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yhata86/fluxfixer/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/yhata86/fluxfixer/graph/badge.svg)](https://app.codecov.io/gh/yhata86/fluxfixer)
 <!-- badges: end -->
 
 ## Overview
@@ -84,7 +85,8 @@ label_date <-
          "          ")
 
 dt_noisy %>% 
-  dplyr::na_if(-9999) %>% 
+  dplyr::mutate(dplyr::across(tidyselect::where(is.numeric),
+                              ~dplyr::na_if(., -9999))) %>%
   ggplot2::ggplot()+
   theme_classic()+
   labs(x = "",
