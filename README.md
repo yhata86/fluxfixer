@@ -4,6 +4,8 @@
 # fluxfixer <img src="man/figures/logo.png" align="right" height="120" alt="" />
 
 <!-- badges: start -->
+
+[![R-CMD-check](https://github.com/yhata86/fluxfixer/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yhata86/fluxfixer/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 ## Overview
