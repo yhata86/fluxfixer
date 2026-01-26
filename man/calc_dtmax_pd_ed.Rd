@@ -85,3 +85,4 @@ steps; else, returns dTmax in the original time steps. Default is `FALSE`.}
 \author{
 Yoshiaki Hata
 }
+\keyword{internal}

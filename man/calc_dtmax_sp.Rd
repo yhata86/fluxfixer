@@ -64,3 +64,4 @@ The successive predawn method is one of the methods for determining
 \author{
 Yoshiaki Hata
 }
+\keyword{internal}

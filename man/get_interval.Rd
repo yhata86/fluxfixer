@@ -22,3 +22,4 @@ A numeric (minutes) indicating the time interval of the input timestamp
 \author{
 Yoshiaki Hata
 }
+\keyword{internal}

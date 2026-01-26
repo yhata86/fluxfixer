@@ -12,6 +12,8 @@
 #'  vector.
 #'
 #' @author Yoshiaki Hata
+#'
+#' @keywords internal
 
 get_interval <- function(vctr_time) {
   if(lubridate::is.POSIXt(vctr_time) != TRUE) {
@@ -114,6 +116,8 @@ calc_sw_in_toa <-
 #'  missing values.
 #'
 #' @author Yoshiaki Hata
+#'
+#' @keywords internal
 
 n_valid <-
   function(vctr, label_err = -9999) {
@@ -187,6 +191,8 @@ n_valid <-
 #'  determining the final attenuation periods that require Z-score modification.
 #'
 #' @author Yoshiaki Hata
+#'
+#' @keywords internal
 
 check_short_attenuation <-
   function(vctr_time, vctr_z, vctr_avg, vctr_sd, wndw_size_conv = 48 * 15,

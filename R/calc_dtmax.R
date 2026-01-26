@@ -51,6 +51,8 @@
 #'  `calc_dtmax_ed`
 #'
 #' @include utils.R
+#'
+#' @keywords internal
 
 calc_dtmax_sp <-
   function(vctr_time, vctr_dt, thres_hour_sp = 5, output_daily = FALSE) {
@@ -177,6 +179,8 @@ calc_dtmax_sp <-
 #'  `calc_dtmax_ed`
 #'
 #' @include utils.R
+#'
+#' @keywords internal
 
 calc_dtmax_pd <-
   function(vctr_time, vctr_dt, vctr_radi, thres_radi = 100, thres_hour_pd = 8,
@@ -341,6 +345,8 @@ calc_dtmax_pd <-
 #'  `calc_dtmax_dr`,
 #'
 #' @include utils.R
+#'
+#' @keywords internal
 
 calc_dtmax_ed <-
   function(vctr_time, vctr_dt, vctr_radi, vctr_ta, vctr_vpd,
@@ -497,6 +503,8 @@ calc_dtmax_ed <-
 #' @author Yoshiaki Hata
 #'
 #' @include utils.R
+#'
+#' @keywords internal
 
 calc_dtmax_pd_ed <-
   function(vctr_time, vctr_dt, vctr_radi, vctr_ta, vctr_vpd,
@@ -716,6 +724,8 @@ calc_dtmax_pd_ed <-
 #'  `calc_dtmax_ed`
 #'
 #' @include utils.R
+#'
+#' @keywords internal
 
 calc_dtmax_mw <-
   function(vctr_time_daily = NULL, vctr_dtmax_pd = NULL, wndw_size_dtmax = 11,
@@ -861,6 +871,8 @@ calc_dtmax_mw <-
 #'  `calc_dtmax_ed`
 #'
 #' @include utils.R
+#'
+#' @keywords internal
 
 calc_dtmax_dr <-
   function(vctr_time_daily = NULL, vctr_dtmax_pd = NULL, wndw_size_dtmax = 11,
@@ -983,6 +995,8 @@ calc_dtmax_dr <-
 #' @author Yoshiaki Hata
 #'
 #' @include utils.R
+#'
+#' @keywords internal
 
 calc_dtmax_mw_dr <-
   function(vctr_time_daily = NULL, vctr_dtmax_pd = NULL, wndw_size_dtmax = 11,

@@ -91,3 +91,4 @@ changes its sign before and after each peak.
 \author{
 Yoshiaki Hata
 }
+\keyword{internal}

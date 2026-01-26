@@ -23,3 +23,4 @@ An integer indicating the number of the input vector elements without
 \author{
 Yoshiaki Hata
 }
+\keyword{internal}

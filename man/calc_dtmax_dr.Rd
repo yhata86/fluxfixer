@@ -108,3 +108,4 @@ The double regression method is one of the methods for determining
 \author{
 Yoshiaki Hata
 }
+\keyword{internal}

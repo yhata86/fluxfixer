@@ -107,3 +107,4 @@ The moving window method is one of the methods for determining
 \author{
 Yoshiaki Hata
 }
+\keyword{internal}

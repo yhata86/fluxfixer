@@ -27,7 +27,7 @@ Imports:
     tidyselect (>= 1.2.0),
     xts (>= 0.12.1),
     zoo (>= 1.8-8)
-RoxygenNote: 7.1.2
+RoxygenNote: 7.3.3
 Depends: 
     R (>= 4.0)
 URL: https://github.com/yhata86/fluxfixer, https://yhata86.github.io/fluxfixer/

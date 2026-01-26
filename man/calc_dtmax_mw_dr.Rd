@@ -78,3 +78,4 @@ which defines the end of predawn in local time (default is 8).}
 \author{
 Yoshiaki Hata
 }
+\keyword{internal}

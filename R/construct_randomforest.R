@@ -54,6 +54,8 @@
 #'  during the evaluation.
 #'
 #' @author Yoshiaki Hata
+#'
+#' @keywords internal
 
 rf_fit <-
   function(df, colname_label, vctr_colname_feature = NULL,
@@ -209,6 +211,8 @@ rf_fit <-
 #'  constructed random forest.
 #'
 #' @author Yoshiaki Hata
+#'
+#' @keywords internal
 
 rf_pred <-
   function(df, colname_label, vctr_colname_feature = NULL,
