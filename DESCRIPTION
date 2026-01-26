@@ -1,16 +1,17 @@
 Package: fluxfixer
 Type: Package
-Title: A Sophisticated Post-processing Framework for Sap Flow Data
+Title: Advanced Framework for Sap Flow Data Post-Process 
 Version: 0.0.0.9000
 Authors@R: person("Yoshiaki", "Hata", email = "yoshiakihata0806@gmail.com",
   role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0001-7703-0863"))
 Author: Yoshiaki Hata
 Maintainer: Yoshiaki Hata <yoshiakihata0806@gmail.com>
 Description: Provides a flexible framework for post-processing thermal
-  dissipation sap flow data using statistical methods and machine learning,
-  including anomaly correction, outlier removal, gap-filling, and sap flux
-  density calculation. This framework can also apply to other raw time series
-  with various artifacts.
+  dissipation sap flow data using statistical methods and machine learning.
+  This framework includes anomaly correction, outlier removal, gap-filling,
+  detrending, signal damping correction, and sap flux density calculation. The
+  functions in this package can also apply to other time series with various
+  artifacts.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
@@ -29,7 +30,7 @@ Imports:
 RoxygenNote: 7.1.2
 Depends: 
     R (>= 4.0)
-URL: https://github.com/yhata86/fluxfixer
+URL: https://github.com/yhata86/fluxfixer, https://yhata86.github.io/fluxfixer/
 BugReports: https://github.com/yhata86/fluxfixer/issues
 Suggests: 
     knitr,
