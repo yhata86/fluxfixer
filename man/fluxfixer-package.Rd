@@ -4,16 +4,17 @@
 \name{fluxfixer-package}
 \alias{fluxfixer}
 \alias{fluxfixer-package}
-\title{fluxfixer: A Sophisticated Post-processing Framework for Sap Flow Data}
+\title{fluxfixer: Advanced Framework for Sap Flow Data Post-Process}
 \description{
 \if{html}{\figure{logo.png}{options: align='right' alt='logo' width='120'}}
 
-Provides a flexible framework for post-processing thermal dissipation sap flow data using statistical methods and machine learning, including anomaly correction, outlier removal, gap-filling, and sap flux density calculation. This framework can also apply to other raw time series with various artifacts.
+Provides a flexible framework for post-processing thermal dissipation sap flow data using statistical methods and machine learning. This framework includes anomaly correction, outlier removal, gap-filling, detrending, signal damping correction, and sap flux density calculation. The functions in this package can also apply to other time series with various artifacts.
 }
 \seealso{
 Useful links:
 \itemize{
   \item \url{https://github.com/yhata86/fluxfixer}
+  \item \url{https://yhata86.github.io/fluxfixer/}
   \item Report bugs at \url{https://github.com/yhata86/fluxfixer/issues}
 }
 
