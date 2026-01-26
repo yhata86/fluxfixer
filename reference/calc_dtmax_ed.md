@@ -1,0 +1,145 @@
+# Calculate dTmax by the environmental dependent method
+
+\`calc_dtmax_ed()\` calculates the time series of dTmax (the maximum
+temperature difference between sap flow probes under zero-flow
+conditions) using the environmental dependent method.
+
+## Usage
+
+``` r
+calc_dtmax_ed(
+  vctr_time,
+  vctr_dt,
+  vctr_radi,
+  vctr_ta,
+  vctr_vpd,
+  thres_radi = 100,
+  thres_ta = 1,
+  thres_vpd = 1,
+  thres_cv = 0.005,
+  thres_hour_pd = 8,
+  min_n_wndw_dtmax = 3,
+  output_daily = FALSE
+)
+```
+
+## Arguments
+
+- vctr_time:
+
+  A timestamp vector of class POSIXct or POSIXt. This vector indicates
+  the timings of the end of each measurement in local time. Any interval
+  (typically 15 to 60 min) is allowed, but the timestamps must be
+  equally spaced and arranged chronologically.
+
+- vctr_dt:
+
+  A vector of dT (the temperature difference between sap flow probes, in
+  degrees Celsius) time series. The length of the vector must match that
+  of the timestamp vector. Missing values must be gap-filled previously.
+
+- vctr_radi:
+
+  A vector of global solar radiation or a similar radiative variable
+  time series. The length of the vector must match that of the timestamp
+  vector. Missing values must be gap-filled previously. The unit of the
+  time series must match that of \`thres_radi\`.
+
+- vctr_ta:
+
+  A vector of air temperature (degrees Celsius) time series. The length
+  of the vector must match that of the timestamp vector. Missing values
+  must be gap-filled previously. The unit of the time series must match
+  that of \`thres_ta\`.
+
+- vctr_vpd:
+
+  A vector of vapor pressure deficit (VPD, in hPa) time series. The
+  length of the vector must match that of the timestamp vector. Missing
+  values must be gap-filled previously. The unit of the time series must
+  match that of \`thres_vpd\`.
+
+- thres_radi:
+
+  A threshold value of the radiation to define daytime. Default is 100
+  (W m-2). The data points with radiation values above the threshold are
+  considered daytime values. The unit of the threshold must match that
+  of the input radiation time series.
+
+- thres_ta:
+
+  A threshold value of the air temperature to define predawn. Default is
+  1.0 (degrees Celsius). The dTmax, estimated by the PD method, with air
+  temperature values below the threshold, is selected as a candidate for
+  the final dTmax. The unit of the threshold must match that of the
+  input air temperature time series.
+
+- thres_vpd:
+
+  A threshold value of the VPD to define predawn. Default is 1.0 (hPa).
+  The dTmax, estimated by the PD method, with VPD values below the
+  threshold, is selected as a candidate for the final dTmax. The unit of
+  the threshold must match that of the input VPD time series.
+
+- thres_cv:
+
+  A threshold value of the coefficient of variation (CV) to define
+  predawn. Default is 0.005. The dTmax, estimated by the PD method, with
+  CV values below the threshold, is selected as a candidate for the
+  final dTmax.
+
+- thres_hour_pd:
+
+  An integer from 0 to 23. The threshold hour of the day which defines
+  the end of predawn in local time (default is 8).
+
+- min_n_wndw_dtmax:
+
+  A positive integer indicating the minimum number of data points for
+  calculating statistics using a moving window (default is 3). If the
+  number of data points is less than this threshold, the statistics are
+  not calculated in the window.
+
+- output_daily:
+
+  A boolean. If \`TRUE\`, returns dTmax time series in daily steps;
+  else, returns dTmax in the original time steps. Default is \`FALSE\`.
+
+## Value
+
+A data frame with columns below:
+
+\* The first column, \`time\`, gives the timestamp of the measurements.
+If \`output_daily\` is \`FALSE\` (default), this column is the same as
+the input timestamp, \`vctr_time\`. If \`output_daily\` is \`TRUE\`, the
+timestamp in daily steps is returned.
+
+\* The second column, \`dt\`, gives the input dT (the temperature
+difference between sap flow probes, degrees Celsius) time series. If
+\`output_daily\` is \`TRUE\`, dT is returned in daily steps. If
+\`output_daily\` is \`FALSE\` (default), this column is not output.
+
+\* The third column, \`dtmax_ed\`, gives the estimated dTmax by the
+environmental dependent method. If \`output_daily\` is \`FALSE\`
+(default), this column has the same time step as the input timestamp. If
+\`output_daily\` is \`TRUE\`, the dTmax is returned in daily steps.
+
+## Details
+
+The environmental dependent method is one of the methods for determining
+dTmax. This method filters the dTmax, estimated by the daily predawn
+method, using the environmental conditions when plants let their sap
+flow nearly zero. A stable dT, with a low coefficient of variation, and
+low air temperature or vapor pressure deficit over a two-hour period,
+characterizes these zero-flow conditions. See more details in Oishi et
+al. (2016; SoftwareX) and Peters et al. (2018; New Phytologist). After
+the filtering, the daily dTmax is interpolated if necessary.
+
+## See also
+
+\`calc_dtmax\`, \`calc_dtmax_sp\`, \`calc_dtmax_pd\`, \`calc_dtmax_mw\`,
+\`calc_dtmax_dr\`,
+
+## Author
+
+Yoshiaki Hata

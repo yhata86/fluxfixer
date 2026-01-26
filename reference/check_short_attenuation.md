@@ -1,0 +1,110 @@
+# Detect periods when short-term signal attenuation occurs
+
+\`check_short_attenuation()\` detects periods of temporary signal
+attenuation by the upward (or downward) peak position of the smoothed
+average (or standard deviation) time series.
+
+## Usage
+
+``` r
+check_short_attenuation(
+  vctr_time,
+  vctr_z,
+  vctr_avg,
+  vctr_sd,
+  wndw_size_conv = 48 * 15,
+  inv_sigma_conv = 0.01,
+  label_err = -9999
+)
+```
+
+## Arguments
+
+- vctr_time:
+
+  A timestamp vector of class POSIXct or POSIXt. This vector indicates
+  the timings of the end of each measurement in local time. Any interval
+  (typically 15 to 60 min) is allowed, but the timestamps must be
+  equally spaced and arranged chronologically.
+
+- vctr_z:
+
+  A vector of Z-score time series. The length of the vector must match
+  that of the timestamp vector.
+
+- vctr_avg:
+
+  A vector of moving window average time series that used in
+  transforming the original time series into the Z-score time series.
+  The length of the vector must match that of the timestamp vector. The
+  unit of the time series must match that of \`vctr_sd\`.
+
+- vctr_sd:
+
+  A vector of moving window standard deviation time series that used in
+  transforming the original time series into the Z-score time series.
+  The length of the vector must match that of the timestamp vector. The
+  unit of the time series must match that of \`vctr_avg\`.
+
+- wndw_size_conv:
+
+  A positive integer indicating the number of data points included in a
+  moving window. THeefault is 48 \* 15, meaning that the window size is
+  15 days if the time interval of the input timestamp is 30 minutes.
+
+- inv_sigma_conv:
+
+  A positive value defining a Gaussian window width. The width of the
+  Gaussian window is inversely proportional to this parameter. Default
+  is 0.01.
+
+- label_err:
+
+  A numeric value representing a missing value in the input vector(s).
+  Default is -9999.
+
+## Value
+
+A data frame with columns below:
+
+\* The first column, \`time_start\`, gives the timestamp at which the
+detected attenuation period begins.
+
+\* The second column, \`time_peak\`, gives the timestamp of the detected
+attenuation period peak.
+
+\* The third column, \`time_end\`, gives the timestamp at which the
+detected attenuation period ends.
+
+\* The fourth column, \`ratio\`, gives the average of the ratio of the
+standard deviation at the detected attenuation peak to that at the
+beginning and end of the attenuation period. This value can be used as a
+threshold for determining the final attenuation periods that require
+Z-score modification.
+
+## Details
+
+In some cases, the dT time series may yield a signal that is attenuated
+for only a short period, for example, when rainfall continues for days,
+causing the moving window mean (or standard deviation) to increase (or
+decrease). In such cases, normalization will cause the Z-score time
+series immediately before and after the rainfall to be unnaturally
+distorted, hindering the construction of the random-forest model. This
+function can detect periods when the moving window average has an upward
+peak, and the moving window standard deviation has a downward peak
+simultaneously.
+
+First, the average and standard deviation time series are interpolated
+if they contain missing values. Second, they are smoothed by convolution
+with a Gaussian window specified by the user through the parameters
+\`wndw_size_conv\` and \`inv_sigma_conv\`. Third, the first-order and
+second-order differences of both smoothed time series are calculated,
+which determine the upward peak positions of the average and the
+downward peak positions of the standard deviation. Finally, possible
+signal attenuation periods are output. The start and end of the periods
+are defined by the timings when the first-order differenced standard
+deviation time series changes its sign before and after each peak.
+
+## Author
+
+Yoshiaki Hata

@@ -1,0 +1,583 @@
+# Run all quality control processes automatically
+
+\`run_fluxfixer()\` provides a sophisticated protocol for
+post-processing raw time series, which can be applied not only to
+thermal dissipation sap flow data but also to other noisy time series,
+using classic statistical and machine-learning methods. In the sap flow
+data processing, users can select multiple methods to estimate the dTmax
+(the maximum temperature difference between sap flow probes under
+zero-flow conditions) and Fd (sap flux density) time series.
+
+## Usage
+
+``` r
+run_fluxfixer(
+  df,
+  colname_time,
+  colname_target,
+  vctr_time_err = NULL,
+  label_err = -9999,
+  thres_al_min = 3,
+  thres_al_max = 50,
+  vctr_time_drft_head = NULL,
+  vctr_time_drft_tail = NULL,
+  n_day_ref = 3,
+  vctr_time_noise = NULL,
+  wndw_size_noise = 13,
+  inv_sigma_noise = 0.01,
+  vctr_time_prd_tail = NULL,
+  wndw_size_z = 48 * 15,
+  min_n_wndw_z = 5,
+  thres_z = 5,
+  n_calc_max = 10,
+  modify_z = FALSE,
+  vctr_time_zmod = NULL,
+  wndw_size_conv = 48 * 15,
+  inv_sigma_conv = 0.01,
+  thres_ratio = 0.5,
+  vctr_colname_feature = NULL,
+  vctr_min_nodesize = c(5),
+  vctr_m_try = NULL,
+  vctr_subsample_outlier = c(0.1),
+  vctr_subsample_gf = c(1),
+  frac_train = 0.75,
+  n_tree = 500,
+  ran_seed = 12345,
+  coef_iqr = 1.5,
+  wndw_size_ref = 48 * 15,
+  detrend = FALSE,
+  correct_damping = FALSE,
+  skip_sapflow_calc = FALSE,
+  colname_radi = NULL,
+  colname_ta = NULL,
+  colname_vpd = NULL,
+  method = c("sp"),
+  thres_hour_sp = 5,
+  thres_radi = 100,
+  thres_ta = 1,
+  thres_vpd = 1,
+  thres_cv = 0.005,
+  thres_hour_pd = 8,
+  min_n_wndw_dtmax = 3,
+  wndw_size_dtmax = 11,
+  alpha = 1.19 * 10^(-4),
+  beta = 1.231,
+  do_heartwood_correction = FALSE,
+  ratio_conductive = NULL
+)
+```
+
+## Arguments
+
+- df:
+
+  A data frame including evenly spaced time stamps in local time and the
+  corresponding raw time series to be post-processed. For thermal
+  dissipation sap flow data, the targeted time series must be a dT (the
+  temperature difference between sap flow probes) time series. To
+  conduct outlier removal and gap-filling using a random forest model,
+  any time series of meteorological, soil environment, and
+  ecophysiological factors can be included. If users conduct the
+  zero-flow condition estimation, the gap-filled time series of global
+  solar radiation or a similar radiative variable (for the PD, MW, DR,
+  and ED methods) and air temperature and vapor pressure deficit (for
+  the ED method) must be included.
+
+- colname_time:
+
+  A character representing the name of the column in the input data
+  frame for the timestamp time series. This column indicates the timings
+  of the end of each measurement in local time. Any interval (typically
+  15 to 60 min) is allowed, but the timestamps must be equally spaced
+  and arranged chronologically.
+
+- colname_target:
+
+  A character representing the name of the column in the input data
+  frame for a targeted time series to be post-processed. For thermal
+  dissipation sap flow data, the targeted time series must be a dT (the
+  temperature difference between sap flow probes) time series.
+
+- vctr_time_err:
+
+  A timestamp vector of class POSIXct or POSIXt, indicating specific
+  error timings.
+
+- label_err:
+
+  A numeric value representing a missing value in the input vector(s).
+  Default is -9999.
+
+- thres_al_min:
+
+  A threshold value for the input time series to define the lower limit.
+  Default is 3.0. The data points with values below the threshold are
+  considered outliers and removed. The unit of the threshold must match
+  that of the input time series.
+
+- thres_al_max:
+
+  A threshold value for the input time series to define the upper limit.
+  Default is 50.0. The data points with values above the threshold are
+  considered outliers and removed. The unit of the threshold must match
+  that of the input time series.
+
+- vctr_time_drft_head:
+
+  A timestamp vector of class POSIXct or POSIXt, indicating when each
+  drift starts.
+
+- vctr_time_drft_tail:
+
+  A timestamp vector of class POSIXct or POSIXt, indicating when each
+  drift ends. The length of the time series must be the same as that of
+  \`vctr_time_drft_head\`.
+
+- n_day_ref:
+
+  A positive integer representing the number of days to be referenced
+  before and after the anomaly period. Default is 3 (days).
+
+- vctr_time_noise:
+
+  A timestamp vector of class POSIXct or POSIXt, indicating when
+  high-frequency noise exists in the targeted time series.
+
+- wndw_size_noise:
+
+  A positive integer indicating the number of data points included in a
+  moving Gaussian window for the high-frequency noise filtering. The
+  default is 13, meaning that the window size is 6.5 hours if the time
+  interval of the input timestamp is 30 minutes.
+
+- inv_sigma_noise:
+
+  A positive value defining a Gaussian window width for the
+  high-frequency noise filtering. The width of the Gaussian window is
+  inversely proportional to this parameter. Default is 0.01.
+
+- vctr_time_prd_tail:
+
+  A timestamp vector of class POSIXct or POSIXt, indicating the end
+  timings of each sub-period. Note that users must not include the final
+  timestamp for the entire time series. For instance, if users want to
+  split the entire measurement period into three sub-periods, they only
+  need to specify the end time stamps of the first two sub-periods.
+  Default is \`NULL\`.
+
+- wndw_size_z:
+
+  A positive integer indicating the number of data points included in a
+  moving window for the Z-score outlier removal. The default is 48 \*
+  15, meaning that the window size is 15 days if the time interval of
+  the input timestamp is 30 minutes.
+
+- min_n_wndw_z:
+
+  A positive integer indicating the minimum number of data points for
+  calculating statistics using a moving window (default is 5) for the
+  Z-score outlier removal. If the number of data points is less than
+  this threshold, the statistics are not calculated in the window.
+
+- thres_z:
+
+  A positive threshold value for the Z-score time series to define
+  outliers. Default is 5.0. The data points with Z-scores (absolute
+  values) above the threshold are considered outliers and removed.
+
+- n_calc_max:
+
+  A positive integer indicating the maximum number of Z-score outlier
+  detection iterations. Default is 10.
+
+- modify_z:
+
+  A boolean. If \`TRUE\`, conduct Z-score short attenuation correction;
+  else, the correction is not applied. Default is \`FALSE\`.
+
+- vctr_time_zmod:
+
+  Only valid if \`modify_z\` is \`TRUE\`. A timestamp vector of class
+  POSIXct or POSIXt, indicating the timings when the short-term signal
+  attenuation correction is applied. Default is \`NULL\`.
+
+- wndw_size_conv:
+
+  Only valid if \`modify_z\` is \`TRUE\`. A positive integer indicating
+  the number of data points included in a moving window for the
+  short-term signal attenuation detection. The default is 48 \* 15,
+  meaning that the window size is 15 days if the time interval of the
+  input timestamp is 30 minutes.
+
+- inv_sigma_conv:
+
+  Only valid if \`modify_z\` is \`TRUE\`. A positive value defining a
+  Gaussian window width for the short-term signal attenuation detection.
+  The width of the Gaussian window is inversely proportional to this
+  parameter. Default is 0.01.
+
+- thres_ratio:
+
+  Only valid if \`modify_z\` is \`TRUE\`. A positive threshold value of
+  the ratio for determining whether the signal attenuation correction is
+  applied to each detected attenuation period. The ratio represents the
+  average of the standard deviation at the detected attenuation peak
+  relative to that at the beginning and end of the attenuation period.
+  If the ratio is below this threshold value, the correction is applied.
+  Default is 0.5.
+
+- vctr_colname_feature:
+
+  A vector of characters indicating the name of the feature time series
+  columns used in constructing a random forest model. If \`NULL\`
+  (default), all columns excluding the label column specified as
+  \`colname_label\` in the input data frame are used as feature columns.
+
+- vctr_min_nodesize:
+
+  A vector of positive integers indicating candidates of a
+  hyperparameter for the random forest model, defining the minimal node
+  size (the minimum number of data points included in each leaf node).
+  Default is \`c(5)\`.
+
+- vctr_m_try:
+
+  A vector of positive integers indicating candidates of a
+  hyperparameter for the random forest model, defining the number of
+  features to be used in splitting each node. If \`NULL\` (default),
+  integers between two and the number of all feature variables are
+  tested.
+
+- vctr_subsample_outlier:
+
+  A vector of numerical values between 0 and 1, indicating candidates of
+  a hyperparameter for the random forest model, defining the fraction of
+  input training data points to be sampled in constructing the random
+  forest. Default is \`c(0.1)\`.
+
+- vctr_subsample_gf:
+
+  A vector of numerical values between 0 and 1, indicating candidates of
+  a hyperparameter for the random forest model, defining the fraction of
+  input training data points to be sampled in constructing the random
+  forest. Default is \`c(1)\`.
+
+- frac_train:
+
+  A numerical value between 0 and 1, defining the fraction of data
+  points to be categorized as training data for the random forest model
+  construction. The other data points are classified as test data.
+  Default is 0.75.
+
+- n_tree:
+
+  An integer representing the number of trees in the random forest.
+  Default is 500.
+
+- ran_seed:
+
+  An integer representing the random seed for the random forest model
+  construction. Default is 12345.
+
+- coef_iqr:
+
+  A positive value defining a multiplier of the interquartile range
+  (IQR). If the value to be checked is less than Q1 (first quartile) -
+  \`coef_iqr\` \* IQR or more than Q3 (third quartile) + \`coef_iqr\` \*
+  IQR, the value is detected as a random forest outlier. Default is 1.5.
+
+- wndw_size_ref:
+
+  A positive integer indicating the number of data points included in
+  calculating the average and standard deviation for their reference
+  value determination. The default is 48 \* 15, meaning that the first
+  15 days of each sub-period are used in the calculation when the time
+  interval of the input timestamp is 30 minutes.
+
+- detrend:
+
+  A boolean. If \`TRUE\`, detrending is applied and the reference
+  average is used to convert the Z-score time series to the time series
+  in its original units; else, detrending is not applied, and the moving
+  window average time series is used for the conversion. Default is
+  \`FALSE\`.
+
+- correct_damping:
+
+  A boolean. If \`TRUE\`, the signal damping correction is applied, and
+  the reference standard deviation is used to convert the Z-score time
+  series into the time series in its original units; else, the
+  correction is not applied, and the moving window standard deviation
+  time series is used in the conversion. Default is \`FALSE\`.
+
+- skip_sapflow_calc:
+
+  A boolean. If \`TRUE\`, zero-flow condition estimation and sap flux
+  density calculation are skipped in the whole process. This setting is
+  useful when users want to post-process a time series unrelated to sap
+  flow measurements. Default is \`FALSE\`.
+
+- colname_radi:
+
+  A character representing the name of the column in the input data
+  frame for global solar radiation or a similar radiative variable time
+  series. Default is \`NULL\`, but this name must be provided when
+  \`method\` includes \`pd\`, \`mw\`, \`dr\`, or \`ed\`. Missing values
+  in the column must be gap-filled previously. The unit of the time
+  series must match that of \`thres_radi\`.
+
+- colname_ta:
+
+  A character representing the name of the column in the input data
+  frame for air temperature (degrees Celsius) time series. Default is
+  \`NULL\`, but this name must be provided when \`method\` includes
+  \`ed\`. Missing values must be gap-filled previously. The unit of the
+  time series must match that of \`thres_ta\`.
+
+- colname_vpd:
+
+  A character representing the name of the column in the input data
+  frame for vapor pressure deficit (VPD, in hPa) time series. Default is
+  \`NULL\`, but this name must be provided when \`method\` includes
+  \`ed\`. Missing values must be gap-filled previously. The unit of the
+  time series must match that of \`thres_vpd\`.
+
+- method:
+
+  A vector of characters indicating the dTmax estimation methods. "sp",
+  "pd", "mw", "dr", and "ed" represent the successive predawn, daily
+  predawn, moving window, double regression, and environmental dependent
+  method, respectively. Default is \`c("sp")\`.
+
+- thres_hour_sp:
+
+  An integer from 0 to 23. The threshold hour of the day which defines
+  the start of predawn in local time (default is 5).
+
+- thres_radi:
+
+  A threshold value of the radiation to define daytime. Default is 100
+  (W m-2). The data points with radiation values above the threshold are
+  considered daytime values. The unit of the threshold must match that
+  of the input radiation time series.
+
+- thres_ta:
+
+  A threshold value of the air temperature to define predawn. Default is
+  1.0 (degrees Celsius). The dTmax, estimated by the PD method, with air
+  temperature values below the threshold, is selected as a candidate for
+  the final dTmax. The unit of the threshold must match that of the
+  input air temperature time series.
+
+- thres_vpd:
+
+  A threshold value of the VPD to define predawn. Default is 1.0 (hPa).
+  The dTmax, estimated by the PD method, with VPD values below the
+  threshold, is selected as a candidate for the final dTmax. The unit of
+  the threshold must match that of the input VPD time series.
+
+- thres_cv:
+
+  A threshold value of the coefficient of variation (CV) to define
+  predawn. Default is 0.005. The dTmax, estimated by the PD method, with
+  CV values below the threshold, is selected as a candidate for the
+  final dTmax.
+
+- thres_hour_pd:
+
+  An integer from 0 to 23. The threshold hour of the day which defines
+  the end of predawn in local time (default is 8).
+
+- min_n_wndw_dtmax:
+
+  A positive integer indicating the minimum number of data points for
+  calculating statistics using a moving window (default is 3). If the
+  number of data points is less than this threshold, the statistics are
+  not calculated in the window.
+
+- wndw_size_dtmax:
+
+  A positive integer indicating the window size (days) for determining
+  moving window maximum values of dTmax. Default is 11 (days).
+
+- alpha:
+
+  A positive value representing a multiplier in the equation to
+  calculate Fd. Default is 1.19 \* 10^(-4) (m3 m-2 s-1).
+
+- beta:
+
+  A positive value representing a power in the equation to calculate Fd.
+  Default is 1.231.
+
+- do_heartwood_correction:
+
+  A boolean. If \`TRUE\`, the heartwood correction is applied to correct
+  dT before calculating Fd; else, the correction is not applied. Default
+  is \`FALSE\`.
+
+- ratio_conductive:
+
+  A number between 0 and 1, indicating the ratio of the probe length to
+  sapwood width. This parameter must be provided if
+  \`do_heartwood_correction\` is \`TRUE\`. Default is \`NULL\`.
+
+## Value
+
+\* The first column, \`time\`, gives the same timestamp as the input
+timestamp specified by \`colname_time\`.
+
+\* The second column, \`raw\`, gives the same targeted time series
+specified by \`colname_target\`.
+
+\* The third column, \`processed\`, gives the post-processed targeted
+time series.
+
+\* The fourth column, \`qc\`, gives a quality-control (QC) flag time
+series indicating the history of modifications to each data point. The
+flag is originally represented as 10-bit binary numbers, but is
+converted to decimal before being output. Each bit is set to 1 if the
+corresponding process is applied to the data point. From right to left,
+the number represents the process of initial missing value detection,
+manual error value removal, outlier removal by absolute limit,
+short-term drift correction, high-frequency noise filtering, Z-score
+outlier removal, random forest outlier removal, gap-filling, detrending,
+and signal damping correction.
+
+If \`skip_sapflow_calc\` is \`FALSE\`, the columns below are also
+output.
+
+\* The columns which have the prefix "dtmax\_" provide the dTmax
+calculated by the methods specified in \`method\`. The last two letters
+of the column name represent the name of the dTmax estimation method.
+"sp", "pd", "mw", "dr", and "ed" represent the successive predawn, daily
+predawn, moving window, double regression, and environmental dependent
+method, respectively.
+
+\* The columns which have the prefix "fd\_" provide the Fd calculated
+using the dTmax estimated by the methods specified in \`method\`. The
+last two letters of the column name represent the name of the dTmax
+estimation method.
+
+## Details
+
+This function executes a series of quality-control processes on the
+input time series. The protocol includes the absolute limit test,
+short-term drift correction, high-frequency noise filtering, outlier
+removal by Z-score and a random forest model, gap-filling using the
+data-driven model, detrending, signal attenuation correction, as well as
+zero-flow condition estimation, heartwood correction, and sap flux
+density calculation for thermal dissipation sap flow data. See more
+details in the vignettes: \`browseVignettes("fluxfixer")\`, or in each
+step-by-step function help page.
+
+Here are some tips helpful for users:
+
+\* If users want to do only quality control unrelated to sap flow
+calculation, set \`skip_sapflow_calc\` as \`TRUE\`. Estimation of the
+zero-flow condition and calculation of sap flux density are skipped in
+this setting.
+
+\* If the input time series has sudden shifts of average and/or standard
+deviation due to various reasons, including sensor replacement, specify
+the end timings of these events in \`vctr_time_prd_tail\`. The Z-score
+transformation gets applied to each sub-period defined by these
+timestamps, calculating a more reasonable Z-score time series.
+
+\* When processing sap flow data, it is highly recommended that users
+include a time series of vapor pressure deficit into the input data
+frame, as it typically controls stomatal opening. If the sap flow
+measurement is conducted in forests with high seasonality, such as
+deciduous forests, it is also recommended to include a time series for
+the amount of forest leaf (leaf area index).
+
+## See also
+
+\`remove_manually\`, \`check_absolute_limits\`, \`modify_short_drift\`,
+\`filter_highfreq_noise\`, \`remove_zscore_outlier\`,
+\`remove_rf_outlier\`, \`calc_ref_stats\`, \`fill_gaps\`,
+\`retrieve_ts\`, \`calc_dtmax\`, \`calc_fd\`
+
+## Author
+
+Yoshiaki Hata
+
+## Examples
+
+``` r
+## Load data
+data("dt_noisy")
+
+## Specify timestamps for the short-term drift correction
+time_drft_head <- as.POSIXct("2013/05/14 13:30", tz = "Etc/GMT-8")
+time_drft_tail <- as.POSIXct("2013/05/17 15:00", tz = "Etc/GMT-8")
+
+## Specify the sensor replacement timing if necessary
+time_prd_tail <- as.POSIXct("2013/05/14 13:00", tz = "Etc/GMT-8")
+
+## Run all processes automatically
+## Note: It takes about 1 minute to complete all processes
+result <-
+  run_fluxfixer(df = dt_noisy, colname_time = "time", colname_target = "dt",
+                vctr_time_drft_head = time_drft_head,
+                vctr_time_drft_tail = time_drft_tail,
+                vctr_time_prd_tail = time_prd_tail,
+                detrend = TRUE)
+#> *** Fluxfixer started running ***
+#> Manual error value removal was not applied
+#> Absolute limits test finished
+#> Short-term drift correction finished
+#> High frequency noise filtering was not applied
+#> Z-score outlier detection started
+#> --- 4 Z-score outliers were detected
+#> --- No Z-score outlier was detected
+#> Z-score outlier detection finished
+#> Random forest outlier detection started
+#> --- Hyperparameter optimization using grid search started
+#> --- MSE: Mean square error for out-of-bag data
+#> --- Hyperparameter set: [m_try, min_nodesize, subsample]
+#> --- MSE: 0.0739554514, Hyperparameter set: [2, 5, 0.1]
+#> --- MSE: 0.0726109857, Hyperparameter set: [3, 5, 0.1]
+#> --- MSE: 0.0722772273, Hyperparameter set: [4, 5, 0.1]
+#> --- MSE: 0.0723189352, Hyperparameter set: [5, 5, 0.1]
+#> --- MSE: 0.0725645986, Hyperparameter set: [6, 5, 0.1]
+#> --- Optimal hyperparameter set: [4, 5, 0.1]
+#> --- Hyperparameter optimization using grid search finished
+#> --- Random forest construction started
+#> --- Random forest construction finished
+#> Random forest outlier detection finished
+#> Reference value definition started
+#> --- Reference average of target time series: 11.4795696128495
+#> --- Reference standard deviation of target time series: 1.6643079953541
+#> Reference value definition finished
+#> Random forest-based gap-filling started
+#> --- Hyperparameter optimization using grid search started
+#> --- MSE: Mean square error for out-of-bag data
+#> --- Hyperparameter set: [m_try, min_nodesize, subsample]
+#> --- MSE: 0.031877748, Hyperparameter set: [2, 5, 1]
+#> --- MSE: 0.0319078118, Hyperparameter set: [3, 5, 1]
+#> --- MSE: 0.0324695933, Hyperparameter set: [4, 5, 1]
+#> --- MSE: 0.0325601249, Hyperparameter set: [5, 5, 1]
+#> --- MSE: 0.0330977558, Hyperparameter set: [6, 5, 1]
+#> --- Optimal hyperparameter set: [2, 5, 1]
+#> --- Hyperparameter optimization using grid search finished
+#> --- Random forest construction started
+#> --- Random forest construction finished
+#> Random forest-based gap-filling finished
+#> Time series retrieval started
+#> --- Signal damping correction was not applied
+#> --- Detrending finished
+#> Time series retrieval finished
+#> Quality-control flag determination finished
+#> Zero-flow condition estimation started
+#> --- dTmax calculation by the SP method started
+#> --- dTmax calculation by the SP method finished
+#> --- dTmax time series aggregation started
+#> --- dTmax time series aggregation finished
+#> Zero-flow condition estimation finished
+#> Fd calculation process started
+#> --- Heartwood correction was not applied
+#> --- Fd calculation by the SP method finished
+#> Fd calculation process finished
+#> *** Fluxfixer finished running successfully ***
+```
