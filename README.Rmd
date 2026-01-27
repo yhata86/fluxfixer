@@ -16,6 +16,7 @@ knitr::opts_chunk$set(
 # fluxfixer <img src="man/figures/logo.png" align="right" height="120" alt="" />
 
 <!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/fluxfixer)](https://CRAN.R-project.org/package=fluxfixer)
 [![R-CMD-check](https://github.com/yhata86/fluxfixer/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yhata86/fluxfixer/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/yhata86/fluxfixer/graph/badge.svg)](https://app.codecov.io/gh/yhata86/fluxfixer)
 <!-- badges: end -->
@@ -67,11 +68,12 @@ remotes::install_github("yhata86/fluxfixer")
 
 ## Example
 
-``` {r example_lib, echo = FALSE, message = FALSE, warning = FALSE}
+``` {r example_lib, echo = FALSE, message = FALSE, warning = FALSE, results = FALSE}
 library(fluxfixer)
 library(ggplot2)
 library(dplyr)
 library(ggtext)
+library(lubridate)
 ```
 
 Assume that you have conducted a sap flow measurement in Malaysia from Sep. 2012 to Aug. 2013, and obtained a half-hourly time series below:
@@ -79,10 +81,15 @@ Assume that you have conducted a sap flow measurement in Malaysia from Sep. 2012
 ``` {r example_raw, echo = FALSE, warning = FALSE}
 data("dt_noisy")
 
-label_date <-
-  paste0(c("Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May",
-           "Jun", "Jul"),
-         "          ")
+## For x-axis label
+df_label <-
+  data.frame(date = seq(lubridate::ymd("2012/09/01", tz = "Etc/GMT-8"),
+                        lubridate::ymd("2013/08/01", tz = "Etc/GMT-8"),
+                        by = "1 month")) %>% 
+  dplyr::mutate(date = date + lubridate::days(15),
+                yval = -1,
+                label_mon = c(month.abb[9:12], month.abb[1:8]))
+
 
 dt_noisy %>% 
   dplyr::mutate(dplyr::across(tidyselect::where(is.numeric),
@@ -92,15 +99,16 @@ dt_noisy %>%
   labs(x = "",
        y = bquote( Delta*italic("T")~(degree*C) ))+
   theme(axis.title.y = element_text(size = 18),
-        axis.text.x = element_text(size = 14, colour = "black"),
+        axis.text.x = element_blank(),
         axis.text.y = element_text(size = 14, colour = "black"),
         axis.ticks.length = unit(2, "mm"))+
-  scale_x_datetime(date_breaks = "1 month", date_labels = label_date,
-                   expand = expansion(0, 0))+
+  coord_cartesian(clip = "off")+
+  scale_x_datetime(date_breaks = "1 month", expand = expansion(0.02, 0))+
   scale_y_continuous(limits = c(-1, 22), breaks = seq(0, 20, by = 5),
                      labels = c(0, "", 10, "", 20), expand = expansion(0, 0))+
-
-  geom_point(aes(time, dt), col = "royalblue")
+  geom_point(aes(time - 1800, dt), col = "royalblue")+
+  geom_text(data = df_label, aes(date, yval, label = label_mon), size = 5,
+            col = "black", vjust = 1.6)
 ```
 
 where $\Delta T$ is the temperature difference between sap flow probes, which will be used in calculating the sap flux density ($F_\mathrm{d}$).
@@ -109,7 +117,7 @@ You may feel upset since the time series has:
 
 * many values near zero due to power supply shortages
 * short-term drift in May, just after sensor replacement
-* Long-term trend of the daily maximum value because of sensor degradation
+* long-term trend of the daily maximum value because of sensor degradation
 
 Do not worry.
 fluxfixer can rescue this time series and output a continuous, stationary time series.
@@ -151,19 +159,21 @@ result %>%
   labs(x = "",
        y = bquote( Delta*italic("T")~(degree*C) ))+
   theme(axis.title.y = element_text(size = 18),
-        axis.text.x = element_text(size = 14, colour = "black"),
+        axis.text.x = element_blank(),
         axis.text.y = element_text(size = 14, colour = "black"),
         axis.ticks.length = unit(2, "mm"),
         legend.position = "none")+
-  scale_x_datetime(date_breaks = "1 month", date_labels = label_date,
-                   expand = expansion(0, 0))+
+  coord_cartesian(clip = "off")+
+  scale_x_datetime(date_breaks = "1 month", expand = expansion(0.02, 0))+
   scale_y_continuous(limits = c(-1, 22), breaks = seq(0, 20, by = 5),
                      labels = c(0, "", 10, "", 20), expand = expansion(0, 0))+
   geom_point(aes(time, raw), col = "royalblue", alpha = 0.01)+
   geom_point(aes(time, processed), col = "orange", alpha = 0.1)+
+  geom_text(data = df_label, aes(date, yval, label = label_mon), size = 5,
+            col = "black", vjust = 1.6)+
   annotate("text", x = as.POSIXct("2013/06/01 00:00", tz = "Etc/GMT-8"),
            y = 16, col = "royalblue", label = "Input", size = 8, hjust = 0)+
-    annotate("text", x = as.POSIXct("2013/06/01 00:00", tz = "Etc/GMT-8"),
+  annotate("text", x = as.POSIXct("2013/06/01 00:00", tz = "Etc/GMT-8"),
            y = 7.5, col = "orange", label = "Output", size = 8, hjust = 0)
     
 ```
@@ -176,7 +186,13 @@ Here is an example of the post-processed half-hourly $F_\mathrm{d}$ time series 
 time_head <- as.POSIXct("2013/02/01 00:00", tz = "Etc/GMT-8")
 time_tail <- as.POSIXct("2013/02/28 23:30", tz = "Etc/GMT-8")
 
-label_date <- as.character(seq(1, 28, by = 2))
+## For x-axis label
+df_label <-
+  data.frame(date = seq(lubridate::ymd_hm("2013/02/01 12:00", tz = "Etc/GMT-8"),
+                        lubridate::ymd_hm("2013/02/28 12:00", tz = "Etc/GMT-8"),
+                        by = "2 day"),
+             yval = 0,
+             label_day = seq(1, 27, by = 2))
 
 time_na_head_01 <- as.POSIXct("2013/02/01 00:00", tz = "Etc/GMT-8")
 time_na_tail_01 <- as.POSIXct("2013/02/02 17:30", tz = "Etc/GMT-8")
@@ -194,14 +210,16 @@ result %>%
   theme_classic()+
   labs(x = "Day of month",
        y = "*F*<sub>d</sub> (&times;10<sup>-5</sup> m<sup>3</sup> m<sup>-2</sup> s<sup>-1</sup>)")+
-  theme(axis.title.x = element_text(size = 18),
+  theme(axis.title.x = element_text(size = 18, vjust = -3.5),
         axis.title.y = element_markdown(size = 18),
-        axis.text.x = element_text(size = 14, colour = "black"),
+        axis.text.x = element_blank(),
         axis.text.y = element_text(size = 14, colour = "black"),
         axis.ticks.length = unit(2, "mm"),
-        legend.position = "none")+
-  scale_x_datetime(limits = c(time_head, time_tail), date_breaks = "2 days",
-                   date_labels = label_date, expand = expansion(0, 0))+
+        legend.position = "none",
+        plot.margin = unit(c(0, 0, 8, 0), "mm"))+
+  coord_cartesian(clip = "off")+
+  scale_x_datetime(limits = c(time_head, time_tail), date_breaks = "1 day",
+                   expand = expansion(0, 0))+
   scale_y_continuous(limits = c(0, 8), breaks = seq(0, 7.5, by = 2.5),
                      labels = c(0, "", 5, ""), expand = expansion(0, 0))+
   annotate("rect", xmin = time_na_head_01, xmax = time_na_tail_01,
@@ -215,10 +233,11 @@ result %>%
   annotate("rect", xmin = time_na_head_05, xmax = time_na_tail_05,
            ymin = -Inf, ymax = Inf, fill = "gray90")+
   geom_line(aes(time, fd_sp * 10^5), col = "deepskyblue1", lwd = 0.8, alpha = 0.8)+
+  geom_text(data = df_label, aes(date, yval, label = label_day), size = 5,
+            col = "black", vjust = 1.6)+
   annotate("text", x = as.POSIXct("2013/02/18 18:00", tz = "Etc/GMT-8"),
            y = 7.5, col = "gray40", label = "Gap-filled", size = 6,
            hjust = 0.5, vjust = 1)
-
 ```
 
 The shaded area represents the gap-filled period by the random forest model.

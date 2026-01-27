@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![CRAN
+status](https://www.r-pkg.org/badges/version/fluxfixer)](https://CRAN.R-project.org/package=fluxfixer)
 [![R-CMD-check](https://github.com/yhata86/fluxfixer/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yhata86/fluxfixer/actions/workflows/R-CMD-check.yaml)
 [![Codecov test
 coverage](https://codecov.io/gh/yhata86/fluxfixer/graph/badge.svg)](https://app.codecov.io/gh/yhata86/fluxfixer)
@@ -29,27 +31,27 @@ Basically, you can conduct the whole process by executing only one
 function, `run_fluxfixer()`. Optionally, you can apply each process
 step-by-step using the functions such as:
 
--   `check_absolute_limits()` eliminates physically unreasonable values.
--   `modify_short_drift()` corrects short-term signal drifts.
--   `filter_highfreq_noise()` filters high-frequency noise from the time
-    series.
--   `remove_zscore_outlier()` detects and removes outliers by Z-score
-    transformation.
--   `remove_rf_outlier()` detects and removes outliers by a random
-    forest model.
--   `fill_gaps()` imputes all missing values in the time series by a
-    random forest model.
--   `retrieve_ts()` converts a standardized Z-score time series into a
-    time series in its original units while conducting detrending and
-    signal damping correction.
+- `check_absolute_limits()` eliminates physically unreasonable values.
+- `modify_short_drift()` corrects short-term signal drifts.
+- `filter_highfreq_noise()` filters high-frequency noise from the time
+  series.
+- `remove_zscore_outlier()` detects and removes outliers by Z-score
+  transformation.
+- `remove_rf_outlier()` detects and removes outliers by a random forest
+  model.
+- `fill_gaps()` imputes all missing values in the time series by a
+  random forest model.
+- `retrieve_ts()` converts a standardized Z-score time series into a
+  time series in its original units while conducting detrending and
+  signal damping correction.
 
 For sap flow data processing:
 
--   `calc_dtmax()` estimates the reference values of observed
-    temperature difference between probes under zero-flow conditions
-    (dTmax) with multiple methods.
--   `calc_fd()` calculates sap flux density, considering the heartwood
-    correction.
+- `calc_dtmax()` estimates the reference values of observed temperature
+  difference between probes under zero-flow conditions (dTmax) with
+  multiple methods.
+- `calc_fd()` calculates sap flux density, considering the heartwood
+  correction.
 
 You can learn more about how to use them in
 `browseVignettes("fluxfixer")`.
@@ -76,17 +78,17 @@ remotes::install_github("yhata86/fluxfixer")
 Assume that you have conducted a sap flow measurement in Malaysia from
 Sep. 2012 to Aug. 2013, and obtained a half-hourly time series below:
 
-<img src="man/figures/README-example_raw-1.png" width="100%" />
+<img src="man/figures/README-example_raw-1.png" alt="" width="100%" />
 
 where $\Delta T$ is the temperature difference between sap flow probes,
 which will be used in calculating the sap flux density ($F_\mathrm{d}$).
 
 You may feel upset since the time series has:
 
--   many values near zero due to power supply shortages
--   short-term drift in May, just after sensor replacement
--   Long-term trend of the daily maximum value because of sensor
-    degradation
+- many values near zero due to power supply shortages
+- short-term drift in May, just after sensor replacement
+- long-term trend of the daily maximum value because of sensor
+  degradation
 
 Do not worry. fluxfixer can rescue this time series and output a
 continuous, stationary time series.
@@ -123,13 +125,13 @@ result <-
 You can derive a data frame containing the post-processed time series
 below.
 
-<img src="man/figures/README-example_gf-1.png" width="100%" />
+<img src="man/figures/README-example_gf-1.png" alt="" width="100%" />
 
 The output data frame also contains $F_\mathrm{d}$ time series, which
 you ultimately want. Here is an example of the post-processed
 half-hourly $F_\mathrm{d}$ time series in Feb. 2013.
 
-<img src="man/figures/README-example_fd-1.png" width="100%" />
+<img src="man/figures/README-example_fd-1.png" alt="" width="100%" />
 
 The shaded area represents the gap-filled period by the random forest
 model. You can see that the imputed time series reproduced the diurnal
