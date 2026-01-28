@@ -1,7 +1,7 @@
 Package: fluxfixer
 Type: Package
 Title: Advanced Framework for Sap Flow Data Post-Process 
-Version: 0.0.0.9000
+Version: 1.0.0
 Authors@R: person("Yoshiaki", "Hata", email = "yoshiakihata0806@gmail.com",
   role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0001-7703-0863"))
 Maintainer: Yoshiaki Hata <yoshiakihata0806@gmail.com>
