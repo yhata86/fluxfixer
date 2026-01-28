@@ -63,12 +63,12 @@ predawn method; MW: Moving window method; DR: Double regression method;
 ED: Environmental dependent method).
 
 | Variable                                  | Type                 | SP  | PD  | MW  | DR  | ED  |
-|:------------------------------------------|:---------------------|:---:|:---:|:---:|:----|:---:|
-| Timestamp                                 | POSIX.ct or POSIX.lt |  ✔  |  ✔  |  ✔  | ✔   |  ✔  |
-| $\Delta T\ \left(^{\circ}C \right)$       | Numeric              |  ✔  |  ✔  |  ✔  | ✔   |  ✔  |
-| Global solar radiation (W m⁻²)            | Numeric              |     |  ✔  |  ✔  | ✔   |  ✔  |
-| Air temperature $\left(^{\circ}C \right)$ | Numeric              |     |     |     |     |  ✔  |
-| Vapor pressure deficit (hPa)              | Numeric              |     |     |     |     |  ✔  |
+|:------------------------------------------|:---------------------|:---:|:---:|:---:|:---:|:---:|
+| Timestamp                                 | POSIX.ct or POSIX.lt |  ✓  |  ✓  |  ✓  |  ✓  |  ✓  |
+| $\Delta T\ \left(^{\circ}C \right)$       | Numeric              |  ✓  |  ✓  |  ✓  |  ✓  |  ✓  |
+| Global solar radiation (W m⁻²)            | Numeric              |     |  ✓  |  ✓  |  ✓  |  ✓  |
+| Air temperature $\left(^{\circ}C \right)$ | Numeric              |     |     |     |     |  ✓  |
+| Vapor pressure deficit (hPa)              | Numeric              |     |     |     |     |  ✓  |
 
 $\Delta T$ is the temperature difference between sap flow probes. You
 can select the multiple methods at once during the automatic processing.
@@ -495,12 +495,12 @@ risk of learning noise, the training data sampling ratio, specified by
 `vctr_subsample_outlier`, is set to 0.1 by default. After determining
 the optimal hyperparameters, they are used to construct the optimal
 random forest model. Output values are obtained from 500 (default;
-specified by `n_tree`) trees, and the first quartile (Q1), third
-quartile (Q3), and interquartile range (IQR) of the output values at
-each time point are calculated. If the targeted value is less than Q1 −
-1.5IQR or more than Q3 + 1.5IQR (default), the data point is identified
-as an outlier and removed. The coefficient 1.5 can be changed by
-`coef_iqr`.
+specified by `n_tree`) trees, and the first quartile (Q₁), third
+quartile (Q₃), and interquartile range (IQR) of the output values at
+each time point are calculated. If the targeted value is less than
+$Q_{1} - 1.5IQR$ or more than $Q_{3} + 1.5IQR$ (default), the data point
+is identified as an outlier and removed. The coefficient 1.5 can be
+changed by `coef_iqr`.
 
 The sample data frame contains time series of environmental factors,
 including precipitation (`p`), global solar radiation (`sw_in`), air

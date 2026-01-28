@@ -136,9 +136,9 @@ default. After determining the optimal hyperparameters, they are used to
 construct the optimal random forest model. Output values are obtained
 from 500 (default) trees, and the first quartile (Q1), third quartile
 (Q3), and interquartile range (IQR) of the output values at each time
-point are calculated. If the targeted value is less than Q1 − 1.5IQR or
-more than Q3 + 1.5IQR (default), the data point is identified as an
-outlier and removed.
+point are calculated. If the targeted value is less than Q1 minus 1.5IQR
+or more than Q3 plus 1.5IQR (default), the data point is identified as
+an outlier and removed.
 
 ## Author
 

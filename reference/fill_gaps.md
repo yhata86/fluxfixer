@@ -127,7 +127,7 @@ Yoshiaki Hata
 ``` r
 ## Load data
 data(dt_noisy)
-df_raw <- dt_noisy[c(13105:15024), ]
+df_raw <- dt_noisy[c(13105:14112), ]
 
 ## Remove error values for making data gaps
 df_raw$dt <- ifelse(df_raw$dt > 9.5, df_raw$dt, -9999)
@@ -140,10 +140,10 @@ result <-
 #> --- Hyperparameter optimization using grid search started
 #> --- MSE: Mean square error for out-of-bag data
 #> --- Hyperparameter set: [m_try, min_nodesize, subsample]
-#> --- MSE: 0.0835932478, Hyperparameter set: [2, 5, 1]
-#> --- MSE: 0.0838841277, Hyperparameter set: [3, 5, 1]
-#> --- MSE: 0.0875365298, Hyperparameter set: [4, 5, 1]
-#> --- Optimal hyperparameter set: [2, 5, 1]
+#> --- MSE: 0.0676186047, Hyperparameter set: [2, 5, 1]
+#> --- MSE: 0.06559005, Hyperparameter set: [3, 5, 1]
+#> --- MSE: 0.0665401028, Hyperparameter set: [4, 5, 1]
+#> --- Optimal hyperparameter set: [3, 5, 1]
 #> --- Hyperparameter optimization using grid search finished
 #> --- Random forest construction started
 #> --- Random forest construction finished

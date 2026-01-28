@@ -507,58 +507,39 @@ Yoshiaki Hata
 ``` r
 ## Load data
 data("dt_noisy")
-
-## Specify timestamps for the short-term drift correction
-time_drft_head <- as.POSIXct("2013/05/14 13:30", tz = "Etc/GMT-8")
-time_drft_tail <- as.POSIXct("2013/05/17 15:00", tz = "Etc/GMT-8")
-
-## Specify the sensor replacement timing if necessary
-time_prd_tail <- as.POSIXct("2013/05/14 13:00", tz = "Etc/GMT-8")
+df_input <- dt_noisy[c(13105:13920), ]
 
 ## Run all processes automatically
-## Note: It takes about 1 minute to complete all processes
 result <-
-  run_fluxfixer(df = dt_noisy, colname_time = "time", colname_target = "dt",
-                vctr_time_drft_head = time_drft_head,
-                vctr_time_drft_tail = time_drft_tail,
-                vctr_time_prd_tail = time_prd_tail,
-                detrend = TRUE)
+  run_fluxfixer(df = df_input, colname_time = "time", colname_target = "dt",
+                vctr_colname_feature = c("sw_in", "vpd", "swc"),
+                skip_sapflow_calc = TRUE)
 #> *** Fluxfixer started running ***
 #> Manual error value removal was not applied
 #> Absolute limits test finished
-#> Short-term drift correction finished
+#> Short-term drift correction was not applied
 #> High frequency noise filtering was not applied
 #> Z-score outlier detection started
-#> --- 4 Z-score outliers were detected
 #> --- No Z-score outlier was detected
 #> Z-score outlier detection finished
 #> Random forest outlier detection started
 #> --- Hyperparameter optimization using grid search started
 #> --- MSE: Mean square error for out-of-bag data
 #> --- Hyperparameter set: [m_try, min_nodesize, subsample]
-#> --- MSE: 0.0739554514, Hyperparameter set: [2, 5, 0.1]
-#> --- MSE: 0.0726109857, Hyperparameter set: [3, 5, 0.1]
-#> --- MSE: 0.0722772273, Hyperparameter set: [4, 5, 0.1]
-#> --- MSE: 0.0723189352, Hyperparameter set: [5, 5, 0.1]
-#> --- MSE: 0.0725645986, Hyperparameter set: [6, 5, 0.1]
-#> --- Optimal hyperparameter set: [4, 5, 0.1]
+#> --- MSE: 0.0559425237, Hyperparameter set: [2, 5, 0.1]
+#> --- MSE: 0.0565652451, Hyperparameter set: [3, 5, 0.1]
+#> --- Optimal hyperparameter set: [2, 5, 0.1]
 #> --- Hyperparameter optimization using grid search finished
 #> --- Random forest construction started
 #> --- Random forest construction finished
 #> Random forest outlier detection finished
-#> Reference value definition started
-#> --- Reference average of target time series: 11.4795696128495
-#> --- Reference standard deviation of target time series: 1.6643079953541
-#> Reference value definition finished
+#> Reference value definition was not applied
 #> Random forest-based gap-filling started
 #> --- Hyperparameter optimization using grid search started
 #> --- MSE: Mean square error for out-of-bag data
 #> --- Hyperparameter set: [m_try, min_nodesize, subsample]
-#> --- MSE: 0.031877748, Hyperparameter set: [2, 5, 1]
-#> --- MSE: 0.0319078118, Hyperparameter set: [3, 5, 1]
-#> --- MSE: 0.0324695933, Hyperparameter set: [4, 5, 1]
-#> --- MSE: 0.0325601249, Hyperparameter set: [5, 5, 1]
-#> --- MSE: 0.0330977558, Hyperparameter set: [6, 5, 1]
+#> --- MSE: 0.0256471796, Hyperparameter set: [2, 5, 1]
+#> --- MSE: 0.0275280593, Hyperparameter set: [3, 5, 1]
 #> --- Optimal hyperparameter set: [2, 5, 1]
 #> --- Hyperparameter optimization using grid search finished
 #> --- Random forest construction started
@@ -566,18 +547,8 @@ result <-
 #> Random forest-based gap-filling finished
 #> Time series retrieval started
 #> --- Signal damping correction was not applied
-#> --- Detrending finished
+#> --- Detrending was not applied
 #> Time series retrieval finished
 #> Quality-control flag determination finished
-#> Zero-flow condition estimation started
-#> --- dTmax calculation by the SP method started
-#> --- dTmax calculation by the SP method finished
-#> --- dTmax time series aggregation started
-#> --- dTmax time series aggregation finished
-#> Zero-flow condition estimation finished
-#> Fd calculation process started
-#> --- Heartwood correction was not applied
-#> --- Fd calculation by the SP method finished
-#> Fd calculation process finished
-#> *** Fluxfixer finished running successfully ***
+#> dTmax and Fd calculation processes skipped
 ```

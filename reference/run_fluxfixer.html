@@ -540,58 +540,39 @@ dissipation sap flow data. See more details in the vignettes:
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="co">## Load data</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"dt_noisy"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Specify timestamps for the short-term drift correction</span></span></span>
-<span class="r-in"><span><span class="va">time_drft_head</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2013/05/14 13:30"</span>, tz <span class="op">=</span> <span class="st">"Etc/GMT-8"</span><span class="op">)</span></span></span>
-<span class="r-in"><span><span class="va">time_drft_tail</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2013/05/17 15:00"</span>, tz <span class="op">=</span> <span class="st">"Etc/GMT-8"</span><span class="op">)</span></span></span>
-<span class="r-in"><span></span></span>
-<span class="r-in"><span><span class="co">## Specify the sensor replacement timing if necessary</span></span></span>
-<span class="r-in"><span><span class="va">time_prd_tail</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.POSIXlt.html" class="external-link">as.POSIXct</a></span><span class="op">(</span><span class="st">"2013/05/14 13:00"</span>, tz <span class="op">=</span> <span class="st">"Etc/GMT-8"</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="va">df_input</span> <span class="op">&lt;-</span> <span class="va">dt_noisy</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">13105</span><span class="op">:</span><span class="fl">13920</span><span class="op">)</span>, <span class="op">]</span></span></span>
 <span class="r-in"><span></span></span>
 <span class="r-in"><span><span class="co">## Run all processes automatically</span></span></span>
-<span class="r-in"><span><span class="co">## Note: It takes about 1 minute to complete all processes</span></span></span>
 <span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span></span></span>
-<span class="r-in"><span>  <span class="fu">run_fluxfixer</span><span class="op">(</span>df <span class="op">=</span> <span class="va">dt_noisy</span>, colname_time <span class="op">=</span> <span class="st">"time"</span>, colname_target <span class="op">=</span> <span class="st">"dt"</span>,</span></span>
-<span class="r-in"><span>                vctr_time_drft_head <span class="op">=</span> <span class="va">time_drft_head</span>,</span></span>
-<span class="r-in"><span>                vctr_time_drft_tail <span class="op">=</span> <span class="va">time_drft_tail</span>,</span></span>
-<span class="r-in"><span>                vctr_time_prd_tail <span class="op">=</span> <span class="va">time_prd_tail</span>,</span></span>
-<span class="r-in"><span>                detrend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
+<span class="r-in"><span>  <span class="fu">run_fluxfixer</span><span class="op">(</span>df <span class="op">=</span> <span class="va">df_input</span>, colname_time <span class="op">=</span> <span class="st">"time"</span>, colname_target <span class="op">=</span> <span class="st">"dt"</span>,</span></span>
+<span class="r-in"><span>                vctr_colname_feature <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"sw_in"</span>, <span class="st">"vpd"</span>, <span class="st">"swc"</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>                skip_sapflow_calc <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> *** Fluxfixer started running ***</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Manual error value removal was not applied</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Absolute limits test finished</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Short-term drift correction finished</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Short-term drift correction was not applied</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> High frequency noise filtering was not applied</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Z-score outlier detection started</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- 4 Z-score outliers were detected</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- No Z-score outlier was detected</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Z-score outlier detection finished</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Random forest outlier detection started</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- Hyperparameter optimization using grid search started</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: Mean square error for out-of-bag data</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- Hyperparameter set: [m_try, min_nodesize, subsample]</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0739554514, Hyperparameter set: [2, 5, 0.1]</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0726109857, Hyperparameter set: [3, 5, 0.1]</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0722772273, Hyperparameter set: [4, 5, 0.1]</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0723189352, Hyperparameter set: [5, 5, 0.1]</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0725645986, Hyperparameter set: [6, 5, 0.1]</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- Optimal hyperparameter set: [4, 5, 0.1]</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0559425237, Hyperparameter set: [2, 5, 0.1]</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0565652451, Hyperparameter set: [3, 5, 0.1]</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --- Optimal hyperparameter set: [2, 5, 0.1]</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- Hyperparameter optimization using grid search finished</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- Random forest construction started</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- Random forest construction finished</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Random forest outlier detection finished</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reference value definition started</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- Reference average of target time series: 11.4795696128495</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- Reference standard deviation of target time series: 1.6643079953541</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Reference value definition finished</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Reference value definition was not applied</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Random forest-based gap-filling started</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- Hyperparameter optimization using grid search started</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: Mean square error for out-of-bag data</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- Hyperparameter set: [m_try, min_nodesize, subsample]</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.031877748, Hyperparameter set: [2, 5, 1]</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0319078118, Hyperparameter set: [3, 5, 1]</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0324695933, Hyperparameter set: [4, 5, 1]</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0325601249, Hyperparameter set: [5, 5, 1]</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0330977558, Hyperparameter set: [6, 5, 1]</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0256471796, Hyperparameter set: [2, 5, 1]</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --- MSE: 0.0275280593, Hyperparameter set: [3, 5, 1]</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- Optimal hyperparameter set: [2, 5, 1]</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- Hyperparameter optimization using grid search finished</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- Random forest construction started</span>
@@ -599,20 +580,10 @@ dissipation sap flow data. See more details in the vignettes:
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Random forest-based gap-filling finished</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Time series retrieval started</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> --- Signal damping correction was not applied</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- Detrending finished</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> --- Detrending was not applied</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Time series retrieval finished</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Quality-control flag determination finished</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Zero-flow condition estimation started</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- dTmax calculation by the SP method started</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- dTmax calculation by the SP method finished</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- dTmax time series aggregation started</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- dTmax time series aggregation finished</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Zero-flow condition estimation finished</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Fd calculation process started</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- Heartwood correction was not applied</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> --- Fd calculation by the SP method finished</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Fd calculation process finished</span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> *** Fluxfixer finished running successfully ***</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> dTmax and Fd calculation processes skipped</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

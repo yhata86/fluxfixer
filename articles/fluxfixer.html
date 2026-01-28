@@ -118,13 +118,13 @@ Daily predawn method; MW: Moving window method; DR: Double regression
 method; ED: Environmental dependent method).</p>
 <table style="width:100%;" class="table">
 <colgroup>
-<col width="45%">
-<col width="25%">
-<col width="5%">
-<col width="5%">
-<col width="5%">
-<col width="5%">
-<col width="5%">
+<col width="36%">
+<col width="20%">
+<col width="8%">
+<col width="8%">
+<col width="8%">
+<col width="8%">
+<col width="8%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Variable</th>
@@ -132,36 +132,36 @@ method; ED: Environmental dependent method).</p>
 <th align="center">SP</th>
 <th align="center">PD</th>
 <th align="center">MW</th>
-<th align="left">DR</th>
+<th align="center">DR</th>
 <th align="center">ED</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left">Timestamp</td>
 <td align="left">POSIX.ct or POSIX.lt</td>
-<td align="center">✔</td>
-<td align="center">✔</td>
-<td align="center">✔</td>
-<td align="left">✔</td>
-<td align="center">✔</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
 </tr>
 <tr class="even">
 <td align="left"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi><mspace width="0.222em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi></mi><mo>∘</mo></msup><mi mathvariant="normal">C</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\Delta T~(^\circ \mathrm{C})</annotation></semantics></math></td>
 <td align="left">Numeric</td>
-<td align="center">✔</td>
-<td align="center">✔</td>
-<td align="center">✔</td>
-<td align="left">✔</td>
-<td align="center">✔</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
 </tr>
 <tr class="odd">
 <td align="left">Global solar radiation (W m<sup>-2</sup>)</td>
 <td align="left">Numeric</td>
 <td align="center"></td>
-<td align="center">✔</td>
-<td align="center">✔</td>
-<td align="left">✔</td>
-<td align="center">✔</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
+<td align="center">✓</td>
 </tr>
 <tr class="even">
 <td align="left">Air temperature
@@ -171,8 +171,8 @@ method; ED: Environmental dependent method).</p>
 <td align="center"></td>
 <td align="center"></td>
 <td align="center"></td>
-<td align="left"></td>
-<td align="center">✔</td>
+<td align="center"></td>
+<td align="center">✓</td>
 </tr>
 <tr class="odd">
 <td align="left">Vapor pressure deficit (hPa)</td>
@@ -180,8 +180,8 @@ method; ED: Environmental dependent method).</p>
 <td align="center"></td>
 <td align="center"></td>
 <td align="center"></td>
-<td align="left"></td>
-<td align="center">✔</td>
+<td align="center"></td>
+<td align="center">✓</td>
 </tr>
 </tbody>
 </table>
@@ -593,11 +593,14 @@ specified by <code>vctr_subsample_outlier</code>, is set to 0.1 by
 default. After determining the optimal hyperparameters, they are used to
 construct the optimal random forest model. Output values are obtained
 from 500 (default; specified by <code>n_tree</code>) trees, and the
-first quartile (Q1), third quartile (Q3), and interquartile range (IQR)
-of the output values at each time point are calculated. If the targeted
-value is less than Q1 − 1.5IQR or more than Q3 + 1.5IQR (default), the
-data point is identified as an outlier and removed. The coefficient 1.5
-can be changed by <code>coef_iqr</code>.</p>
+first quartile (Q<sub>1</sub>), third quartile (Q<sub>3</sub>), and
+interquartile range (IQR) of the output values at each time point are
+calculated. If the targeted value is less than
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">Q</mi><mn mathvariant="normal">1</mn></msub><mo mathvariant="normal">−</mo><mn mathvariant="normal">1.5</mn><mi mathvariant="normal">I</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">R</mi></mrow><annotation encoding="application/x-tex">\mathrm{Q_1 − 1.5IQR}</annotation></semantics></math>
+or more than
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi mathvariant="normal">Q</mi><mn mathvariant="normal">3</mn></msub><mo mathvariant="normal">+</mo><mn mathvariant="normal">1.5</mn><mi mathvariant="normal">I</mi><mi mathvariant="normal">Q</mi><mi mathvariant="normal">R</mi></mrow><annotation encoding="application/x-tex">\mathrm{Q_3 + 1.5IQR}</annotation></semantics></math>
+(default), the data point is identified as an outlier and removed. The
+coefficient 1.5 can be changed by <code>coef_iqr</code>.</p>
 <p>The sample data frame contains time series of environmental factors,
 including precipitation (<code>p</code>), global solar radiation
 (<code>sw_in</code>), air temperature (<code>ta</code>), vapor pressure

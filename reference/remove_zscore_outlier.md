@@ -142,14 +142,14 @@ The input time series is standardized using a moving window, and the
 data values are converted to Z-scores. In this step, the width of the
 moving window is set to 15 days by default, centered on the target time
 point, and standardization is performed individually for each time point
-in the time series. The upper and lower limits of the Z-score (default:
-±5) are set, and data points outside that range are removed as outliers.
-After the outliers have been removed, the Z-score is returned to the
-original value using the original mean and standard deviation time
-series, and standardization is performed again using a moving window to
-remove additional outliers. These procedures are repeated until either
-no more outliers are removed or the maximum number of iterations
-(default 10) is reached.
+in the time series. The threshold of the Z-score absolute value
+(default: 5 as specified by 'thres_z') is set, and data points outside
+that range are removed as outliers. After the outliers have been
+removed, the Z-score is returned to the original value using the
+original mean and standard deviation time series, and standardization is
+performed again using a moving window to remove additional outliers.
+These procedures are repeated until either no more outliers are removed
+or the maximum number of iterations (default 10) is reached.
 
 Users can define sub-periods across the entire time series using
 \`vctr_time_prd_tail\`, and the Z-score conversion is performed in each
