@@ -82,7 +82,7 @@ You may feel upset since the time series has:
 
 - many values near zero due to power supply shortages
 - short-term drift in May, just after sensor replacement
-- Long-term trend of the daily maximum value because of sensor
+- long-term trend of the daily maximum value because of sensor
   degradation
 
 Do not worry. fluxfixer can rescue this time series and output a

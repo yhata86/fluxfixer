@@ -107,13 +107,13 @@
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
 <p>Assume that you have conducted a sap flow measurement in Malaysia from Sep. 2012 to Aug. 2013, and obtained a half-hourly time series below:</p>
-<p><img src="reference/figures/README-example_raw-1.png" width="100%"></p>
+<p><img src="reference/figures/README-example_raw-1.png" alt="" width="100%"></p>
 <p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math> is the temperature difference between sap flow probes, which will be used in calculating the sap flux density (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi mathvariant="normal">d</mi></msub><annotation encoding="application/x-tex">F_\mathrm{d}</annotation></semantics></math>).</p>
 <p>You may feel upset since the time series has:</p>
 <ul>
 <li>many values near zero due to power supply shortages</li>
 <li>short-term drift in May, just after sensor replacement</li>
-<li>Long-term trend of the daily maximum value because of sensor degradation</li>
+<li>long-term trend of the daily maximum value because of sensor degradation</li>
 </ul>
 <p>Do not worry. fluxfixer can rescue this time series and output a continuous, stationary time series.</p>
 <p>To begin with, you prepare a dataset containing raw <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math> and other environmental variables, and specify the timestamps of the events.</p>
@@ -139,9 +139,9 @@
 <span>                vctr_time_prd_tail <span class="op">=</span> <span class="va">time_prd_tail</span>,</span>
 <span>                detrend <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 <p>You can derive a data frame containing the post-processed time series below.</p>
-<p><img src="reference/figures/README-example_gf-1.png" width="100%"></p>
+<p><img src="reference/figures/README-example_gf-1.png" alt="" width="100%"></p>
 <p>The output data frame also contains <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi mathvariant="normal">d</mi></msub><annotation encoding="application/x-tex">F_\mathrm{d}</annotation></semantics></math> time series, which you ultimately want. Here is an example of the post-processed half-hourly <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi mathvariant="normal">d</mi></msub><annotation encoding="application/x-tex">F_\mathrm{d}</annotation></semantics></math> time series in Feb. 2013.</p>
-<p><img src="reference/figures/README-example_fd-1.png" width="100%"></p>
+<p><img src="reference/figures/README-example_fd-1.png" alt="" width="100%"></p>
 <p>The shaded area represents the gap-filled period by the random forest model. You can see that the imputed time series reproduced the diurnal cycle of the non-imputed time series successfully.</p>
 </div>
 <div class="section level2">
@@ -184,6 +184,7 @@
 <div class="dev-status">
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
+<li><a href="https://CRAN.R-project.org/package=fluxfixer" class="external-link"><img src="https://www.r-pkg.org/badges/version/fluxfixer" alt="CRAN status"></a></li>
 <li><a href="https://github.com/yhata86/fluxfixer/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/yhata86/fluxfixer/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/yhata86/fluxfixer" class="external-link"><img src="https://codecov.io/gh/yhata86/fluxfixer/graph/badge.svg" alt="Codecov test coverage"></a></li>
 </ul>
