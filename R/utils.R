@@ -255,21 +255,19 @@ check_short_attenuation <-
       tidyr::fill(c(dT_avg_smth, dT_sd_smth), .direction = "updown") %>%
       dplyr::mutate(dT_avg_smth = gsignal::conv(dT_avg_smth, g_filter,
                                                 shape = "same"),
-                    dT_avg_smth_diff1 = dT_avg_smth - stats::lag(dT_avg_smth),
-                    dT_avg_smth_diff2 = dT_avg_smth_diff1 -
-                      stats::lag(dT_avg_smth_diff1),
+                    dT_avg_smth_diff1 = dT_avg_smth - dplyr::lag(dT_avg_smth),
+                    dT_avg_smth_diff2 = dplyr::lead(dT_avg_smth_diff1) -
+                      dT_avg_smth_diff1,
                     flag_dT_avg_peak =
-                      ifelse(dT_avg_smth_diff1 == 0 |
-                               dT_avg_smth_diff1 *
+                      ifelse(dT_avg_smth_diff1 *
                                dplyr::lead(dT_avg_smth_diff1) < 0, 1, 0),
                     dT_sd_smth = gsignal::conv(dT_sd_smth, g_filter,
                                                shape = "same"),
-                    dT_sd_smth_diff1 = dT_sd_smth - stats::lag(dT_sd_smth),
-                    dT_sd_smth_diff2 = dT_sd_smth_diff1 -
-                      stats::lag(dT_sd_smth_diff1),
+                    dT_sd_smth_diff1 = dT_sd_smth - dplyr::lag(dT_sd_smth),
+                    dT_sd_smth_diff2 = dplyr::lead(dT_sd_smth_diff1) -
+                      dT_sd_smth_diff1,
                     flag_dT_sd_peak =
-                      ifelse(dT_sd_smth_diff1 == 0 |
-                               dT_sd_smth_diff1 *
+                      ifelse(dT_sd_smth_diff1 *
                                dplyr::lead(dT_sd_smth_diff1) < 0, 1, 0))
 
     ## detect peak position
@@ -288,8 +286,8 @@ check_short_attenuation <-
       dplyr::filter(flag_dT_sd_peak == 1 & dT_sd_smth_diff2 > 0) %>%
       dplyr::pull(time)
 
-    if(length(vctr_time_sd_dpeak) <= 1) {
-      message("--- There are less than two peaks. Skip the detection.")
+    if(length(vctr_time_sd_dpeak) < 1) {
+      message("--- There are no peaks. Skip the detection.")
       data.frame(time_start = vctr_time_start,
                  time_peak = vctr_time_peak,
                  time_end = vctr_time_end,
@@ -301,7 +299,10 @@ check_short_attenuation <-
         target_time_sd_dpeak <- vctr_time_sd_dpeak[i]
         num_time_sd_peak <- which(vctr_time_sd_peak == target_time_sd_dpeak)
 
-      if(num_time_sd_peak == 1) {
+        if(length(vctr_time_sd_dpeak) == 1) {
+          attn_head <- time_mea_start + interval_time
+          attn_tail <- time_mea_end - interval_time
+        } else if(num_time_sd_peak == 1) {
           attn_head <- time_mea_start + interval_time
           attn_tail <- vctr_time_sd_peak[num_time_sd_peak + 1] - interval_time
         } else if(num_time_sd_peak == length(vctr_time_sd_peak)) {
