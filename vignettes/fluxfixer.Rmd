@@ -69,46 +69,46 @@ This preparation depends on which type of time series you want to post-process.
 
 The variables listed in the table below are mandatory for each method to determine zero-flow conditions (SP: Successive predawn method; PD: Daily predawn method; MW: Moving window method; DR: Double regression method; ED: Environmental dependent method).
 
-| Variable                              | Type                 | SP  | PD  | MW  | DR  | ED  |
-|:--------------------------------------|:---------------------|:---:|:---:|:---:|:----|:---:|
-| Timestamp                             | POSIX.ct or POSIX.lt |  ✔  |  ✔  |  ✔  |  ✔   |  ✔  |
-| $\Delta T~(^\circ \mathrm{C})$        | Numeric              |  ✔  |  ✔  |  ✔  | ✔   |  ✔  |
-| Global solar radiation (W m^-2^)      | Numeric              |     |  ✔  |  ✔  | ✔   |  ✔  |
-| Air temperature $(^\circ \mathrm{C})$ | Numeric              |     |     |     |     |  ✔  |
-| Vapor pressure deficit (hPa)          | Numeric              |     |     |     |     |  ✔  |
+| Variable                              | Type                 | SP      | PD      | MW      | DR          | ED      |
+|:--------------------------------------|:---------------------|:-------:|:-------:|:-------:| :-------:|:-------:|
+| Timestamp                             | POSIX.ct or POSIX.lt | &check; | &check; | &check; | &check;  | &check; |
+| $\Delta T~(^\circ \mathrm{C})$        | Numeric              | &check; | &check; | &check; | &check;  | &check; |
+| Global solar radiation (W m^-2^)      | Numeric              |         | &check; | &check; | &check;  | &check; |
+| Air temperature $(^\circ \mathrm{C})$ | Numeric              |         |         |         |              | &check; |
+| Vapor pressure deficit (hPa)          | Numeric              |         |         |         |              | &check; |
 
 $\Delta T$ is the temperature difference between sap flow probes.
 You can select the multiple methods at once during the automatic processing.
 
 Here are the more details of each variable column.
 
--   Timestamp: A timestamp of class POSIXct or POSIXt, indicating the timings of the end of each measurement in local time.
-    Any interval (typically 15 to 60 min) is allowed, but the timestamps must be equally spaced and arranged chronologically.
+* Timestamp: A timestamp of class POSIXct or POSIXt, indicating the timings of the end of each measurement in local time.
+Any interval (typically 15 to 60 min) is allowed, but the timestamps must be equally spaced and arranged chronologically.
 
--   $\Delta T$: A numeric value of the temperature difference between sap flow probes.
-    The units should be in $^\circ \mathrm{C}$.
-    It is acceptable to include missing values, but the label representing the missing value must be unique such as `-9999`.
+* $\Delta T$: A numeric value of the temperature difference between sap flow probes.
+The units should be in $^\circ \mathrm{C}$.
+It is acceptable to include missing values, but the label representing the missing value must be unique such as `-9999`.
 
--   Global solar radiation: A numeric value indicating incident short-wave radiation.
-    The units should be in W m^-2^.
-    If you choose the PD, MW, DR, or ED methods, the time series must be included and gap-filled previously.
-    These methods use it only to define daytime, so you can use PPFD (photosynthetic photon flux density) or another variable with a strong correlation with global solar radiation.
-    In such cases, you must modify the threshold value for daytime definition specified by the argument `thres_radi` in `run_fluxfixer()` or `calc_dtmax()`.
-    In case you have no radiative time series, this package offers the `calc_sw_in_toa()` function that estimates the global solar radiation at the top of the atmosphere at a specific location.
-    You can add this time series to your input data frame and determine the zero-flow conditions.
-    See more details in `?calc_sw_in_toa()`.
+* Global solar radiation: A numeric value indicating incident short-wave radiation.
+The units should be in W m^-2^.
+If you choose the PD, MW, DR, or ED methods, the time series must be included and gap-filled previously.
+These methods use it only to define daytime, so you can use PPFD (photosynthetic photon flux density) or another variable with a strong correlation with global solar radiation.
+In such cases, you must modify the threshold value for daytime definition specified by the argument `thres_radi` in `run_fluxfixer()` or `calc_dtmax()`.
+In case you have no radiative time series, this package offers the `calc_sw_in_toa()` function that estimates the global solar radiation at the top of the atmosphere at a specific location.
+You can add this time series to your input data frame and determine the zero-flow conditions.
+See more details in `?calc_sw_in_toa()`.
 
--   Air temperature: A numeric value and its units should be in$^\circ \mathrm{C}$.
-    If you select the ED method, this time series must be included and gap-filled previously.
+* Air temperature: A numeric value and its units should be in$^\circ \mathrm{C}$.
+If you select the ED method, this time series must be included and gap-filled previously.
 
--   Vapor pressure deficit (VPD): A numeric value representing the difference between saturated water vapor pressure and the actual partial water vapor pressure in the atmosphere.
-    The units should be in hPa.
-    If you select the ED method, this time series must be included and gap-filled previously.
-    And even if you do not select the ED method, the VPD is recommended to be included in the input data frame to construct a more powerful random forest model for outlier detection and gap-filling processes, as the VPD typically controls the opening of plant stomata.
-    In this case, you do not have to fill gaps in the time series previously.
+* Vapor pressure deficit (VPD): A numeric value representing the difference between saturated water vapor pressure and the actual partial water vapor pressure in the atmosphere.
+The units should be in hPa.
+If you select the ED method, this time series must be included and gap-filled previously.
+And even if you do not select the ED method, the VPD is recommended to be included in the input data frame to construct a more powerful random forest model for outlier detection and gap-filling processes, as the VPD typically controls the opening of plant stomata.
+In this case, you do not have to fill gaps in the time series previously.
 
--   Other variables: Even when you select only the SP method, you need to add as many drivers that influence sap flow dynamics as possible in the input data frame to construct a more powerful random forest model for outlier detection and gap-filling processes.
-    For example, if you want to post-process sap flow data observed in a deciduous forest, you are recommended to include a time series representing forest leaf amount, such as LAI (leaf area index).
+* Other variables: Even when you select only the SP method, you need to add as many drivers that influence sap flow dynamics as possible in the input data frame to construct a more powerful random forest model for outlier detection and gap-filling processes.
+For example, if you want to post-process sap flow data observed in a deciduous forest, you are recommended to include a time series representing forest leaf amount, such as LAI (leaf area index).
 
 You can also include columns that are unrelated to the post-processing, but be sure to indicate which variables are to be used in the random forest construction when you execute `run_fluxfixer()` by specifying `vctr_colname_feature`.
 
@@ -116,13 +116,13 @@ You can also include columns that are unrelated to the post-processing, but be s
 
 In this case, the input data frame is required to have the columns below.
 
--   Timestamp: A timestamp of class POSIXct or POSIXt, indicating the timings of the end of each measurement in local time.
-    Any interval is allowed, but the timestamps must be equally spaced and arranged chronologically.
+* Timestamp: A timestamp of class POSIXct or POSIXt, indicating the timings of the end of each measurement in local time.
+Any interval is allowed, but the timestamps must be equally spaced and arranged chronologically.
 
--   Target variable: A numeric value of the variable you want to post-process.
-    It is acceptable to include missing values, but the label representing the missing value must be unique such as `-9999`.
+* Target variable: A numeric value of the variable you want to post-process.
+It is acceptable to include missing values, but the label representing the missing value must be unique such as `-9999`.
 
--   Other variables: You need to add as many drivers that influence targeted variable dynamics as possible in the input data frame to construct a more powerful random forest model for outlier detection and gap-filling processes.
+* Other variables: You need to add as many drivers that influence targeted variable dynamics as possible in the input data frame to construct a more powerful random forest model for outlier detection and gap-filling processes.
 
 You can also include columns that are unrelated to the post-processing, but be sure to indicate which variables are to be used in the random forest construction when you execute `run_fluxfixer()` by specifying `vctr_colname_feature`.
 
@@ -142,14 +142,14 @@ data("dt_noisy")
 
 This data frame contains the columns below.
 
--   `time`: Timestamp of the measurement end timing in local time
--   `dt`: $\Delta T$ time series ($^\circ \mathrm{C}$)
--   `p`: Precipitation (mm)
--   `sw_in`: Global solar radiation (W m^-2^)
--   `ta`: Air temperature ($^\circ \mathrm{C}$)
--   `vpd`: Vapor pressure deficit (hPa)
--   `ws`: Horizontal wind speed (m s^-1^)
--   `swc`: Soil water content (m^3 m^-3^)}
+* `time`: Timestamp of the measurement end timing in local time
+* `dt`: $\Delta T$ time series ($^\circ \mathrm{C}$)
+* `p`: Precipitation (mm)
+* `sw_in`: Global solar radiation (W m^-2^)
+* `ta`: Air temperature ($^\circ \mathrm{C}$)
+* `vpd`: Vapor pressure deficit (hPa)
+* `ws`: Horizontal wind speed (m s^-1^)
+* `swc`: Soil water content (m^3 m^-3^)}
 
 You can check the details of the data frame in `?data("dt_noisy")` if necessary.
 The target column is `dt`, so check this time series visually first.
@@ -177,20 +177,20 @@ dt_noisy %>%
 
 From this visualization, you would come up with some ideas for post-processing.
 
--   There is a short-term signal drift in May 2013.
-    The short-term drift correction is needed.
+* There is a short-term signal drift in May 2013.
+The short-term drift correction is needed.
 
--   There is no high-frequency noise contamination throughout the measurement period.
-    The high-frequency noise filtering is not required.
+* There is no high-frequency noise contamination throughout the measurement period.
+The high-frequency noise filtering is not required.
 
--   Long-term gradual signal trend exists.
-    Detrending is needed for preventing the underestimation of sap flux density.
+* Long-term gradual signal trend exists.
+Detrending is needed for preventing the underestimation of sap flux density.
 
--   Signal damping, which means the gradual decrease in signal standard deviation, did not occur.
-    The signal damping correction is not required.
+* Signal damping, which means the gradual decrease in signal standard deviation, did not occur.
+The signal damping correction is not required.
 
--   The sap flow sensor was replaced in May 2013, according to the information from a data provider.
-    The measurement sub-period should be set.
+* The sap flow sensor was replaced in May 2013, according to the information from a data provider.
+The measurement sub-period should be set.
 
 Now, you are able to set appropriate arguments in `run_fluxfixer()` and execute it.
 
@@ -218,18 +218,18 @@ Also, only the SP method is applied by default to estimate zero-flow conditions.
 
 The `result` data frame contains columns below.
 
--   `time`: The same timestamp as the input timestamp specified by `colname_time`.
+* `time`: The same timestamp as the input timestamp specified by `colname_time`.
 
--   `raw`: The same input $\Delta T$ time series specified by `colname_target`.
+* `raw`: The same input $\Delta T$ time series specified by `colname_target`.
 
--   `processed`: The post-processed $\Delta T$ time series
+* `processed`: The post-processed $\Delta T$ time series
 
--   `qc`: A quality-control (QC) flag time series indicating the history of modifications to each data point.
+* `qc`: A quality-control (QC) flag time series indicating the history of modifications to each data point.
     See more details in `?run_fluxfixer`
 
--   `dtmax_sp`: $\Delta T_\mathrm{max}$ (the maximum temperature difference between sap flow probes under zero-flow conditions) time series calculated by the SP method.
+* `dtmax_sp`: $\Delta T_\mathrm{max}$ (the maximum temperature difference between sap flow probes under zero-flow conditions) time series calculated by the SP method.
 
--   `fd_sp`: $F_\mathrm{d}$ (sap flux density) time series using $\Delta T_\mathrm{max}$ calculated by the SP method.
+* `fd_sp`: $F_\mathrm{d}$ (sap flux density) time series using $\Delta T_\mathrm{max}$ calculated by the SP method.
 
 You can confirm whether this function post-processed the raw time series appropriately by drawing the graph.
 
@@ -382,8 +382,8 @@ You can input any feature from the input data frame, and out-of-bag evaluation i
 This evaluation is applied to a training dataset separated from the entire input data. To reduce the computational cost, the only hyperparameter used by default for grid search is the number of candidate features (`vctr_m_try`).
 To reduce the risk of learning noise, the training data sampling ratio, specified by `vctr_subsample_outlier`, is set to 0.1 by default.
 After determining the optimal hyperparameters, they are used to construct the optimal random forest model.
-Output values are obtained from 500 (default; specified by `n_tree`) trees, and the first quartile (Q1), third quartile (Q3), and interquartile range (IQR) of the output values at each time point are calculated.
-If the targeted value is less than Q1 − 1.5IQR or more than Q3 + 1.5IQR (default), the data point is identified as an outlier and removed. The coefficient 1.5 can be changed by `coef_iqr`.
+Output values are obtained from 500 (default; specified by `n_tree`) trees, and the first quartile (Q~1~), third quartile (Q~3~), and interquartile range (IQR) of the output values at each time point are calculated.
+If the targeted value is less than $\mathrm{Q_1 − 1.5IQR}$ or more than $\mathrm{Q_3 + 1.5IQR}$ (default), the data point is identified as an outlier and removed. The coefficient 1.5 can be changed by `coef_iqr`.
 
 The sample data frame contains time series of environmental factors, including precipitation (`p`), global solar radiation (`sw_in`), air temperature (`ta`), vapor pressure deficit (`vpd`), horizontal wind speed (`ws`), and soil water content (`swc`).
 Using these drivers, you can construct a more precise random forest model.

@@ -369,8 +369,8 @@ rf_pred <-
 #' Output values are obtained from 500 (default) trees, and the first quartile
 #' (Q1), third quartile (Q3), and interquartile range (IQR) of the output
 #' values at each time point are calculated. If the targeted value is less
-#' than Q1 − 1.5IQR or more than Q3 + 1.5IQR (default), the data point is
-#' identified as an outlier and removed.
+#' than Q1 minus 1.5IQR or more than Q3 plus 1.5IQR (default), the data point
+#' is identified as an outlier and removed.
 #'
 #' @inheritParams rf_fit
 #' @inheritParams rf_pred
@@ -513,7 +513,7 @@ remove_rf_outlier <-
 #' @examples
 #' ## Load data
 #' data(dt_noisy)
-#' df_raw <- dt_noisy[c(13105:15024), ]
+#' df_raw <- dt_noisy[c(13105:14112), ]
 #'
 #' ## Remove error values for making data gaps
 #' df_raw$dt <- ifelse(df_raw$dt > 9.5, df_raw$dt, -9999)

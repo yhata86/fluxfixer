@@ -98,7 +98,7 @@ imputation.
 \examples{
 ## Load data
 data(dt_noisy)
-df_raw <- dt_noisy[c(13105:15024), ]
+df_raw <- dt_noisy[c(13105:14112), ]
 
 ## Remove error values for making data gaps
 df_raw$dt <- ifelse(df_raw$dt > 9.5, df_raw$dt, -9999)

@@ -8,7 +8,7 @@
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Provides a flexible framework for post-processing thermal dissipation sap flow data using statistical methods and machine learning. This framework includes anomaly correction, outlier removal, gap-filling, detrending, signal damping correction, and sap flux density calculation. The functions in this package can also apply to other time series with various artifacts.
+Provides a flexible framework for post-processing thermal dissipation sap flow data using statistical methods and machine learning. This framework includes anomaly correction, outlier removal, gap-filling, trend removal, signal damping correction, and sap flux density calculation. The functions in this package can also apply to other time series with various artifacts.
 }
 \seealso{
 Useful links:

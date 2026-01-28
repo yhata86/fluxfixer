@@ -134,22 +134,13 @@
 #' @examples
 #' ## Load data
 #' data("dt_noisy")
-#'
-#' ## Specify timestamps for the short-term drift correction
-#' time_drft_head <- as.POSIXct("2013/05/14 13:30", tz = "Etc/GMT-8")
-#' time_drft_tail <- as.POSIXct("2013/05/17 15:00", tz = "Etc/GMT-8")
-#'
-#' ## Specify the sensor replacement timing if necessary
-#' time_prd_tail <- as.POSIXct("2013/05/14 13:00", tz = "Etc/GMT-8")
+#' df_input <- dt_noisy[c(13105:13920), ]
 #'
 #' ## Run all processes automatically
-#' ## Note: It takes about 1 minute to complete all processes
 #' result <-
-#'   run_fluxfixer(df = dt_noisy, colname_time = "time", colname_target = "dt",
-#'                 vctr_time_drft_head = time_drft_head,
-#'                 vctr_time_drft_tail = time_drft_tail,
-#'                 vctr_time_prd_tail = time_prd_tail,
-#'                 detrend = TRUE)
+#'   run_fluxfixer(df = df_input, colname_time = "time", colname_target = "dt",
+#'                 vctr_colname_feature = c("sw_in", "vpd", "swc"),
+#'                 skip_sapflow_calc = TRUE)
 #'
 #' @author Yoshiaki Hata
 #'

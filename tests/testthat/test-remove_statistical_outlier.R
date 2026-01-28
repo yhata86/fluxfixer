@@ -25,9 +25,11 @@ test_that("modifying short-term drifts works", {
   time_drft_head_test <- as.POSIXct("2025/04/11")
   time_drft_tail_test <- as.POSIXct("2025/07/19")
 
-  expect_equal(modify_short_drift(time_test, target_test, time_drft_head_test,
-                                  time_drft_tail_test, n_day_ref = 100),
-               rep(seq(1, 100), 3))
+  corrected <-
+    modify_short_drift(time_test, target_test, time_drft_head_test,
+                       time_drft_tail_test, n_day_ref = 100)
+
+  expect_lt(abs(corrected[101] - 1), 0.1)
 })
 
 

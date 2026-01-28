@@ -4,14 +4,13 @@ Title: Advanced Framework for Sap Flow Data Post-Process
 Version: 0.0.0.9000
 Authors@R: person("Yoshiaki", "Hata", email = "yoshiakihata0806@gmail.com",
   role = c("aut", "cre", "cph"), comment = c(ORCID = "0000-0001-7703-0863"))
-Author: Yoshiaki Hata
 Maintainer: Yoshiaki Hata <yoshiakihata0806@gmail.com>
 Description: Provides a flexible framework for post-processing thermal
   dissipation sap flow data using statistical methods and machine learning.
   This framework includes anomaly correction, outlier removal, gap-filling,
-  detrending, signal damping correction, and sap flux density calculation. The
-  functions in this package can also apply to other time series with various
-  artifacts.
+  trend removal, signal damping correction, and sap flux density calculation.
+  The functions in this package can also apply to other time series with
+  various artifacts.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
