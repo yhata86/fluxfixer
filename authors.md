@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/yhata86/fluxfixer/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/yhata86/fluxfixer/blob/v1.0.0/DESCRIPTION)
 
 Hata Y (2026). *fluxfixer: Advanced Framework for Sap Flow Data
 Post-Process*. R package version 1.0.0,
