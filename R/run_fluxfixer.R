@@ -341,30 +341,41 @@ run_fluxfixer <-
                  target_gf = vctr_target_gf,
                  target_rt = vctr_target_rt)
 
-    vctr_qc_target <-
+    df_target <-
       df_target %>%
-      dplyr::mutate(qc_target = 0) %>%
-      dplyr::mutate(qc_target = ifelse(target_raw == label_err, qc_target + 2^1,
+      dplyr::mutate(qc_target = 0,
+                    qc_target = ifelse(target_raw == label_err, qc_target + 2^0,
                                        qc_target),
-                    qc_target = ifelse(target_mr != target_raw, qc_target + 2^2,
+                    qc_target = ifelse(target_mr != target_raw, qc_target + 2^1,
                                        qc_target),
-                    qc_target = ifelse(target_al != target_mr, qc_target + 2^3,
+                    qc_target = ifelse(target_al != target_mr, qc_target + 2^2,
                                        qc_target),
-                    qc_target = ifelse(target_st != target_al, qc_target + 2^4,
+                    qc_target = ifelse(target_st != target_al, qc_target + 2^3,
                                        qc_target),
-                    qc_target = ifelse(target_nf != target_st, qc_target + 2^5,
+                    qc_target = ifelse(target_nf != target_st, qc_target + 2^4,
                                        qc_target),
                     qc_target = ifelse(target_zs == label_err &
                                          target_nf != label_err,
-                                       qc_target + 2^6, qc_target),
+                                       qc_target + 2^5, qc_target),
                     qc_target = ifelse(target_rf == label_err &
                                          target_zs != label_err,
-                                       qc_target + 2^7, qc_target),
-                    qc_target = ifelse(detrend == TRUE, qc_target + 2^8,
-                                       qc_target),
-                    qc_target = ifelse(correct_damping == TRUE,
-                                       qc_target + 2^9, qc_target)) %>%
-      dplyr::pull(qc_target)
+                                       qc_target + 2^6, qc_target),
+                    qc_target = ifelse(target_gf != target_rf,
+                                       qc_target + 2^7, qc_target))
+
+    if(detrend == TRUE) {
+      df_target <-
+        df_target %>%
+        dplyr::mutate(qc_target = qc_target + 2^8)
+    }
+
+    if(correct_damping == TRUE) {
+      df_target <-
+        df_target %>%
+        dplyr::mutate(qc_target = qc_target + 2^9)
+    }
+
+    vctr_qc_target <- df_target$qc_target
 
     message("Quality-control flag determination finished")
 
@@ -376,6 +387,7 @@ run_fluxfixer <-
 
     if(skip_sapflow_calc) {
       message("dTmax and Fd calculation processes skipped")
+      message("*** Fluxfixer finished running successfully ***")
       return(df_output)
     }
 
