@@ -610,10 +610,18 @@ remove_zscore_outlier <-
             dplyr::filter(ratio < thres_ratio) %>%
             dplyr::pull(time_end)
 
-          message("Short attenuation periods were detected at ",
-                  vctr_time_attn_head)
+          vctr_ratio <-
+            df_attn %>%
+            dplyr::filter(ratio < thres_ratio) %>%
+            dplyr::pull(ratio)
 
-          for (i_attn in n_attn) {
+          message("--- Short attenuation periods were detected at:")
+
+          for (i_attn in 1:n_attn) {
+            message("    [", vctr_time_attn_head[[i_attn]], ", ",
+                    vctr_time_attn_tail[[i_attn]], "], ratio = ",
+                    vctr_ratio[[i_attn]])
+
             data_dT <-
               data_dT %>%
               dplyr::mutate(dT_avg =
@@ -628,6 +636,7 @@ remove_zscore_outlier <-
                             dT_sd = zoo::na.approx(dT_sd, na.rm = FALSE),
                             dT_z = (dT_mod - dT_avg) / dT_sd)
           }
+        message("--- Z-score modification during attenuation periods finished")
         }
       } else {
         data_dT <-
@@ -639,6 +648,8 @@ remove_zscore_outlier <-
                           ifelse(time %in% vctr_time_zmod, NA, dT_sd),
                         dT_sd = zoo::na.approx(dT_sd, na.rm = FALSE),
                         dT_z = (dT_mod - dT_avg) / dT_sd)
+
+        message("--- Z-score modification during attenuation periods finished")
       }
     }
 

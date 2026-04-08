@@ -283,7 +283,9 @@ check_short_attenuation <-
 
     vctr_time_sd_dpeak <-
       data %>%
-      dplyr::filter(flag_dT_sd_peak == 1 & dT_sd_smth_diff2 > 0) %>%
+      dplyr::filter(flag_dT_sd_peak == 1 & dT_sd_smth_diff2 > 0 &
+                      time > (time_mea_start + interval_time) &
+                      time < (time_mea_end - interval_time)) %>%
       dplyr::pull(time)
 
     if(length(vctr_time_sd_dpeak) < 1) {
