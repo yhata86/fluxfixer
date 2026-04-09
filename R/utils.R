@@ -355,3 +355,112 @@ check_short_attenuation <-
     }
   }
 
+
+#' Convert the decimal QC flag into a human-interpretable 10-digit binary
+#'
+#' @description `interpret_qc()` converts the input decimal QC (quality
+#'  control) flag time series into a data frame whose columns indicate the
+#'  applied process to each data point. The values "0" and "1" represent that
+#'  the process specified in their column name was applied and not applied to
+#'  the data point, respectively.
+#'
+#' @param vctr_qc A vector of the decimal QC flag output from
+#'  `run_fluxfixer()`.
+#'
+#' @returns
+#' A data frame with columns below:
+#'
+#' * The first column, `initial_na`, indicates whether the data point was
+#'  originally missing.
+#'
+#' * The second column, `manual_removal`, indicates whether the data point was
+#'  removed manually as specified in the `vctr_time_err` argument in the
+#'  `run_fluxfixer()`.
+#'
+#' * The third column, `absolute_limits`, indicates whether the data point was
+#'  removed as an outlier by absolute limits.
+#'
+#' * The fourth column, `drift_correction`, indicates whether the data point
+#'  was modified by the short-term drift correction.
+#'
+#' * The fifth column, `noise_filtering`, indicates whether the data point was
+#'  modified by the high-frequency noise filtering.
+#'
+#' * The sixth column, `z_score_outlier`, indicates whether the data point was
+#'  removed by the Z-score outlier detection.
+#'
+#' * The seventh column, `rf_outlier`, indicates whether the data point was
+#'  removed by the random forest outlier detection.
+#'
+#' * The eighth column, `gap_filling`, indicates whether the data point was
+#'  gap-filled by the random forest model prediction.
+#'
+#' * The ninth column, `detrending`, indicates whether the data point was
+#'  modified in the detrending.
+#'
+#' * The tenth column, `damping_correction`, indicates whether the data point
+#'  was modified by the signal damping correction.
+#'
+#' @examples
+#' ## Make a QC flag vector
+#' qc <- c(0, 1, 2, 1023)
+#'
+#' ## Obtain a human-interpretable QC data frame
+#' result <- interpret_qc(vctr_qc = qc)
+#'
+#' @author Yoshiaki Hata
+#'
+#' @export
+
+interpret_qc <-
+  function(vctr_qc) {
+    ## avoid "No visible binding for global variable" notes
+    qc_decimal <- NULL
+    damping_correction <- NULL
+    detrending <- NULL
+    gap_filling <- NULL
+    rf_outlier <- NULL
+    z_score_outlier <- NULL
+    noise_filtering <- NULL
+    drift_correction <- NULL
+    absolute_limits <- NULL
+    manual_removal <- NULL
+    initial_na <- NULL
+
+    data.frame(qc_decimal = vctr_qc) %>%
+      dplyr::mutate(damping_correction = ifelse(qc_decimal >= 2^9, 1, 0),
+                    qc_decimal = ifelse(damping_correction == 1,
+                                        qc_decimal - 2^9, qc_decimal),
+                    detrending = ifelse(qc_decimal >= 2^8, 1, 0),
+                    qc_decimal = ifelse(detrending == 1, qc_decimal - 2^8,
+                                        qc_decimal),
+                    gap_filling = ifelse(qc_decimal >= 2^7, 1, 0),
+                    qc_decimal = ifelse(gap_filling == 1, qc_decimal - 2^7,
+                                        qc_decimal),
+                    rf_outlier = ifelse(qc_decimal >= 2^6, 1, 0),
+                    qc_decimal = ifelse(rf_outlier == 1, qc_decimal - 2^6,
+                                        qc_decimal),
+                    z_score_outlier = ifelse(qc_decimal >= 2^5, 1, 0),
+                    qc_decimal = ifelse(z_score_outlier == 1,
+                                        qc_decimal - 2^5, qc_decimal),
+                    noise_filtering = ifelse(qc_decimal >= 2^4, 1, 0),
+                    qc_decimal = ifelse(noise_filtering == 1, qc_decimal - 2^4,
+                                        qc_decimal),
+                    drift_correction = ifelse(qc_decimal >= 2^3, 1, 0),
+                    qc_decimal = ifelse(drift_correction == 1,
+                                        qc_decimal - 2^3, qc_decimal),
+                    absolute_limits = ifelse(qc_decimal >= 2^2, 1, 0),
+                    qc_decimal = ifelse(absolute_limits == 1, qc_decimal - 2^2,
+                                        qc_decimal),
+                    manual_removal = ifelse(qc_decimal >= 2^1, 1, 0),
+                    qc_decimal = ifelse(manual_removal == 1, qc_decimal - 2^1,
+                                        qc_decimal),
+                    initial_na = ifelse(qc_decimal >= 2^0, 1, 0),
+                    qc_decimal = ifelse(initial_na == 1, qc_decimal - 2^0,
+                                        qc_decimal)) %>%
+      dplyr::select(initial_na, manual_removal, absolute_limits,
+                    drift_correction, noise_filtering, z_score_outlier,
+                    rf_outlier, gap_filling, detrending,
+                    damping_correction) %>%
+      return()
+  }

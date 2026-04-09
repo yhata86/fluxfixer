@@ -64,3 +64,27 @@ test_that("gets the right number of short attenuation periods", {
   expect_equal(nrow(rslt_test), 1)
 })
 
+test_that("gets right QC flag interpretation", {
+  rslt_test <- interpret_qc(c(0, 1, 3, 7, 15, 31, 63, 127, 255, 511, 1023))
+
+  expect_equal(rslt_test$initial_na,
+               c(0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+  expect_equal(rslt_test$manual_removal,
+               c(0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1))
+  expect_equal(rslt_test$absolute_limits,
+               c(0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1))
+  expect_equal(rslt_test$drift_correction,
+               c(0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1))
+  expect_equal(rslt_test$noise_filtering,
+               c(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1))
+  expect_equal(rslt_test$z_score_outlier,
+               c(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1))
+  expect_equal(rslt_test$rf_outlier,
+               c(0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1))
+  expect_equal(rslt_test$gap_filling,
+               c(0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1))
+  expect_equal(rslt_test$detrending,
+               c(0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1))
+  expect_equal(rslt_test$damping_correction,
+               c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1))
+})

@@ -134,7 +134,8 @@
 #'  value removal, outlier removal by absolute limit, short-term drift
 #'  correction, high-frequency noise filtering, Z-score outlier removal,
 #'  random forest outlier removal, gap-filling, detrending, and signal damping
-#'  correction.
+#'  correction. This time series can be easily converted into a
+#'  human-interpretable data frame by the `interpret_qc()` function.
 #'
 #' If `skip_sapflow_calc` is `FALSE`, the columns below are also output.
 #'
@@ -164,7 +165,8 @@
 #'
 #' @seealso `remove_manually`, `check_absolute_limits`, `modify_short_drift`,
 #'  `filter_highfreq_noise`, `remove_zscore_outlier`, `remove_rf_outlier`,
-#'  `calc_ref_stats`, `fill_gaps`, `retrieve_ts`, `calc_dtmax`, `calc_fd`
+#'  `calc_ref_stats`, `fill_gaps`, `retrieve_ts`, `calc_dtmax`, `calc_fd`,
+#'  `interpret_qc`
 #'
 #' @export
 
