@@ -1,19 +1,23 @@
 test_that("gets right time interval", {
-  time_test <- seq(lubridate::ymd_hm("2025/01/01 00:30"),
-                   lubridate::ymd_hm("2025/01/02 00:00"),
+  timezone <- "Etc/GMT-8"
+
+  time_test <- seq(as.POSIXct("2025/01/01 00:30", tz = timezone),
+                   as.POSIXct("2025/01/02 00:00", tz = timezone),
                    by = "30 min")
 
   expect_equal(get_interval(time_test), 30)
 
   expect_error(get_interval(c(time_test, NA)), "one or more NA values exist")
   expect_error(get_interval(c(time_test,
-                              lubridate::ymd_hm("2025/01/02 01:00"))),
+                              as.POSIXct("2025/01/02 01:00", tz = timezone))),
                "does not have equal intervals")
 })
 
 
 test_that("gets right TOA global radiation", {
-  expect_equal(calc_sw_in_toa(lubridate::ymd_hm("2025/01/01 07:00"),
+  timezone <- "Etc/GMT-8"
+
+  expect_equal(calc_sw_in_toa(as.POSIXct("2025/01/01 07:00", tz = timezone),
                                          35, 140, 135), 0)
 })
 
@@ -25,8 +29,10 @@ test_that("gets the right number of data points without missing values", {
 
 
 test_that("gets the right number of short attenuation periods", {
-  time_test <- seq(lubridate::ymd_hm("2025/01/01 00:30"),
-                   lubridate::ymd_hm("2025/02/01 00:00"),
+  timezone <- "Etc/GMT-8"
+
+  time_test <- seq(as.POSIXct("2025/01/01 00:30", tz = timezone),
+                   as.POSIXct("2025/02/01 00:00", tz = timezone),
                    by = "30 min")
 
   set.seed(12345)

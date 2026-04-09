@@ -1,10 +1,14 @@
 test_that("manual outlier removal works", {
+  timezone <- "Etc/GMT-8"
+
   time_test <-
-    seq(as.POSIXct("2025/01/01"), as.POSIXct("2025/01/05"),
-        by = "1 day")
+    seq(as.POSIXct("2025/01/01", tz = timezone),
+        as.POSIXct("2025/01/05", tz = timezone), by = "1 day")
 
   target_test <- seq(1, 5)
-  time_err_test <- c(as.POSIXct("2025/01/01"), as.POSIXct("2025/01/03"))
+  time_err_test <-
+    c(as.POSIXct("2025/01/01", tz = timezone),
+      as.POSIXct("2025/01/03", tz = timezone))
 
   expect_equal(remove_manually(time_test, target_test, time_err_test),
                c(-9999, 2, -9999, 4, 5))
@@ -18,12 +22,15 @@ test_that("screening outliers by absolute limits works", {
 })
 
 test_that("modifying short-term drifts works", {
+  timezone <- "Etc/GMT-8"
+
   time_test <-
-    seq(as.POSIXct("2025/01/01"), as.POSIXct("2025/10/27"),
-        by = "1 day")
+    seq(as.POSIXct("2025/01/01", tz = timezone),
+        as.POSIXct("2025/10/27", tz = timezone), by = "1 day")
+
   target_test <- c(seq(1, 100), seq(1001, 1100), seq(1, 100))
-  time_drft_head_test <- as.POSIXct("2025/04/11")
-  time_drft_tail_test <- as.POSIXct("2025/07/19")
+  time_drft_head_test <- as.POSIXct("2025/04/11", tz = timezone)
+  time_drft_tail_test <- as.POSIXct("2025/07/19", tz = timezone)
 
   corrected <-
     modify_short_drift(time_test, target_test, time_drft_head_test,
@@ -35,12 +42,16 @@ test_that("modifying short-term drifts works", {
 
 test_that("filtering high frequncy noise works", {
   set.seed(123)
-  time_test <- seq(as.POSIXct("2025/01/01"), length.out = 360, by = "1 day")
+  timezone <- "Etc/GMT-8"
+
+  time_test <- seq(as.POSIXct("2025/01/01", tz = timezone), length.out = 360,
+                   by = "1 day")
   x_test <- seq(1, 360)
   target_test <- sin(x_test / 180 * pi) + rnorm(length(x_test), sd = 0.2)
   target_test[c(seq(1, 5), seq(10, 30), seq(240, 250))] <- -9999
-  vctr_time_noise_test <- seq(as.POSIXct("2025/01/01"),
-                              as.POSIXct("2025/09/01"), by = "1 day")
+  vctr_time_noise_test <-
+    seq(as.POSIXct("2025/01/01", tz = timezone),
+        as.POSIXct("2025/09/01", tz = timezone), by = "1 day")
 
   target_filtered <-
     filter_highfreq_noise(time_test, target_test, vctr_time_noise_test,
@@ -56,15 +67,18 @@ test_that("filtering high frequncy noise works", {
 
 
 test_that("Z-score outlier removal works", {
-  time_test <- seq(as.POSIXct("2025/01/01 00:30"), length.out = 6 * 360,
-                   by = "30 min")
+  timezone <- "Etc/GMT-8"
+
+  time_test <-
+    seq(as.POSIXct("2025/01/01 00:30", tz = timezone), length.out = 6 * 360,
+        by = "30 min")
   x_test <- seq(1, 3 * 360)
   target_test <- sin(x_test / 180 * pi)
   target_test <- c(target_test, 0.2 * sin(x_test / 180 * pi))
   target_test[c(seq(101, 200), seq(1601, 1800))] <- -9999
   target_test[c(300, 500, 1000)] <- 3.9
   target_test[c(1900, 2000, 2100)] <- 0.8
-  time_prd_tail_test <- as.POSIXct("2025/01/23 12:00")
+  time_prd_tail_test <- as.POSIXct("2025/01/23 12:00", tz = timezone)
 
   target_filtered <-
     remove_zscore_outlier(time_test, target_test,
@@ -84,10 +98,14 @@ test_that("Z-score outlier removal works", {
 
 
 test_that("reference average and sd calculation works", {
-  time_test <- seq(as.POSIXct("2025/01/01 00:30"), length.out = 48 * 30,
+  timezone <- "Etc/GMT-8"
+
+  time_test <-
+    seq(as.POSIXct("2025/01/01 00:30", tz = timezone), length.out = 48 * 30,
                    by = "30 min")
-  target_test <- c(rep(seq(1, 3), each = 48 * 5), rep(seq(3, 5), each = 48 * 5))
-  time_prd_tail_test <- as.POSIXct("2025/01/16 00:00")
+  target_test <-
+    c(rep(seq(1, 3), each = 48 * 5), rep(seq(3, 5), each = 48 * 5))
+  time_prd_tail_test <- as.POSIXct("2025/01/16 00:00", tz = timezone)
   vctr_ref <- calc_ref_stats(time_test, target_test, time_prd_tail_test)
 
   expect_equal(vctr_ref[1], 3)
