@@ -28,6 +28,9 @@ run_fluxfixer(
   wndw_size_conv = 48 * 15,
   inv_sigma_conv = 0.01,
   thres_ratio = 0.5,
+  lat = NULL,
+  lon = NULL,
+  std_meridian = NULL,
   vctr_colname_feature = NULL,
   vctr_min_nodesize = c(5),
   vctr_m_try = NULL,
@@ -169,6 +172,27 @@ represents the average of the standard deviation at the detected
 attenuation peak relative to that at the beginning and end of the
 attenuation period. If the ratio is below this threshold value, the
 correction is applied. Default is 0.5.}
+
+\item{lat}{Only valid if `vctr_colname_feature` is `NULL`, and `lon` as well
+as `std_meridian` are provided. A numeric value (degrees) between -90 and
+90, indicating the latitude of the specific location. This parameter is
+used to calculate incident global solar radiation time series at TOA
+(top of atmosphere) at the specified location, and the time series is added
+to the features for the random forest construction. Default is `NULL`.}
+
+\item{lon}{Only valid if `vctr_colname_feature` is `NULL`, and `lat` as well
+as `std_meridian` are provided. A numeric value (degrees) between -180 and
+180, indicating the longitude of the specific location. This parameter is
+used to calculate incident global solar radiation time series at TOA at the
+specified location, and the time series is added to the features for the
+random forest construction. Default is `NULL`.}
+
+\item{std_meridian}{Only valid if `vctr_colname_feature` is `NULL`, and
+`lat` as well as `lon` are provided. A numeric value (degrees) between -180
+and 180, indicating the standard meridian of the specific location. This
+parameter is used to calculate incident global solar radiation time series
+at TOA at the specified location, and the time series is added to the
+features for the random forest construction. Default is `NULL`.}
 
 \item{vctr_colname_feature}{A vector of characters indicating the name of
 the feature time series columns used in constructing a random forest model.

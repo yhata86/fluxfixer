@@ -67,6 +67,24 @@
 #'  input data frame for a targeted time series to be post-processed. For
 #'  thermal dissipation sap flow data, the targeted time series must be a dT
 #'  (the temperature difference between sap flow probes) time series.
+#' @param lat Only valid if `vctr_colname_feature` is `NULL`, and `lon` as well
+#'  as `std_meridian` are provided. A numeric value (degrees) between -90 and
+#'  90, indicating the latitude of the specific location. This parameter is
+#'  used to calculate incident global solar radiation time series at TOA
+#'  (top of atmosphere) at the specified location, and the time series is added
+#'  to the features for the random forest construction. Default is `NULL`.
+#' @param lon Only valid if `vctr_colname_feature` is `NULL`, and `lat` as well
+#'  as `std_meridian` are provided. A numeric value (degrees) between -180 and
+#'  180, indicating the longitude of the specific location. This parameter is
+#'  used to calculate incident global solar radiation time series at TOA at the
+#'  specified location, and the time series is added to the features for the
+#'  random forest construction. Default is `NULL`.
+#' @param std_meridian Only valid if `vctr_colname_feature` is `NULL`, and
+#'  `lat` as well as `lon` are provided. A numeric value (degrees) between -180
+#'  and 180, indicating the standard meridian of the specific location. This
+#'  parameter is used to calculate incident global solar radiation time series
+#'  at TOA at the specified location, and the time series is added to the
+#'  features for the random forest construction. Default is `NULL`.
 #' @param detrend A boolean. If `TRUE`, detrending is applied and the reference
 #'  average is used to convert the Z-score time series to the time series in
 #'  its original units; else, detrending is not applied, and the moving window
@@ -160,6 +178,7 @@ run_fluxfixer <-
            wndw_size_z = 48 * 15, min_n_wndw_z = 5, thres_z = 5.0,
            n_calc_max = 10, modify_z = FALSE, vctr_time_zmod = NULL,
            wndw_size_conv = 48 * 15, inv_sigma_conv = 0.01, thres_ratio = 0.5,
+           lat = NULL, lon = NULL, std_meridian = NULL,
            vctr_colname_feature = NULL, vctr_min_nodesize = c(5),
            vctr_m_try = NULL, vctr_subsample_outlier = c(0.1),
            vctr_subsample_gf = c(1), frac_train = 0.75, n_tree = 500,
@@ -185,12 +204,51 @@ run_fluxfixer <-
     target_nf <- NULL
     target_zs <- NULL
     target_rf <- NULL
+    target_gf <- NULL
+    target_rt <- NULL
 
     message("*** Fluxfixer started running ***")
 
     ## Pick up specific columns
-    vctr_time <- df %>% dplyr::pull(!!colname_time)
-    vctr_target <- df %>% dplyr::pull(!!colname_target)
+    if(ncol(df[colnames(df) == colname_time]) == 1) {
+      vctr_time <- df %>% dplyr::pull(!!colname_time)
+    } else {
+      stop("The input column name representing time stamp is wrong")
+    }
+
+    if(ncol(df[colnames(df) == colname_target]) == 1) {
+      vctr_target <- df %>% dplyr::pull(!!colname_target)
+    } else {
+      stop("The input column name representing target variable is wrong")
+    }
+
+    ## Make additional columns when only mandatory columns are provided
+    if(is.null(vctr_colname_feature) &
+       ncol(dplyr::select(df, -c(dplyr::all_of(!!colname_time),
+                                 dplyr::all_of(!!colname_target)))) == 0) {
+
+      df <-
+        df %>%
+        dplyr::mutate(yr = lubridate::year(vctr_time),
+                      doy = lubridate::yday(vctr_time),
+                      hod = lubridate::hour(vctr_time) +
+                        lubridate::minute(vctr_time) / 60,
+                      nday_cum = dplyr::row_number(df) /
+                        (24 * 60 / get_interval(vctr_time)))
+
+      message("Time-related variables were added to the data frame")
+    }
+
+    if(is.null(vctr_colname_feature) & !is.null(lat) & !is.null(lon) &
+       !is.null(std_meridian)) {
+      df <-
+        df %>%
+        dplyr::mutate(sw_in_toa = calc_sw_in_toa(vctr_time, lat, lon,
+                                                 std_meridian))
+
+      message("Max. solar radiation time series was added to the data frame")
+    }
+
     vctr_target_raw <- vctr_target
 
     if(!is.null(colname_radi)) {
@@ -211,7 +269,7 @@ run_fluxfixer <-
       vctr_vpd <- NULL
     }
 
-    ## remove error values manually
+    ## Remove error values manually
     if(!is.null(vctr_time_err)) {
       vctr_target <-
         remove_manually(vctr_time, vctr_target, vctr_time_err, label_err)

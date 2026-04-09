@@ -15,3 +15,14 @@ test_that("automated process works", {
   expect_gt(min(df$processed), 8)
   expect_lt(max(df$processed), 14)
 })
+
+test_that("automated process fails appropriately", {
+  data("dt_noisy")
+
+  ## wrong time stamp column name
+  expect_error(run_fluxfixer(dt_noisy, colname_time = "Time",
+                             colname_target = "dt"))
+  ## wrong target column name
+  expect_error(run_fluxfixer(dt_noisy, colname_time = "time",
+                             colname_target = "Dt"))
+})
