@@ -37,6 +37,16 @@
 #'  is also recommended to include a time series for the amount of forest leaf
 #'  (leaf area index).
 #'
+#' * If users do not specify the explanatory variable names in
+#'  `vctr_colname_feature`, all of the columns excluding the columns specified
+#'  in `colname_time` and `colname_target` are used for the construction. Under
+#'  this case, if there are no other columns available, this function
+#'  automatically add variables `yr` (year), `doy` (day of year), `tod` (time
+#'  of day, unit: hour), and `nday_cum` (cumulative number of day) obtained
+#'  from the timestamp column, as well as `sw_in_toa` (global solar radiation
+#'  at the top of the atmosphere) variable only when augment `lat`, `lon`, and
+#'  `std_meridian` are provided.
+#'
 #' @inheritParams remove_manually
 #' @inheritParams check_absolute_limits
 #' @inheritParams modify_short_drift
@@ -228,12 +238,11 @@ run_fluxfixer <-
     if(is.null(vctr_colname_feature) &
        ncol(dplyr::select(df, -c(dplyr::all_of(!!colname_time),
                                  dplyr::all_of(!!colname_target)))) == 0) {
-
       df <-
         df %>%
         dplyr::mutate(yr = lubridate::year(vctr_time),
                       doy = lubridate::yday(vctr_time),
-                      hod = lubridate::hour(vctr_time) +
+                      tod = lubridate::hour(vctr_time) +
                         lubridate::minute(vctr_time) / 60,
                       nday_cum = dplyr::row_number(df) /
                         (24 * 60 / get_interval(vctr_time)))
