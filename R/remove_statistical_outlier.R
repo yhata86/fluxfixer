@@ -4,10 +4,10 @@
 #'  indicating specific timestamps.
 #'
 #' @inheritParams n_valid
-#' @param vctr_time A timestamp vector of class POSIXct or POSIXt.
+#' @param vctr_time A timestamp vector of class POSIXct or POSIXlt.
 #' @param vctr_target A vector of a targeted time series to be checked. The
 #'  length of the time series must be the same as that of `vctr_time`.
-#' @param vctr_time_err A timestamp vector of class POSIXct or POSIXt,
+#' @param vctr_time_err A timestamp vector of class POSIXct or POSIXlt,
 #'  indicating specific error timings.
 #'
 #' @returns
@@ -120,9 +120,9 @@ check_absolute_limits <-
 #'
 #' @inheritParams get_interval
 #' @inheritParams remove_manually
-#' @param vctr_time_drft_head A timestamp vector of class POSIXct or POSIXt,
+#' @param vctr_time_drft_head A timestamp vector of class POSIXct or POSIXlt,
 #'  indicating when each drift starts.
-#' @param vctr_time_drft_tail A timestamp vector of class POSIXct or POSIXt,
+#' @param vctr_time_drft_tail A timestamp vector of class POSIXct or POSIXlt,
 #'  indicating when each drift ends. The length of the time series must be the
 #'  same as that of `vctr_time_drft_head`.
 #' @param n_day_ref A positive integer representing the number of days to be
@@ -236,7 +236,7 @@ modify_short_drift <-
 #'  noise.
 #'
 #' @inheritParams modify_short_drift
-#' @param vctr_time_noise A timestamp vector of class POSIXct or POSIXt,
+#' @param vctr_time_noise A timestamp vector of class POSIXct or POSIXlt,
 #'  indicating when high-frequency noise exists in the targeted time series.
 #' @param wndw_size_noise A positive integer indicating the number of data
 #'  points included in a moving Gaussian window for the high-frequency noise
@@ -355,7 +355,7 @@ filter_highfreq_noise <-
 #' and standard deviation time series.
 #'
 #' @inheritParams remove_manually
-#' @param vctr_time_prd_tail A timestamp vector of class POSIXct or POSIXt,
+#' @param vctr_time_prd_tail A timestamp vector of class POSIXct or POSIXlt,
 #'  indicating the end timings of each sub-period. Note that users must not
 #'  include the final timestamp for the entire time series. For instance, if
 #'  users want to split the entire measurement period into three sub-periods,
@@ -377,7 +377,7 @@ filter_highfreq_noise <-
 #' @param modify_z A boolean. If `TRUE`, conduct Z-score short attenuation
 #'  correction; else, the correction is not applied. Default is `FALSE`.
 #' @param vctr_time_zmod Only valid if `modify_z` is `TRUE`. A timestamp vector
-#'  of class POSIXct or POSIXt, indicating the timings when the short-term
+#'  of class POSIXct or POSIXlt, indicating the timings when the short-term
 #'  signal attenuation correction is applied. Default is `NULL`.
 #' @param wndw_size_conv Only valid if `modify_z` is `TRUE`. A positive integer
 #'  indicating the number of data points included in a moving window for the

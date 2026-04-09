@@ -14,7 +14,7 @@
 #'  advantage of being able to calculate dTmax quickly while minimizing the
 #'  effect of nocturnal transpiration on dTmax estimation.
 #'
-#' @param vctr_time A timestamp vector of class POSIXct or POSIXt. This vector
+#' @param vctr_time A timestamp vector of class POSIXct or POSIXlt. This vector
 #'  indicates the timings of the end of each measurement in local time. Any
 #'  interval (typically 15 to 60 min) is allowed, but the timestamps must be
 #'  equally spaced and arranged chronologically.
@@ -669,7 +669,7 @@ calc_dtmax_pd_ed <-
 #'  Peters et al. (2018; New Phytologist).
 #'
 #' @inheritParams calc_dtmax_pd
-#' @param vctr_time_daily A timestamp vector of class POSIXct or POSIXt in
+#' @param vctr_time_daily A timestamp vector of class POSIXct or POSIXlt in
 #'  daily steps. This vector indicates the start and end dates of the
 #'  measurement, and is assumed to be output from the `calc_dtmax_pd()`
 #'  function. The timestamps must be equally spaced and arranged
@@ -686,8 +686,8 @@ calc_dtmax_pd_ed <-
 #'  for determining moving window maximum values of dTmax. Default is 11
 #'  (days).
 #' @param vctr_time Only valid when `vctr_dtmax_pd` is `NULL`. A timestamp
-#'  vector of class POSIXct or POSIXt. This vector indicates the timings of the
-#'  end of each measurement in local time. Any interval (typically 15 to 60
+#'  vector of class POSIXct or POSIXlt. This vector indicates the timings of
+#'  the end of each measurement in local time. Any interval (typically 15 to 60
 #'  min) is allowed, but the timestamps must be equally spaced and arranged
 #'  chronologically. Default is `NULL`.
 #' @param vctr_dt Only valid when `vctr_dtmax_pd` is `NULL`. A vector of dT

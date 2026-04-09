@@ -4,7 +4,7 @@
 #'  timestamp vector and checks whether the format of the time vector is
 #'  acceptable for the successive process.
 #'
-#' @param vctr_time A timestamp vector of class POSIXct or POSIXt. The
+#' @param vctr_time A timestamp vector of class POSIXct or POSIXlt. The
 #'  timestamps must be equally spaced and arranged chronologically.
 #'
 #' @returns
@@ -17,7 +17,7 @@
 
 get_interval <- function(vctr_time) {
   if(lubridate::is.POSIXt(vctr_time) != TRUE) {
-    stop("input time vector must be a POSIXct or POSIXt class")
+    stop("input time vector must be a POSIXct or POSIXlt class")
   }
 
   if(length(vctr_time[is.na(vctr_time)]) >= 1) {
