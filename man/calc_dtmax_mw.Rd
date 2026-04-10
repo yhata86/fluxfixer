@@ -18,7 +18,7 @@ calc_dtmax_mw(
 )
 }
 \arguments{
-\item{vctr_time_daily}{A timestamp vector of class POSIXct or POSIXt in
+\item{vctr_time_daily}{A timestamp vector of class POSIXct or POSIXlt in
 daily steps. This vector indicates the start and end dates of the
 measurement, and is assumed to be output from the `calc_dtmax_pd()`
 function. The timestamps must be equally spaced and arranged
@@ -46,8 +46,8 @@ statistics are not calculated in the window.}
 steps; else, returns dTmax in the original time steps. Default is `FALSE`.}
 
 \item{vctr_time}{Only valid when `vctr_dtmax_pd` is `NULL`. A timestamp
-vector of class POSIXct or POSIXt. This vector indicates the timings of the
-end of each measurement in local time. Any interval (typically 15 to 60
+vector of class POSIXct or POSIXlt. This vector indicates the timings of
+the end of each measurement in local time. Any interval (typically 15 to 60
 min) is allowed, but the timestamps must be equally spaced and arranged
 chronologically. Default is `NULL`.}
 

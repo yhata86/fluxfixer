@@ -7,12 +7,12 @@
 remove_manually(vctr_time, vctr_target, vctr_time_err, label_err = -9999)
 }
 \arguments{
-\item{vctr_time}{A timestamp vector of class POSIXct or POSIXt.}
+\item{vctr_time}{A timestamp vector of class POSIXct or POSIXlt.}
 
 \item{vctr_target}{A vector of a targeted time series to be checked. The
 length of the time series must be the same as that of `vctr_time`.}
 
-\item{vctr_time_err}{A timestamp vector of class POSIXct or POSIXt,
+\item{vctr_time_err}{A timestamp vector of class POSIXct or POSIXlt,
 indicating specific error timings.}
 
 \item{label_err}{A numeric value representing a missing value in the input

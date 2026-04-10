@@ -7,7 +7,7 @@
 calc_dtmax_sp(vctr_time, vctr_dt, thres_hour_sp = 5, output_daily = FALSE)
 }
 \arguments{
-\item{vctr_time}{A timestamp vector of class POSIXct or POSIXt. This vector
+\item{vctr_time}{A timestamp vector of class POSIXct or POSIXlt. This vector
 indicates the timings of the end of each measurement in local time. Any
 interval (typically 15 to 60 min) is allowed, but the timestamps must be
 equally spaced and arranged chronologically.}

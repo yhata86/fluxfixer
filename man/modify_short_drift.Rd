@@ -14,16 +14,16 @@ modify_short_drift(
 )
 }
 \arguments{
-\item{vctr_time}{A timestamp vector of class POSIXct or POSIXt. The
+\item{vctr_time}{A timestamp vector of class POSIXct or POSIXlt. The
 timestamps must be equally spaced and arranged chronologically.}
 
 \item{vctr_target}{A vector of a targeted time series to be checked. The
 length of the time series must be the same as that of `vctr_time`.}
 
-\item{vctr_time_drft_head}{A timestamp vector of class POSIXct or POSIXt,
+\item{vctr_time_drft_head}{A timestamp vector of class POSIXct or POSIXlt,
 indicating when each drift starts.}
 
-\item{vctr_time_drft_tail}{A timestamp vector of class POSIXct or POSIXt,
+\item{vctr_time_drft_tail}{A timestamp vector of class POSIXct or POSIXlt,
 indicating when each drift ends. The length of the time series must be the
 same as that of `vctr_time_drft_head`.}
 

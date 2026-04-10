@@ -1,5 +1,10 @@
 # fluxfixer (development version)
 
+## Major changes
+
+* New function `interpret_qc()` is now available to convert an output quality
+ control (QC) flag from `run_fluxfixer()` to a human-interpretable data frame
+
 ## Minor changes
 
 * Better final message appears when setting `skip_sapflow_calc` as `TRUE` in
@@ -16,10 +21,10 @@
 
 ## Bug fixes
 
-* QC flag determination in `run_fluxfixer()` now works correctly.
+* QC flag determination in `run_fluxfixer()` now works correctly
 
 * Z-score modification during short attenuation periods in `run_fluxfixer()`
- now works correctly.
+ now works correctly
 
 # fluxfixer 1.0.0
 

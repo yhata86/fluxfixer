@@ -13,12 +13,12 @@ calc_ref_stats(
 )
 }
 \arguments{
-\item{vctr_time}{A timestamp vector of class POSIXct or POSIXt.}
+\item{vctr_time}{A timestamp vector of class POSIXct or POSIXlt.}
 
 \item{vctr_target}{A vector of a targeted time series to be checked. The
 length of the time series must be the same as that of `vctr_time`.}
 
-\item{vctr_time_prd_tail}{A timestamp vector of class POSIXct or POSIXt,
+\item{vctr_time_prd_tail}{A timestamp vector of class POSIXct or POSIXlt,
 indicating the end timings of each sub-period. Note that users must not
 include the final timestamp for the entire time series. For instance, if
 users want to split the entire measurement period into three sub-periods,

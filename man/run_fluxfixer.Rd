@@ -85,7 +85,7 @@ input data frame for a targeted time series to be post-processed. For
 thermal dissipation sap flow data, the targeted time series must be a dT
 (the temperature difference between sap flow probes) time series.}
 
-\item{vctr_time_err}{A timestamp vector of class POSIXct or POSIXt,
+\item{vctr_time_err}{A timestamp vector of class POSIXct or POSIXlt,
 indicating specific error timings.}
 
 \item{label_err}{A numeric value representing a missing value in the input
@@ -101,17 +101,17 @@ the upper limit. Default is 50.0. The data points with values above the
 threshold are considered outliers and removed. The unit of the threshold
 must match that of the input time series.}
 
-\item{vctr_time_drft_head}{A timestamp vector of class POSIXct or POSIXt,
+\item{vctr_time_drft_head}{A timestamp vector of class POSIXct or POSIXlt,
 indicating when each drift starts.}
 
-\item{vctr_time_drft_tail}{A timestamp vector of class POSIXct or POSIXt,
+\item{vctr_time_drft_tail}{A timestamp vector of class POSIXct or POSIXlt,
 indicating when each drift ends. The length of the time series must be the
 same as that of `vctr_time_drft_head`.}
 
 \item{n_day_ref}{A positive integer representing the number of days to be
 referenced before and after the anomaly period. Default is 3 (days).}
 
-\item{vctr_time_noise}{A timestamp vector of class POSIXct or POSIXt,
+\item{vctr_time_noise}{A timestamp vector of class POSIXct or POSIXlt,
 indicating when high-frequency noise exists in the targeted time series.}
 
 \item{wndw_size_noise}{A positive integer indicating the number of data
@@ -123,7 +123,7 @@ the time interval of the input timestamp is 30 minutes.}
 the high-frequency noise filtering. The width of the Gaussian window is
 inversely proportional to this parameter. Default is 0.01.}
 
-\item{vctr_time_prd_tail}{A timestamp vector of class POSIXct or POSIXt,
+\item{vctr_time_prd_tail}{A timestamp vector of class POSIXct or POSIXlt,
 indicating the end timings of each sub-period. Note that users must not
 include the final timestamp for the entire time series. For instance, if
 users want to split the entire measurement period into three sub-periods,
@@ -151,7 +151,7 @@ Z-score outlier detection iterations. Default is 10.}
 correction; else, the correction is not applied. Default is `FALSE`.}
 
 \item{vctr_time_zmod}{Only valid if `modify_z` is `TRUE`. A timestamp vector
-of class POSIXct or POSIXt, indicating the timings when the short-term
+of class POSIXct or POSIXlt, indicating the timings when the short-term
 signal attenuation correction is applied. Default is `NULL`.}
 
 \item{wndw_size_conv}{Only valid if `modify_z` is `TRUE`. A positive integer
@@ -352,7 +352,8 @@ the probe length to sapwood width. This parameter must be provided if
  value removal, outlier removal by absolute limit, short-term drift
  correction, high-frequency noise filtering, Z-score outlier removal,
  random forest outlier removal, gap-filling, detrending, and signal damping
- correction.
+ correction. This time series can be easily converted into a
+ human-interpretable data frame by the `interpret_qc()` function.
 
 If `skip_sapflow_calc` is `FALSE`, the columns below are also output.
 
@@ -404,6 +405,16 @@ Here are some tips helpful for users:
  conducted in forests with high seasonality, such as deciduous forests, it
  is also recommended to include a time series for the amount of forest leaf
  (leaf area index).
+
+* If users do not specify the explanatory variable names in
+ `vctr_colname_feature`, all of the columns excluding the columns specified
+ in `colname_time` and `colname_target` are used for the construction. Under
+ this case, if there are no other columns available, this function
+ automatically add variables `yr` (year), `doy` (day of year), `tod` (time
+ of day, unit: hour), and `nday_cum` (cumulative number of day) obtained
+ from the timestamp column, as well as `sw_in_toa` (global solar radiation
+ at the top of the atmosphere) variable only when augment `lat`, `lon`, and
+ `std_meridian` are provided.
 }
 \examples{
 ## Load data
@@ -420,7 +431,8 @@ result <-
 \seealso{
 `remove_manually`, `check_absolute_limits`, `modify_short_drift`,
  `filter_highfreq_noise`, `remove_zscore_outlier`, `remove_rf_outlier`,
- `calc_ref_stats`, `fill_gaps`, `retrieve_ts`, `calc_dtmax`, `calc_fd`
+ `calc_ref_stats`, `fill_gaps`, `retrieve_ts`, `calc_dtmax`, `calc_fd`,
+ `interpret_qc`
 }
 \author{
 Yoshiaki Hata

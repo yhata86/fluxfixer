@@ -15,7 +15,7 @@ calc_dtmax_pd(
 )
 }
 \arguments{
-\item{vctr_time}{A timestamp vector of class POSIXct or POSIXt. This vector
+\item{vctr_time}{A timestamp vector of class POSIXct or POSIXlt. This vector
 indicates the timings of the end of each measurement in local time. Any
 interval (typically 15 to 60 min) is allowed, but the timestamps must be
 equally spaced and arranged chronologically.}

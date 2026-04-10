@@ -14,7 +14,7 @@ calc_sw_in_toa(
 )
 }
 \arguments{
-\item{vctr_time}{A timestamp vector of class POSIXct or POSIXt. The
+\item{vctr_time}{A timestamp vector of class POSIXct or POSIXlt. The
 timestamps must be equally spaced and arranged chronologically.}
 
 \item{lat}{A numeric value (degrees) between -90 and 90, indicating the

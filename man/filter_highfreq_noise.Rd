@@ -14,13 +14,13 @@ filter_highfreq_noise(
 )
 }
 \arguments{
-\item{vctr_time}{A timestamp vector of class POSIXct or POSIXt. The
+\item{vctr_time}{A timestamp vector of class POSIXct or POSIXlt. The
 timestamps must be equally spaced and arranged chronologically.}
 
 \item{vctr_target}{A vector of a targeted time series to be checked. The
 length of the time series must be the same as that of `vctr_time`.}
 
-\item{vctr_time_noise}{A timestamp vector of class POSIXct or POSIXt,
+\item{vctr_time_noise}{A timestamp vector of class POSIXct or POSIXlt,
 indicating when high-frequency noise exists in the targeted time series.}
 
 \item{wndw_size_noise}{A positive integer indicating the number of data
