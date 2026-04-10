@@ -19,7 +19,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fluxfixer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -41,7 +41,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Run all quality control processes automatically</h1>
-      <small class="dont-index">Source: <a href="https://github.com/yhata86/fluxfixer/blob/v1.0.0/R/run_fluxfixer.R" class="external-link"><code>R/run_fluxfixer.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/yhata86/fluxfixer/blob/main/R/run_fluxfixer.R" class="external-link"><code>R/run_fluxfixer.R</code></a></small>
       <div class="d-none name"><code>run_fluxfixer.Rd</code></div>
     </div>
 
@@ -81,6 +81,9 @@
 <span>  wndw_size_conv <span class="op">=</span> <span class="fl">48</span> <span class="op">*</span> <span class="fl">15</span>,</span>
 <span>  inv_sigma_conv <span class="op">=</span> <span class="fl">0.01</span>,</span>
 <span>  thres_ratio <span class="op">=</span> <span class="fl">0.5</span>,</span>
+<span>  lat <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  lon <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  std_meridian <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  vctr_colname_feature <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  vctr_min_nodesize <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">5</span><span class="op">)</span>,</span>
 <span>  vctr_m_try <span class="op">=</span> <span class="cn">NULL</span>,</span>
@@ -146,7 +149,7 @@ thermal dissipation sap flow data, the targeted time series must be a dT
 
 
 <dt id="arg-vctr-time-err">vctr_time_err<a class="anchor" aria-label="anchor" href="#arg-vctr-time-err"></a></dt>
-<dd><p>A timestamp vector of class POSIXct or POSIXt,
+<dd><p>A timestamp vector of class POSIXct or POSIXlt,
 indicating specific error timings.</p></dd>
 
 
@@ -170,12 +173,12 @@ must match that of the input time series.</p></dd>
 
 
 <dt id="arg-vctr-time-drft-head">vctr_time_drft_head<a class="anchor" aria-label="anchor" href="#arg-vctr-time-drft-head"></a></dt>
-<dd><p>A timestamp vector of class POSIXct or POSIXt,
+<dd><p>A timestamp vector of class POSIXct or POSIXlt,
 indicating when each drift starts.</p></dd>
 
 
 <dt id="arg-vctr-time-drft-tail">vctr_time_drft_tail<a class="anchor" aria-label="anchor" href="#arg-vctr-time-drft-tail"></a></dt>
-<dd><p>A timestamp vector of class POSIXct or POSIXt,
+<dd><p>A timestamp vector of class POSIXct or POSIXlt,
 indicating when each drift ends. The length of the time series must be the
 same as that of `vctr_time_drft_head`.</p></dd>
 
@@ -186,7 +189,7 @@ referenced before and after the anomaly period. Default is 3 (days).</p></dd>
 
 
 <dt id="arg-vctr-time-noise">vctr_time_noise<a class="anchor" aria-label="anchor" href="#arg-vctr-time-noise"></a></dt>
-<dd><p>A timestamp vector of class POSIXct or POSIXt,
+<dd><p>A timestamp vector of class POSIXct or POSIXlt,
 indicating when high-frequency noise exists in the targeted time series.</p></dd>
 
 
@@ -204,7 +207,7 @@ inversely proportional to this parameter. Default is 0.01.</p></dd>
 
 
 <dt id="arg-vctr-time-prd-tail">vctr_time_prd_tail<a class="anchor" aria-label="anchor" href="#arg-vctr-time-prd-tail"></a></dt>
-<dd><p>A timestamp vector of class POSIXct or POSIXt,
+<dd><p>A timestamp vector of class POSIXct or POSIXlt,
 indicating the end timings of each sub-period. Note that users must not
 include the final timestamp for the entire time series. For instance, if
 users want to split the entire measurement period into three sub-periods,
@@ -244,7 +247,7 @@ correction; else, the correction is not applied. Default is `FALSE`.</p></dd>
 
 <dt id="arg-vctr-time-zmod">vctr_time_zmod<a class="anchor" aria-label="anchor" href="#arg-vctr-time-zmod"></a></dt>
 <dd><p>Only valid if `modify_z` is `TRUE`. A timestamp vector
-of class POSIXct or POSIXt, indicating the timings when the short-term
+of class POSIXct or POSIXlt, indicating the timings when the short-term
 signal attenuation correction is applied. Default is `NULL`.</p></dd>
 
 
@@ -271,6 +274,33 @@ represents the average of the standard deviation at the detected
 attenuation peak relative to that at the beginning and end of the
 attenuation period. If the ratio is below this threshold value, the
 correction is applied. Default is 0.5.</p></dd>
+
+
+<dt id="arg-lat">lat<a class="anchor" aria-label="anchor" href="#arg-lat"></a></dt>
+<dd><p>Only valid if `vctr_colname_feature` is `NULL`, and `lon` as well
+as `std_meridian` are provided. A numeric value (degrees) between -90 and
+90, indicating the latitude of the specific location. This parameter is
+used to calculate incident global solar radiation time series at TOA
+(top of atmosphere) at the specified location, and the time series is added
+to the features for the random forest construction. Default is `NULL`.</p></dd>
+
+
+<dt id="arg-lon">lon<a class="anchor" aria-label="anchor" href="#arg-lon"></a></dt>
+<dd><p>Only valid if `vctr_colname_feature` is `NULL`, and `lat` as well
+as `std_meridian` are provided. A numeric value (degrees) between -180 and
+180, indicating the longitude of the specific location. This parameter is
+used to calculate incident global solar radiation time series at TOA at the
+specified location, and the time series is added to the features for the
+random forest construction. Default is `NULL`.</p></dd>
+
+
+<dt id="arg-std-meridian">std_meridian<a class="anchor" aria-label="anchor" href="#arg-std-meridian"></a></dt>
+<dd><p>Only valid if `vctr_colname_feature` is `NULL`, and
+`lat` as well as `lon` are provided. A numeric value (degrees) between -180
+and 180, indicating the standard meridian of the specific location. This
+parameter is used to calculate incident global solar radiation time series
+at TOA at the specified location, and the time series is added to the
+features for the random forest construction. Default is `NULL`.</p></dd>
 
 
 <dt id="arg-vctr-colname-feature">vctr_colname_feature<a class="anchor" aria-label="anchor" href="#arg-vctr-colname-feature"></a></dt>
@@ -487,7 +517,8 @@ the probe length to sapwood width. This parameter must be provided if
  value removal, outlier removal by absolute limit, short-term drift
  correction, high-frequency noise filtering, Z-score outlier removal,
  random forest outlier removal, gap-filling, detrending, and signal damping
- correction.</p>
+ correction. This time series can be easily converted into a
+ human-interpretable data frame by the `interpret_qc()` function.</p>
 <p>If `skip_sapflow_calc` is `FALSE`, the columns below are also output.</p>
 <p>* The columns which have the prefix "dtmax_" provide the dTmax calculated by
  the methods specified in `method`. The last two letters of the column name
@@ -524,12 +555,22 @@ dissipation sap flow data. See more details in the vignettes:
  conducted in forests with high seasonality, such as deciduous forests, it
  is also recommended to include a time series for the amount of forest leaf
  (leaf area index).</p>
+<p>* If users do not specify the explanatory variable names in
+ `vctr_colname_feature`, all of the columns excluding the columns specified
+ in `colname_time` and `colname_target` are used for the construction. Under
+ this case, if there are no other columns available, this function
+ automatically add variables `yr` (year), `doy` (day of year), `tod` (time
+ of day, unit: hour), and `nday_cum` (cumulative number of day) obtained
+ from the timestamp column, as well as `sw_in_toa` (global solar radiation
+ at the top of the atmosphere) variable only when augment `lat`, `lon`, and
+ `std_meridian` are provided.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
     <div class="dont-index"><p>`remove_manually`, `check_absolute_limits`, `modify_short_drift`,
  `filter_highfreq_noise`, `remove_zscore_outlier`, `remove_rf_outlier`,
- `calc_ref_stats`, `fill_gaps`, `retrieve_ts`, `calc_dtmax`, `calc_fd`</p></div>
+ `calc_ref_stats`, `fill_gaps`, `retrieve_ts`, `calc_dtmax`, `calc_fd`,
+ `interpret_qc`</p></div>
     </div>
     <div class="section level2">
     <h2 id="author">Author<a class="anchor" aria-label="anchor" href="#author"></a></h2>
@@ -584,6 +625,7 @@ dissipation sap flow data. See more details in the vignettes:
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Time series retrieval finished</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Quality-control flag determination finished</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> dTmax and Fd calculation processes skipped</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> *** Fluxfixer finished running successfully ***</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

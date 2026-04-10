@@ -13,7 +13,7 @@ remove_manually(vctr_time, vctr_target, vctr_time_err, label_err = -9999)
 
 - vctr_time:
 
-  A timestamp vector of class POSIXct or POSIXt.
+  A timestamp vector of class POSIXct or POSIXlt.
 
 - vctr_target:
 
@@ -22,7 +22,7 @@ remove_manually(vctr_time, vctr_target, vctr_time_err, label_err = -9999)
 
 - vctr_time_err:
 
-  A timestamp vector of class POSIXct or POSIXt, indicating specific
+  A timestamp vector of class POSIXct or POSIXlt, indicating specific
   error timings.
 
 - label_err:

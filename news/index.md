@@ -1,5 +1,42 @@
 # Changelog
 
+## fluxfixer (development version)
+
+### Major changes
+
+- New function
+  [`interpret_qc()`](https://yhata86.github.io/fluxfixer/reference/interpret_qc.md)
+  is now available to convert an output quality control (QC) flag from
+  [`run_fluxfixer()`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
+  to a human-interpretable data frame
+
+### Minor changes
+
+- Better final message appears when setting `skip_sapflow_calc` as
+  `TRUE` in
+  [`run_fluxfixer()`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
+
+- Better message appears when setting `modify_z` as `TRUE` in
+  [`run_fluxfixer()`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
+
+- Better message appears when inputting wrong column names for
+  `colname_time` or `colname_target` in
+  [`run_fluxfixer()`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
+
+- Additional columns are now created in the input data frame when only
+  mandatory variables are input in
+  [`run_fluxfixer()`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
+
+### Bug fixes
+
+- QC flag determination in
+  [`run_fluxfixer()`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
+  now works correctly
+
+- Z-score modification during short attenuation periods in
+  [`run_fluxfixer()`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
+  now works correctly
+
 ## fluxfixer 1.0.0
 
 CRAN release: 2026-02-02

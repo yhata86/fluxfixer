@@ -20,7 +20,7 @@ filter_highfreq_noise(
 
 - vctr_time:
 
-  A timestamp vector of class POSIXct or POSIXt. The timestamps must be
+  A timestamp vector of class POSIXct or POSIXlt. The timestamps must be
   equally spaced and arranged chronologically.
 
 - vctr_target:
@@ -30,7 +30,7 @@ filter_highfreq_noise(
 
 - vctr_time_noise:
 
-  A timestamp vector of class POSIXct or POSIXt, indicating when
+  A timestamp vector of class POSIXct or POSIXlt, indicating when
   high-frequency noise exists in the targeted time series.
 
 - wndw_size_noise:

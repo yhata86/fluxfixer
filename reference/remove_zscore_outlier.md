@@ -28,7 +28,7 @@ remove_zscore_outlier(
 
 - vctr_time:
 
-  A timestamp vector of class POSIXct or POSIXt.
+  A timestamp vector of class POSIXct or POSIXlt.
 
 - vctr_target:
 
@@ -37,7 +37,7 @@ remove_zscore_outlier(
 
 - vctr_time_prd_tail:
 
-  A timestamp vector of class POSIXct or POSIXt, indicating the end
+  A timestamp vector of class POSIXct or POSIXlt, indicating the end
   timings of each sub-period. Note that users must not include the final
   timestamp for the entire time series. For instance, if users want to
   split the entire measurement period into three sub-periods, they only
@@ -77,7 +77,7 @@ remove_zscore_outlier(
 - vctr_time_zmod:
 
   Only valid if \`modify_z\` is \`TRUE\`. A timestamp vector of class
-  POSIXct or POSIXt, indicating the timings when the short-term signal
+  POSIXct or POSIXlt, indicating the timings when the short-term signal
   attenuation correction is applied. Default is \`NULL\`.
 
 - wndw_size_conv:

@@ -25,7 +25,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fluxfixer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +58,7 @@
       <img src="../logo.png" class="logo" alt=""><h1>fluxfixer</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/yhata86/fluxfixer/blob/v1.0.0/vignettes/fluxfixer.Rmd" class="external-link"><code>vignettes/fluxfixer.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/yhata86/fluxfixer/blob/main/vignettes/fluxfixer.Rmd" class="external-link"><code>vignettes/fluxfixer.Rmd</code></a></small>
       <div class="d-none name"><code>fluxfixer.Rmd</code></div>
     </div>
 
@@ -190,8 +190,8 @@ is the temperature difference between sap flow probes. You can select
 the multiple methods at once during the automatic processing.</p>
 <p>Here are the more details of each variable column.</p>
 <ul>
-<li><p>Timestamp: A timestamp of class POSIXct or POSIXt, indicating the
-timings of the end of each measurement in local time. Any interval
+<li><p>Timestamp: A timestamp of class POSIXct or POSIXlt, indicating
+the timings of the end of each measurement in local time. Any interval
 (typically 15 to 60 min) is allowed, but the timestamps must be equally
 spaced and arranged chronologically.</p></li>
 <li><p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>:
@@ -230,18 +230,29 @@ processes, as the VPD typically controls the opening of plant stomata.
 In this case, you do not have to fill gaps in the time series
 previously.</p></li>
 <li><p>Other variables: Even when you select only the SP method, you
-need to add as many drivers that influence sap flow dynamics as possible
-in the input data frame to construct a more powerful random forest model
-for outlier detection and gap-filling processes. For example, if you
-want to post-process sap flow data observed in a deciduous forest, you
-are recommended to include a time series representing forest leaf
-amount, such as LAI (leaf area index).</p></li>
+should include as many drivers that influence sap flow dynamics as
+possible in the input data frame to construct a more powerful random
+forest model for outlier detection and gap-filling processes. For
+example, if you want to post-process sap flow data observed in a
+deciduous forest, you are recommended to include a time series
+representing forest leaf amount, such as LAI (leaf area index).</p></li>
 </ul>
 <p>You can also include columns that are unrelated to the
 post-processing, but be sure to indicate which variables are to be used
 in the random forest construction when you execute
 <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code> by specifying
-<code>vctr_colname_feature</code>.</p>
+<code>vctr_colname_feature</code>. Note that if you do not specify the
+explanatory variable names in <code>vctr_colname_feature</code>, all of
+the columns excluding the columns specified in <code>colname_time</code>
+and <code>colname_target</code> are used for the construction. Under
+this case, if there are no other columns available, this function
+automatically add variables <code>yr</code> (year), <code>doy</code>
+(day of year), <code>tod</code> (time of day, unit: hour), and
+<code>nday_cum</code> (cumulative number of day) obtained from the
+timestamp column, as well as <code>sw_in_toa</code> (global solar
+radiation at the top of the atmosphere) variable only when augment
+<code>lat</code>, <code>lon</code>, and <code>std_meridian</code> are
+provided.</p>
 </div>
 <div class="section level4">
 <h4 id="for-time-series-unrelated-to-thermal-dissipation-sap-flow">For time series unrelated to thermal dissipation sap flow<a class="anchor" aria-label="anchor" href="#for-time-series-unrelated-to-thermal-dissipation-sap-flow"></a>
@@ -249,24 +260,35 @@ in the random forest construction when you execute
 <p>In this case, the input data frame is required to have the columns
 below.</p>
 <ul>
-<li><p>Timestamp: A timestamp of class POSIXct or POSIXt, indicating the
-timings of the end of each measurement in local time. Any interval is
-allowed, but the timestamps must be equally spaced and arranged
+<li><p>Timestamp: A timestamp of class POSIXct or POSIXlt, indicating
+the timings of the end of each measurement in local time. Any interval
+is allowed, but the timestamps must be equally spaced and arranged
 chronologically.</p></li>
 <li><p>Target variable: A numeric value of the variable you want to
 post-process. It is acceptable to include missing values, but the label
 representing the missing value must be unique such as
 <code>-9999</code>.</p></li>
-<li><p>Other variables: You need to add as many drivers that influence
-targeted variable dynamics as possible in the input data frame to
-construct a more powerful random forest model for outlier detection and
-gap-filling processes.</p></li>
+<li><p>Other variables: You should include as many drivers that
+influence targeted variable dynamics as possible in the input data frame
+to construct a more powerful random forest model for outlier detection
+and gap-filling processes.</p></li>
 </ul>
 <p>You can also include columns that are unrelated to the
 post-processing, but be sure to indicate which variables are to be used
 in the random forest construction when you execute
 <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code> by specifying
-<code>vctr_colname_feature</code>.</p>
+<code>vctr_colname_feature</code>. Note that if you do not specify the
+explanatory variable names in <code>vctr_colname_feature</code>, all of
+the columns excluding the columns specified in <code>colname_time</code>
+and <code>colname_target</code> are used for the construction. Under
+this case, if there are no other columns available, this function
+automatically add variables <code>yr</code> (year), <code>doy</code>
+(day of year), <code>tod</code> (time of day, unit: hour), and
+<code>nday_cum</code> (cumulative number of day) obtained from the
+timestamp column, as well as <code>sw_in_toa</code> (global solar
+radiation at the top of the atmosphere) variable only when augment
+<code>lat</code>, <code>lon</code>, and <code>std_meridian</code> are
+provided.</p>
 </div>
 </div>
 <div class="section level3">
@@ -607,10 +629,6 @@ including precipitation (<code>p</code>), global solar radiation
 deficit (<code>vpd</code>), horizontal wind speed (<code>ws</code>), and
 soil water content (<code>swc</code>). Using these drivers, you can
 construct a more precise random forest model.</p>
-<p>Note that if you do not specify the explanatory variable names in
-<code>vctr_colname_feature</code>, all of the columns excluding the
-column specified in <code>colname_label</code> are used for the
-construction.</p>
 <div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Conduct the random forest outlier removal</span></span>
 <span><span class="va">df_rf</span> <span class="op">&lt;-</span></span>

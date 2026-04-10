@@ -22,7 +22,7 @@ calc_sw_in_toa(
 
 - vctr_time:
 
-  A timestamp vector of class POSIXct or POSIXt. The timestamps must be
+  A timestamp vector of class POSIXct or POSIXlt. The timestamps must be
   equally spaced and arranged chronologically.
 
 - lat:

@@ -22,6 +22,9 @@
   : Fill missing values with a random forest model
 - [`filter_highfreq_noise()`](https://yhata86.github.io/fluxfixer/reference/filter_highfreq_noise.md)
   : Filter high frequency noise by Gaussian filter
+- [`interpret_qc()`](https://yhata86.github.io/fluxfixer/reference/interpret_qc.md)
+  : Convert the decimal QC flag into a human-interpretable 10-digit
+  binary
 - [`modify_short_drift()`](https://yhata86.github.io/fluxfixer/reference/modify_short_drift.md)
   : Modify short-term drifts
 - [`remove_manually()`](https://yhata86.github.io/fluxfixer/reference/remove_manually.md)

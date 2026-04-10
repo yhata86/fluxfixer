@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fluxfixer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -29,14 +29,34 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Changelog</h1>
-      <small>Source: <a href="https://github.com/yhata86/fluxfixer/blob/v1.0.0/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
+      <small>Source: <a href="https://github.com/yhata86/fluxfixer/blob/main/NEWS.md" class="external-link"><code>NEWS.md</code></a></small>
     </div>
 
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="fluxfixer-development-version">fluxfixer (development version)<a class="anchor" aria-label="anchor" href="#fluxfixer-development-version"></a></h2>
+<div class="section level3">
+<h3 id="major-changes-development-version">Major changes<a class="anchor" aria-label="anchor" href="#major-changes-development-version"></a></h3>
+<ul><li>New function <code><a href="../reference/interpret_qc.html">interpret_qc()</a></code> is now available to convert an output quality control (QC) flag from <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code> to a human-interpretable data frame</li>
+</ul></div>
+<div class="section level3">
+<h3 id="minor-changes-development-version">Minor changes<a class="anchor" aria-label="anchor" href="#minor-changes-development-version"></a></h3>
+<ul><li><p>Better final message appears when setting <code>skip_sapflow_calc</code> as <code>TRUE</code> in <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code></p></li>
+<li><p>Better message appears when setting <code>modify_z</code> as <code>TRUE</code> in <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code></p></li>
+<li><p>Better message appears when inputting wrong column names for <code>colname_time</code> or <code>colname_target</code> in <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code></p></li>
+<li><p>Additional columns are now created in the input data frame when only mandatory variables are input in <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code></p></li>
+</ul></div>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li><p>QC flag determination in <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code> now works correctly</p></li>
+<li><p>Z-score modification during short attenuation periods in <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code> now works correctly</p></li>
+</ul></div>
+</div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="1.0.0" id="fluxfixer-100">fluxfixer 1.0.0<a class="anchor" aria-label="anchor" href="#fluxfixer-100"></a></h2><p class="text-muted">CRAN release: 2026-02-02</p>
 <ul><li>First CRAN release</li>
 </ul></div>
-  </main></div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside></div>
 
 
     <footer><div class="pkgdown-footer-left">

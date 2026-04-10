@@ -11,7 +11,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fluxfixer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +33,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Remove outliers by Z-score time series</h1>
-      <small class="dont-index">Source: <a href="https://github.com/yhata86/fluxfixer/blob/v1.0.0/R/remove_statistical_outlier.R" class="external-link"><code>R/remove_statistical_outlier.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/yhata86/fluxfixer/blob/main/R/remove_statistical_outlier.R" class="external-link"><code>R/remove_statistical_outlier.R</code></a></small>
       <div class="d-none name"><code>remove_zscore_outlier.Rd</code></div>
     </div>
 
@@ -67,7 +67,7 @@
 
 
 <dl><dt id="arg-vctr-time">vctr_time<a class="anchor" aria-label="anchor" href="#arg-vctr-time"></a></dt>
-<dd><p>A timestamp vector of class POSIXct or POSIXt.</p></dd>
+<dd><p>A timestamp vector of class POSIXct or POSIXlt.</p></dd>
 
 
 <dt id="arg-vctr-target">vctr_target<a class="anchor" aria-label="anchor" href="#arg-vctr-target"></a></dt>
@@ -76,7 +76,7 @@ length of the time series must be the same as that of `vctr_time`.</p></dd>
 
 
 <dt id="arg-vctr-time-prd-tail">vctr_time_prd_tail<a class="anchor" aria-label="anchor" href="#arg-vctr-time-prd-tail"></a></dt>
-<dd><p>A timestamp vector of class POSIXct or POSIXt,
+<dd><p>A timestamp vector of class POSIXct or POSIXlt,
 indicating the end timings of each sub-period. Note that users must not
 include the final timestamp for the entire time series. For instance, if
 users want to split the entire measurement period into three sub-periods,
@@ -116,7 +116,7 @@ correction; else, the correction is not applied. Default is `FALSE`.</p></dd>
 
 <dt id="arg-vctr-time-zmod">vctr_time_zmod<a class="anchor" aria-label="anchor" href="#arg-vctr-time-zmod"></a></dt>
 <dd><p>Only valid if `modify_z` is `TRUE`. A timestamp vector
-of class POSIXct or POSIXt, indicating the timings when the short-term
+of class POSIXct or POSIXlt, indicating the timings when the short-term
 signal attenuation correction is applied. Default is `NULL`.</p></dd>
 
 

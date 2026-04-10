@@ -21,7 +21,7 @@ modify_short_drift(
 
 - vctr_time:
 
-  A timestamp vector of class POSIXct or POSIXt. The timestamps must be
+  A timestamp vector of class POSIXct or POSIXlt. The timestamps must be
   equally spaced and arranged chronologically.
 
 - vctr_target:
@@ -31,12 +31,12 @@ modify_short_drift(
 
 - vctr_time_drft_head:
 
-  A timestamp vector of class POSIXct or POSIXt, indicating when each
+  A timestamp vector of class POSIXct or POSIXlt, indicating when each
   drift starts.
 
 - vctr_time_drft_tail:
 
-  A timestamp vector of class POSIXct or POSIXt, indicating when each
+  A timestamp vector of class POSIXct or POSIXlt, indicating when each
   drift ends. The length of the time series must be the same as that of
   \`vctr_time_drft_head\`.
 

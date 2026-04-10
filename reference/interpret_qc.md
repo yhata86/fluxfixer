@@ -1,0 +1,68 @@
+# Convert the decimal QC flag into a human-interpretable 10-digit binary
+
+\`interpret_qc()\` converts the input decimal QC (quality control) flag
+time series into a data frame whose columns indicate the applied process
+to each data point. The values "0" and "1" represent that the process
+specified in their column name was applied and not applied to the data
+point, respectively.
+
+## Usage
+
+``` r
+interpret_qc(vctr_qc)
+```
+
+## Arguments
+
+- vctr_qc:
+
+  A vector of the decimal QC flag output from \`run_fluxfixer()\`.
+
+## Value
+
+A data frame with columns below:
+
+\* The first column, \`initial_na\`, indicates whether the data point
+was originally missing.
+
+\* The second column, \`manual_removal\`, indicates whether the data
+point was removed manually as specified in the \`vctr_time_err\`
+argument in the \`run_fluxfixer()\`.
+
+\* The third column, \`absolute_limits\`, indicates whether the data
+point was removed as an outlier by absolute limits.
+
+\* The fourth column, \`drift_correction\`, indicates whether the data
+point was modified by the short-term drift correction.
+
+\* The fifth column, \`noise_filtering\`, indicates whether the data
+point was modified by the high-frequency noise filtering.
+
+\* The sixth column, \`z_score_outlier\`, indicates whether the data
+point was removed by the Z-score outlier detection.
+
+\* The seventh column, \`rf_outlier\`, indicates whether the data point
+was removed by the random forest outlier detection.
+
+\* The eighth column, \`gap_filling\`, indicates whether the data point
+was gap-filled by the random forest model prediction.
+
+\* The ninth column, \`detrending\`, indicates whether the data point
+was modified in the detrending.
+
+\* The tenth column, \`damping_correction\`, indicates whether the data
+point was modified by the signal damping correction.
+
+## Author
+
+Yoshiaki Hata
+
+## Examples
+
+``` r
+## Make a QC flag vector
+qc <- c(0, 1, 2, 1023)
+
+## Obtain a human-interpretable QC data frame
+result <- interpret_qc(vctr_qc = qc)
+```

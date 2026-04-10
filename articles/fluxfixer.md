@@ -75,7 +75,7 @@ can select the multiple methods at once during the automatic processing.
 
 Here are the more details of each variable column.
 
-- Timestamp: A timestamp of class POSIXct or POSIXt, indicating the
+- Timestamp: A timestamp of class POSIXct or POSIXlt, indicating the
   timings of the end of each measurement in local time. Any interval
   (typically 15 to 60 min) is allowed, but the timestamps must be
   equally spaced and arranged chronologically.
@@ -118,26 +118,35 @@ Here are the more details of each variable column.
   of plant stomata. In this case, you do not have to fill gaps in the
   time series previously.
 
-- Other variables: Even when you select only the SP method, you need to
-  add as many drivers that influence sap flow dynamics as possible in
-  the input data frame to construct a more powerful random forest model
-  for outlier detection and gap-filling processes. For example, if you
-  want to post-process sap flow data observed in a deciduous forest, you
-  are recommended to include a time series representing forest leaf
+- Other variables: Even when you select only the SP method, you should
+  include as many drivers that influence sap flow dynamics as possible
+  in the input data frame to construct a more powerful random forest
+  model for outlier detection and gap-filling processes. For example, if
+  you want to post-process sap flow data observed in a deciduous forest,
+  you are recommended to include a time series representing forest leaf
   amount, such as LAI (leaf area index).
 
 You can also include columns that are unrelated to the post-processing,
 but be sure to indicate which variables are to be used in the random
 forest construction when you execute
 [`run_fluxfixer()`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
-by specifying `vctr_colname_feature`.
+by specifying `vctr_colname_feature`. Note that if you do not specify
+the explanatory variable names in `vctr_colname_feature`, all of the
+columns excluding the columns specified in `colname_time` and
+`colname_target` are used for the construction. Under this case, if
+there are no other columns available, this function automatically add
+variables `yr` (year), `doy` (day of year), `tod` (time of day, unit:
+hour), and `nday_cum` (cumulative number of day) obtained from the
+timestamp column, as well as `sw_in_toa` (global solar radiation at the
+top of the atmosphere) variable only when augment `lat`, `lon`, and
+`std_meridian` are provided.
 
 #### For time series unrelated to thermal dissipation sap flow
 
 In this case, the input data frame is required to have the columns
 below.
 
-- Timestamp: A timestamp of class POSIXct or POSIXt, indicating the
+- Timestamp: A timestamp of class POSIXct or POSIXlt, indicating the
   timings of the end of each measurement in local time. Any interval is
   allowed, but the timestamps must be equally spaced and arranged
   chronologically.
@@ -146,7 +155,7 @@ below.
   post-process. It is acceptable to include missing values, but the
   label representing the missing value must be unique such as `-9999`.
 
-- Other variables: You need to add as many drivers that influence
+- Other variables: You should include as many drivers that influence
   targeted variable dynamics as possible in the input data frame to
   construct a more powerful random forest model for outlier detection
   and gap-filling processes.
@@ -155,7 +164,16 @@ You can also include columns that are unrelated to the post-processing,
 but be sure to indicate which variables are to be used in the random
 forest construction when you execute
 [`run_fluxfixer()`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
-by specifying `vctr_colname_feature`.
+by specifying `vctr_colname_feature`. Note that if you do not specify
+the explanatory variable names in `vctr_colname_feature`, all of the
+columns excluding the columns specified in `colname_time` and
+`colname_target` are used for the construction. Under this case, if
+there are no other columns available, this function automatically add
+variables `yr` (year), `doy` (day of year), `tod` (time of day, unit:
+hour), and `nday_cum` (cumulative number of day) obtained from the
+timestamp column, as well as `sw_in_toa` (global solar radiation at the
+top of the atmosphere) variable only when augment `lat`, `lon`, and
+`std_meridian` are provided.
 
 ### Automatic execution of all processes
 
@@ -507,10 +525,6 @@ including precipitation (`p`), global solar radiation (`sw_in`), air
 temperature (`ta`), vapor pressure deficit (`vpd`), horizontal wind
 speed (`ws`), and soil water content (`swc`). Using these drivers, you
 can construct a more precise random forest model.
-
-Note that if you do not specify the explanatory variable names in
-`vctr_colname_feature`, all of the columns excluding the column
-specified in `colname_label` are used for the construction.
 
 ``` r
 ## Conduct the random forest outlier removal

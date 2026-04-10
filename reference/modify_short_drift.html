@@ -11,7 +11,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">fluxfixer</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">1.0.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -33,7 +33,7 @@
 <div class="row">
   <main id="main" class="col-md-9"><div class="page-header">
       <img src="../logo.png" class="logo" alt=""><h1>Modify short-term drifts</h1>
-      <small class="dont-index">Source: <a href="https://github.com/yhata86/fluxfixer/blob/v1.0.0/R/remove_statistical_outlier.R" class="external-link"><code>R/remove_statistical_outlier.R</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/yhata86/fluxfixer/blob/main/R/remove_statistical_outlier.R" class="external-link"><code>R/remove_statistical_outlier.R</code></a></small>
       <div class="d-none name"><code>modify_short_drift.Rd</code></div>
     </div>
 
@@ -60,7 +60,7 @@
 
 
 <dl><dt id="arg-vctr-time">vctr_time<a class="anchor" aria-label="anchor" href="#arg-vctr-time"></a></dt>
-<dd><p>A timestamp vector of class POSIXct or POSIXt. The
+<dd><p>A timestamp vector of class POSIXct or POSIXlt. The
 timestamps must be equally spaced and arranged chronologically.</p></dd>
 
 
@@ -70,12 +70,12 @@ length of the time series must be the same as that of `vctr_time`.</p></dd>
 
 
 <dt id="arg-vctr-time-drft-head">vctr_time_drft_head<a class="anchor" aria-label="anchor" href="#arg-vctr-time-drft-head"></a></dt>
-<dd><p>A timestamp vector of class POSIXct or POSIXt,
+<dd><p>A timestamp vector of class POSIXct or POSIXlt,
 indicating when each drift starts.</p></dd>
 
 
 <dt id="arg-vctr-time-drft-tail">vctr_time_drft_tail<a class="anchor" aria-label="anchor" href="#arg-vctr-time-drft-tail"></a></dt>
-<dd><p>A timestamp vector of class POSIXct or POSIXt,
+<dd><p>A timestamp vector of class POSIXct or POSIXlt,
 indicating when each drift ends. The length of the time series must be the
 same as that of `vctr_time_drft_head`.</p></dd>
 

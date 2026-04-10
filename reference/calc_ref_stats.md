@@ -20,7 +20,7 @@ calc_ref_stats(
 
 - vctr_time:
 
-  A timestamp vector of class POSIXct or POSIXt.
+  A timestamp vector of class POSIXct or POSIXlt.
 
 - vctr_target:
 
@@ -29,7 +29,7 @@ calc_ref_stats(
 
 - vctr_time_prd_tail:
 
-  A timestamp vector of class POSIXct or POSIXt, indicating the end
+  A timestamp vector of class POSIXct or POSIXlt, indicating the end
   timings of each sub-period. Note that users must not include the final
   timestamp for the entire time series. For instance, if users want to
   split the entire measurement period into three sub-periods, they only

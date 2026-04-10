@@ -35,6 +35,9 @@ run_fluxfixer(
   wndw_size_conv = 48 * 15,
   inv_sigma_conv = 0.01,
   thres_ratio = 0.5,
+  lat = NULL,
+  lon = NULL,
+  std_meridian = NULL,
   vctr_colname_feature = NULL,
   vctr_min_nodesize = c(5),
   vctr_m_try = NULL,
@@ -100,7 +103,7 @@ run_fluxfixer(
 
 - vctr_time_err:
 
-  A timestamp vector of class POSIXct or POSIXt, indicating specific
+  A timestamp vector of class POSIXct or POSIXlt, indicating specific
   error timings.
 
 - label_err:
@@ -124,12 +127,12 @@ run_fluxfixer(
 
 - vctr_time_drft_head:
 
-  A timestamp vector of class POSIXct or POSIXt, indicating when each
+  A timestamp vector of class POSIXct or POSIXlt, indicating when each
   drift starts.
 
 - vctr_time_drft_tail:
 
-  A timestamp vector of class POSIXct or POSIXt, indicating when each
+  A timestamp vector of class POSIXct or POSIXlt, indicating when each
   drift ends. The length of the time series must be the same as that of
   \`vctr_time_drft_head\`.
 
@@ -140,7 +143,7 @@ run_fluxfixer(
 
 - vctr_time_noise:
 
-  A timestamp vector of class POSIXct or POSIXt, indicating when
+  A timestamp vector of class POSIXct or POSIXlt, indicating when
   high-frequency noise exists in the targeted time series.
 
 - wndw_size_noise:
@@ -158,7 +161,7 @@ run_fluxfixer(
 
 - vctr_time_prd_tail:
 
-  A timestamp vector of class POSIXct or POSIXt, indicating the end
+  A timestamp vector of class POSIXct or POSIXlt, indicating the end
   timings of each sub-period. Note that users must not include the final
   timestamp for the entire time series. For instance, if users want to
   split the entire measurement period into three sub-periods, they only
@@ -198,7 +201,7 @@ run_fluxfixer(
 - vctr_time_zmod:
 
   Only valid if \`modify_z\` is \`TRUE\`. A timestamp vector of class
-  POSIXct or POSIXt, indicating the timings when the short-term signal
+  POSIXct or POSIXlt, indicating the timings when the short-term signal
   attenuation correction is applied. Default is \`NULL\`.
 
 - wndw_size_conv:
@@ -225,6 +228,36 @@ run_fluxfixer(
   relative to that at the beginning and end of the attenuation period.
   If the ratio is below this threshold value, the correction is applied.
   Default is 0.5.
+
+- lat:
+
+  Only valid if \`vctr_colname_feature\` is \`NULL\`, and \`lon\` as
+  well as \`std_meridian\` are provided. A numeric value (degrees)
+  between -90 and 90, indicating the latitude of the specific location.
+  This parameter is used to calculate incident global solar radiation
+  time series at TOA (top of atmosphere) at the specified location, and
+  the time series is added to the features for the random forest
+  construction. Default is \`NULL\`.
+
+- lon:
+
+  Only valid if \`vctr_colname_feature\` is \`NULL\`, and \`lat\` as
+  well as \`std_meridian\` are provided. A numeric value (degrees)
+  between -180 and 180, indicating the longitude of the specific
+  location. This parameter is used to calculate incident global solar
+  radiation time series at TOA at the specified location, and the time
+  series is added to the features for the random forest construction.
+  Default is \`NULL\`.
+
+- std_meridian:
+
+  Only valid if \`vctr_colname_feature\` is \`NULL\`, and \`lat\` as
+  well as \`lon\` are provided. A numeric value (degrees) between -180
+  and 180, indicating the standard meridian of the specific location.
+  This parameter is used to calculate incident global solar radiation
+  time series at TOA at the specified location, and the time series is
+  added to the features for the random forest construction. Default is
+  \`NULL\`.
 
 - vctr_colname_feature:
 
@@ -442,7 +475,9 @@ the number represents the process of initial missing value detection,
 manual error value removal, outlier removal by absolute limit,
 short-term drift correction, high-frequency noise filtering, Z-score
 outlier removal, random forest outlier removal, gap-filling, detrending,
-and signal damping correction.
+and signal damping correction. This time series can be easily converted
+into a human-interpretable data frame by the \`interpret_qc()\`
+function.
 
 If \`skip_sapflow_calc\` is \`FALSE\`, the columns below are also
 output.
@@ -491,12 +526,23 @@ measurement is conducted in forests with high seasonality, such as
 deciduous forests, it is also recommended to include a time series for
 the amount of forest leaf (leaf area index).
 
+\* If users do not specify the explanatory variable names in
+\`vctr_colname_feature\`, all of the columns excluding the columns
+specified in \`colname_time\` and \`colname_target\` are used for the
+construction. Under this case, if there are no other columns available,
+this function automatically add variables \`yr\` (year), \`doy\` (day of
+year), \`tod\` (time of day, unit: hour), and \`nday_cum\` (cumulative
+number of day) obtained from the timestamp column, as well as
+\`sw_in_toa\` (global solar radiation at the top of the atmosphere)
+variable only when augment \`lat\`, \`lon\`, and \`std_meridian\` are
+provided.
+
 ## See also
 
 \`remove_manually\`, \`check_absolute_limits\`, \`modify_short_drift\`,
 \`filter_highfreq_noise\`, \`remove_zscore_outlier\`,
 \`remove_rf_outlier\`, \`calc_ref_stats\`, \`fill_gaps\`,
-\`retrieve_ts\`, \`calc_dtmax\`, \`calc_fd\`
+\`retrieve_ts\`, \`calc_dtmax\`, \`calc_fd\`, \`interpret_qc\`
 
 ## Author
 
@@ -551,4 +597,5 @@ result <-
 #> Time series retrieval finished
 #> Quality-control flag determination finished
 #> dTmax and Fd calculation processes skipped
+#> *** Fluxfixer finished running successfully ***
 ```
