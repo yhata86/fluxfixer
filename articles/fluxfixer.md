@@ -135,11 +135,10 @@ the explanatory variable names in `vctr_colname_feature`, all of the
 columns excluding the columns specified in `colname_time` and
 `colname_target` are used for the construction. Under this case, if
 there are no other columns available, this function automatically add
-variables `yr` (year), `doy` (day of year), `tod` (time of day, unit:
-hour), and `nday_cum` (cumulative number of day) obtained from the
-timestamp column, as well as `sw_in_toa` (global solar radiation at the
-top of the atmosphere) variable only when augment `lat`, `lon`, and
-`std_meridian` are provided.
+variables representing year, day of year, time of day (unit: hour), and
+cumulative number of day obtained from the timestamp column, as well as
+global solar radiation at the top of the atmosphere variable only when
+augment `lat`, `lon`, and `std_meridian` are provided.
 
 #### For time series unrelated to thermal dissipation sap flow
 
@@ -169,11 +168,10 @@ the explanatory variable names in `vctr_colname_feature`, all of the
 columns excluding the columns specified in `colname_time` and
 `colname_target` are used for the construction. Under this case, if
 there are no other columns available, this function automatically add
-variables `yr` (year), `doy` (day of year), `tod` (time of day, unit:
-hour), and `nday_cum` (cumulative number of day) obtained from the
-timestamp column, as well as `sw_in_toa` (global solar radiation at the
-top of the atmosphere) variable only when augment `lat`, `lon`, and
-`std_meridian` are provided.
+variables representing year, day of year, time of day (unit: hour), and
+cumulative number of day obtained from the timestamp column, as well as
+global solar radiation at the top of the atmosphere variable only when
+augment `lat`, `lon`, and `std_meridian` are provided.
 
 ### Automatic execution of all processes
 
