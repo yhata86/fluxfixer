@@ -2,6 +2,10 @@
 
 ## fluxfixer (development version)
 
+## fluxfixer 1.1.0
+
+CRAN release: 2026-04-11
+
 ### Major changes
 
 - New function
