@@ -57,6 +57,12 @@ The successive predawn method is one of the methods for determining
  advantage of being able to calculate dTmax quickly while minimizing the
  effect of nocturnal transpiration on dTmax estimation.
 }
+\references{
+Hata, Y. & Kumagai, T. (2026)
+fluxfixer: An R package for producing thermal dissipation sap flow data
+with high quality control. SoftwareX, 34, 102740.
+\doi{10.1016/j.softx.2026.102740}
+}
 \seealso{
 `calc_dtmax`, `calc_dtmax_pd`, `calc_dtmax_mw`, `calc_dtmax_dr`,
  `calc_dtmax_ed`

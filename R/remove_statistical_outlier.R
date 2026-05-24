@@ -31,6 +31,12 @@
 #'
 #' @author Yoshiaki Hata
 #'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
+#'
 #' @export
 
 remove_manually <-
@@ -82,6 +88,12 @@ remove_manually <-
 #' result <- check_absolute_limits(vctr_target = target)
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
 #'
 #' @export
 
@@ -147,6 +159,12 @@ check_absolute_limits <-
 #'                      vctr_time_drft_tail = time_drft_tail)
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
 #'
 #' @include utils.R
 #'
@@ -264,6 +282,12 @@ modify_short_drift <-
 #'                         vctr_time_noise = time_noise)
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
 #'
 #' @importFrom rlang :=
 #'
@@ -429,6 +453,12 @@ filter_highfreq_noise <-
 #' result <- remove_zscore_outlier(vctr_time = time, vctr_target = target)
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
 #'
 #' @include utils.R
 #'
@@ -702,6 +732,12 @@ remove_zscore_outlier <-
 #'
 #' @author Yoshiaki Hata
 #'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
+#'
 #' @seealso retrieve_ts
 #'
 #' @include utils.R
@@ -839,6 +875,12 @@ calc_ref_stats <-
 #'               vctr_target_sd = target_sd)
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
 #'
 #' @seealso calc_ref_stats
 #'

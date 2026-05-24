@@ -1,0 +1,10 @@
+bibentry(
+  bibtype = "Article",
+  title = "fluxfixer: An R package for producing thermal dissipation sap flow data with high quality control",
+  author = "Yoshiaki Hata, Tomo'omi Kumagai",
+  journal = "SoftwareX",
+  year = 2026,
+  volume = 34,
+  pages = 102740,
+  doi = "10.1016/j.softx.2026.102740",
+)

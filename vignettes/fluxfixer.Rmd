@@ -558,3 +558,12 @@ I hope the fluxfixer will make your data quality control tasks less painful.
 
 If you have any questions, please check each function's help page first, then feel free to contact me.
 
+# References
+
+Please cite the paper below if you use fluxfixer.
+
+Hata, Y. & Kumagai, T. (2026)
+fluxfixer: An R package for producing thermal dissipation sap flow data
+with high quality control. SoftwareX, 34, 102740.
+[doi:10.1016/j.softx.2026.102740](http://doi.org/10.1016/j.softx.2026.102740)
+

@@ -13,6 +13,12 @@
 #'
 #' @author Yoshiaki Hata
 #'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
+#'
 #' @keywords internal
 
 get_interval <- function(vctr_time) {
@@ -72,6 +78,17 @@ get_interval <- function(vctr_time) {
 #'
 #' @author Yoshiaki Hata
 #'
+#' @references
+#' \itemize{
+#'  \item Hata, Y. & Kumagai, T. (2026)
+#'  fluxfixer: An R package for producing thermal dissipation sap flow data
+#'  with high quality control. SoftwareX, 34, 102740.
+#'  \doi{10.1016/j.softx.2026.102740}
+#'  \item Campbell, G. S. & Norman J. M. (1998)
+#'  An Introduction to Environmental Biophysics. Springer New York.
+#'  2nd Edition. \doi{10.1007/978-1-4612-1626-1}
+#' }
+#'
 #' @export
 
 calc_sw_in_toa <-
@@ -116,6 +133,12 @@ calc_sw_in_toa <-
 #'  missing values.
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
 #'
 #' @keywords internal
 
@@ -191,6 +214,12 @@ n_valid <-
 #'  determining the final attenuation periods that require Z-score modification.
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
 #'
 #' @keywords internal
 
@@ -409,6 +438,12 @@ check_short_attenuation <-
 #' result <- interpret_qc(vctr_qc = qc)
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
 #'
 #' @export
 

@@ -141,3 +141,12 @@ cycle of the non-imputed time series successfully.
 
 This package is open-source and released under the MIT License. See the
 LICENSE file for more details.
+
+## References
+
+Please cite the paper below if you use fluxfixer.
+
+Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+thermal dissipation sap flow data with high quality control. SoftwareX,
+34, 102740.
+[doi:10.1016/j.softx.2026.102740](http://doi.org/10.1016/j.softx.2026.102740)

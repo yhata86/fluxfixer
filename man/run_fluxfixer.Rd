@@ -428,6 +428,12 @@ result <-
                 skip_sapflow_calc = TRUE)
 
 }
+\references{
+Hata, Y. & Kumagai, T. (2026)
+fluxfixer: An R package for producing thermal dissipation sap flow data
+with high quality control. SoftwareX, 34, 102740.
+\doi{10.1016/j.softx.2026.102740}
+}
 \seealso{
 `remove_manually`, `check_absolute_limits`, `modify_short_drift`,
  `filter_highfreq_noise`, `remove_zscore_outlier`, `remove_rf_outlier`,

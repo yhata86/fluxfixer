@@ -1,5 +1,9 @@
 # fluxfixer (development version)
 
+## Minor changes
+
+* A new article describing fluxfixer has been added to the citation
+
 # fluxfixer 1.1.0
 
 ## Major changes

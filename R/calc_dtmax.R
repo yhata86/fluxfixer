@@ -47,6 +47,12 @@
 #'
 #' @author Yoshiaki Hata
 #'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
+#'
 #' @seealso `calc_dtmax`, `calc_dtmax_pd`, `calc_dtmax_mw`, `calc_dtmax_dr`,
 #'  `calc_dtmax_ed`
 #'
@@ -174,6 +180,21 @@ calc_dtmax_sp <-
 #'  the dTmax is returned in daily steps.
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' \itemize{
+#'  \item Hata, Y. & Kumagai, T. (2026)
+#'  fluxfixer: An R package for producing thermal dissipation sap flow data
+#'  with high quality control. SoftwareX, 34, 102740.
+#'  \doi{10.1016/j.softx.2026.102740}
+#'  \item Peters, R. L., Fonti P., Frank, D. C., Poyatos, R., Pappas, C.,
+#'  Kahmen, A., Carraro, V., Prendin, A. L., Schneider, L., Baltzer, J. L.,
+#'  Baron-Gafford, G. A., Dietrich, L., Heinrich, I., Minor, R. L.,
+#'  Sonnentag, O., Matheny, A. M., Wightman, M. & Steppe, K. (2018)
+#'  Quantification of uncertainties in conifer sap flow measured with the
+#'  thermal dissipation method. New Phytologist, 219(4), 1283-1299.
+#'  \doi{10.1111/nph.15241}
+#' }
 #'
 #' @seealso `calc_dtmax`, `calc_dtmax_sp`, `calc_dtmax_mw`, `calc_dtmax_dr`,
 #'  `calc_dtmax_ed`
@@ -341,6 +362,25 @@ calc_dtmax_pd <-
 #'
 #' @author Yoshiaki Hata
 #'
+#' @references
+#' \itemize{
+#'  \item Hata, Y. & Kumagai, T. (2026)
+#'  fluxfixer: An R package for producing thermal dissipation sap flow data
+#'  with high quality control. SoftwareX, 34, 102740.
+#'  \doi{10.1016/j.softx.2026.102740}
+#'  \item Peters, R. L., Fonti P., Frank, D. C., Poyatos, R., Pappas, C.,
+#'  Kahmen, A., Carraro, V., Prendin, A. L., Schneider, L., Baltzer, J. L.,
+#'  Baron-Gafford, G. A., Dietrich, L., Heinrich, I., Minor, R. L.,
+#'  Sonnentag, O., Matheny, A. M., Wightman, M. & Steppe, K. (2018)
+#'  Quantification of uncertainties in conifer sap flow measured with the
+#'  thermal dissipation method. New Phytologist, 219(4), 1283-1299.
+#'  \doi{10.1111/nph.15241}
+#'  \item Oishi A. C., Hawthorne, D. A. & Oren, R. (2016)
+#'  Baseliner: An open-source, interactive tool for processing sap flux data
+#'  from thermal dissipation probes. SoftwareX, 5, 139-143.
+#'  \doi{10.1016/j.softx.2016.07.003}
+#' }
+#'
 #' @seealso `calc_dtmax`, `calc_dtmax_sp`, `calc_dtmax_pd`, `calc_dtmax_mw`,
 #'  `calc_dtmax_dr`,
 #'
@@ -501,6 +541,25 @@ calc_dtmax_ed <-
 #' @inheritParams calc_dtmax_ed
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' \itemize{
+#'  \item Hata, Y. & Kumagai, T. (2026)
+#'  fluxfixer: An R package for producing thermal dissipation sap flow data
+#'  with high quality control. SoftwareX, 34, 102740.
+#'  \doi{10.1016/j.softx.2026.102740}
+#'  \item Peters, R. L., Fonti P., Frank, D. C., Poyatos, R., Pappas, C.,
+#'  Kahmen, A., Carraro, V., Prendin, A. L., Schneider, L., Baltzer, J. L.,
+#'  Baron-Gafford, G. A., Dietrich, L., Heinrich, I., Minor, R. L.,
+#'  Sonnentag, O., Matheny, A. M., Wightman, M. & Steppe, K. (2018)
+#'  Quantification of uncertainties in conifer sap flow measured with the
+#'  thermal dissipation method. New Phytologist, 219(4), 1283-1299.
+#'  \doi{10.1111/nph.15241}
+#'  \item Oishi A. C., Hawthorne, D. A. & Oren, R. (2016)
+#'  Baseliner: An open-source, interactive tool for processing sap flux data
+#'  from thermal dissipation probes. SoftwareX, 5, 139-143.
+#'  \doi{10.1016/j.softx.2016.07.003}
+#' }
 #'
 #' @include utils.R
 #'
@@ -720,6 +779,21 @@ calc_dtmax_pd_ed <-
 #'
 #' @author Yoshiaki Hata
 #'
+#' @references
+#' \itemize{
+#'  \item Hata, Y. & Kumagai, T. (2026)
+#'  fluxfixer: An R package for producing thermal dissipation sap flow data
+#'  with high quality control. SoftwareX, 34, 102740.
+#'  \doi{10.1016/j.softx.2026.102740}
+#'  \item Peters, R. L., Fonti P., Frank, D. C., Poyatos, R., Pappas, C.,
+#'  Kahmen, A., Carraro, V., Prendin, A. L., Schneider, L., Baltzer, J. L.,
+#'  Baron-Gafford, G. A., Dietrich, L., Heinrich, I., Minor, R. L.,
+#'  Sonnentag, O., Matheny, A. M., Wightman, M. & Steppe, K. (2018)
+#'  Quantification of uncertainties in conifer sap flow measured with the
+#'  thermal dissipation method. New Phytologist, 219(4), 1283-1299.
+#'  \doi{10.1111/nph.15241}
+#' }
+#'
 #' @seealso `calc_dtmax`, `calc_dtmax_sp`, `calc_dtmax_pd`, `calc_dtmax_dr`,
 #'  `calc_dtmax_ed`
 #'
@@ -867,6 +941,21 @@ calc_dtmax_mw <-
 #'
 #' @author Yoshiaki Hata
 #'
+#' @references
+#' \itemize{
+#'  \item Hata, Y. & Kumagai, T. (2026)
+#'  fluxfixer: An R package for producing thermal dissipation sap flow data
+#'  with high quality control. SoftwareX, 34, 102740.
+#'  \doi{10.1016/j.softx.2026.102740}
+#'  \item Peters, R. L., Fonti P., Frank, D. C., Poyatos, R., Pappas, C.,
+#'  Kahmen, A., Carraro, V., Prendin, A. L., Schneider, L., Baltzer, J. L.,
+#'  Baron-Gafford, G. A., Dietrich, L., Heinrich, I., Minor, R. L.,
+#'  Sonnentag, O., Matheny, A. M., Wightman, M. & Steppe, K. (2018)
+#'  Quantification of uncertainties in conifer sap flow measured with the
+#'  thermal dissipation method. New Phytologist, 219(4), 1283-1299.
+#'  \doi{10.1111/nph.15241}
+#' }
+#'
 #' @seealso `calc_dtmax`, `calc_dtmax_sp`, `calc_dtmax_pd`, `calc_dtmax_mw`,
 #'  `calc_dtmax_ed`
 #'
@@ -993,6 +1082,21 @@ calc_dtmax_dr <-
 #' @inheritParams calc_dtmax_mw
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' \itemize{
+#'  \item Hata, Y. & Kumagai, T. (2026)
+#'  fluxfixer: An R package for producing thermal dissipation sap flow data
+#'  with high quality control. SoftwareX, 34, 102740.
+#'  \doi{10.1016/j.softx.2026.102740}
+#'  \item Peters, R. L., Fonti P., Frank, D. C., Poyatos, R., Pappas, C.,
+#'  Kahmen, A., Carraro, V., Prendin, A. L., Schneider, L., Baltzer, J. L.,
+#'  Baron-Gafford, G. A., Dietrich, L., Heinrich, I., Minor, R. L.,
+#'  Sonnentag, O., Matheny, A. M., Wightman, M. & Steppe, K. (2018)
+#'  Quantification of uncertainties in conifer sap flow measured with the
+#'  thermal dissipation method. New Phytologist, 219(4), 1283-1299.
+#'  \doi{10.1111/nph.15241}
+#' }
 #'
 #' @include utils.R
 #'
@@ -1216,6 +1320,27 @@ calc_dtmax_mw_dr <-
 #'  calc_dtmax(vctr_time = time, vctr_dt = dt, vctr_radi = radi, vctr_ta = ta,
 #'             vctr_vpd = vpd, method = c("sp", "pd", "mw", "dr", "ed"),
 #'             thres_vpd = 6.0)
+#'
+#' @author Yoshiaki Hata
+#'
+#' @references
+#' \itemize{
+#'  \item Hata, Y. & Kumagai, T. (2026)
+#'  fluxfixer: An R package for producing thermal dissipation sap flow data
+#'  with high quality control. SoftwareX, 34, 102740.
+#'  \doi{10.1016/j.softx.2026.102740}
+#'  \item Peters, R. L., Fonti P., Frank, D. C., Poyatos, R., Pappas, C.,
+#'  Kahmen, A., Carraro, V., Prendin, A. L., Schneider, L., Baltzer, J. L.,
+#'  Baron-Gafford, G. A., Dietrich, L., Heinrich, I., Minor, R. L.,
+#'  Sonnentag, O., Matheny, A. M., Wightman, M. & Steppe, K. (2018)
+#'  Quantification of uncertainties in conifer sap flow measured with the
+#'  thermal dissipation method. New Phytologist, 219(4), 1283-1299.
+#'  \doi{10.1111/nph.15241}
+#'  \item Oishi A. C., Hawthorne, D. A. & Oren, R. (2016)
+#'  Baseliner: An open-source, interactive tool for processing sap flux data
+#'  from thermal dissipation probes. SoftwareX, 5, 139-143.
+#'  \doi{10.1016/j.softx.2016.07.003}
+#' }
 #'
 #' @include utils.R
 #'

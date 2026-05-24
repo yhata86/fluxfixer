@@ -55,6 +55,12 @@
 #'
 #' @author Yoshiaki Hata
 #'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
+#'
 #' @keywords internal
 
 rf_fit <-
@@ -211,6 +217,12 @@ rf_fit <-
 #'  constructed random forest.
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
 #'
 #' @keywords internal
 
@@ -418,6 +430,12 @@ rf_pred <-
 #'
 #' @author Yoshiaki Hata
 #'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
+#'
 #' @export
 
 remove_rf_outlier <-
@@ -524,6 +542,12 @@ remove_rf_outlier <-
 #'             vctr_colname_feature = c("sw_in", "vpd", "swc", "ta"))$stats
 #'
 #' @author Yoshiaki Hata
+#'
+#' @references
+#' Hata, Y. & Kumagai, T. (2026)
+#' fluxfixer: An R package for producing thermal dissipation sap flow data
+#' with high quality control. SoftwareX, 34, 102740.
+#' \doi{10.1016/j.softx.2026.102740}
 #'
 #' @export
 

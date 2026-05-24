@@ -48,6 +48,19 @@
 #'
 #' @author Yoshiaki Hata
 #'
+#' @references
+#' \itemize{
+#'  \item Hata, Y. & Kumagai, T. (2026)
+#'  fluxfixer: An R package for producing thermal dissipation sap flow data
+#'  with high quality control. SoftwareX, 34, 102740.
+#'  \doi{10.1016/j.softx.2026.102740}
+#'  \item Clearwater M. J., Meinzer, F. C., Andrade, J. L., Goldstein, G. &
+#'  Holbrook, N. M. (1999)
+#'  Potential errors in measurement of nonuniform sap flow using heat
+#'  dissipation probes.
+#'  \doi{10.1093/treephys/19.10.681}
+#' }
+#'
 #' @include utils.R
 #'
 #' @export
