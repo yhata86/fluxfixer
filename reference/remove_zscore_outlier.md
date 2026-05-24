@@ -188,6 +188,13 @@ deviation time series during the attenuation periods are deleted and
 linearly interpolated. Finally, the modified Z-score time series is
 calculated using these average and standard deviation time series.
 
+## References
+
+Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+thermal dissipation sap flow data with high quality control. SoftwareX,
+34, 102740.
+[doi:10.1016/j.softx.2026.102740](https://doi.org/10.1016/j.softx.2026.102740)
+
 ## Author
 
 Yoshiaki Hata

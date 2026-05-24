@@ -106,6 +106,26 @@ calc_dtmax_pd_ed(
   A boolean. If \`TRUE\`, returns dTmax time series in daily steps;
   else, returns dTmax in the original time steps. Default is \`FALSE\`.
 
+## References
+
+- Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+  thermal dissipation sap flow data with high quality control.
+  SoftwareX, 34, 102740.
+  [doi:10.1016/j.softx.2026.102740](https://doi.org/10.1016/j.softx.2026.102740)
+
+- Peters, R. L., Fonti P., Frank, D. C., Poyatos, R., Pappas, C.,
+  Kahmen, A., Carraro, V., Prendin, A. L., Schneider, L., Baltzer, J.
+  L., Baron-Gafford, G. A., Dietrich, L., Heinrich, I., Minor, R. L.,
+  Sonnentag, O., Matheny, A. M., Wightman, M. & Steppe, K. (2018)
+  Quantification of uncertainties in conifer sap flow measured with the
+  thermal dissipation method. New Phytologist, 219(4), 1283-1299.
+  [doi:10.1111/nph.15241](https://doi.org/10.1111/nph.15241)
+
+- Oishi A. C., Hawthorne, D. A. & Oren, R. (2016) Baseliner: An
+  open-source, interactive tool for processing sap flux data from
+  thermal dissipation probes. SoftwareX, 5, 139-143.
+  [doi:10.1016/j.softx.2016.07.003](https://doi.org/10.1016/j.softx.2016.07.003)
+
 ## Author
 
 Yoshiaki Hata

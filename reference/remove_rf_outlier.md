@@ -140,6 +140,13 @@ point are calculated. If the targeted value is less than Q1 minus 1.5IQR
 or more than Q3 plus 1.5IQR (default), the data point is identified as
 an outlier and removed.
 
+## References
+
+Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+thermal dissipation sap flow data with high quality control. SoftwareX,
+34, 102740.
+[doi:10.1016/j.softx.2026.102740](https://doi.org/10.1016/j.softx.2026.102740)
+
 ## Author
 
 Yoshiaki Hata

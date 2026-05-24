@@ -8,16 +8,19 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/yhata86/fluxfixer/blob/main/DESCRIPTION)
+[`inst/CITATION`](https://github.com/yhata86/fluxfixer/blob/main/inst/CITATION)
 
-Hata Y (2026). *fluxfixer: Advanced Framework for Sap Flow Data
-Post-Process*. R package version 1.1.0.9000,
-<https://github.com/yhata86/fluxfixer>.
+Hata Y, Kumagai T (2026). “fluxfixer: An R package for producing thermal
+dissipation sap flow data with high quality control.” *SoftwareX*,
+**34**, 102740.
+[doi:10.1016/j.softx.2026.102740](https://doi.org/10.1016/j.softx.2026.102740).
 
-    @Manual{,
-      title = {fluxfixer: Advanced Framework for Sap Flow Data Post-Process},
-      author = {Yoshiaki Hata},
+    @Article{,
+      title = {fluxfixer: An R package for producing thermal dissipation sap flow data with high quality control},
+      author = {Yoshiaki Hata and Tomo'omi Kumagai},
+      journal = {SoftwareX},
       year = {2026},
-      note = {R package version 1.1.0.9000},
-      url = {https://github.com/yhata86/fluxfixer},
+      volume = {34},
+      pages = {102740},
+      doi = {10.1016/j.softx.2026.102740},
     }

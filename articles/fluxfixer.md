@@ -16,6 +16,7 @@ You can install the latest version of fluxfixer from
 [CRAN](https://cran.r-project.org/) with:
 
 ``` r
+
 install.packages("fluxfixer")
 ```
 
@@ -23,6 +24,7 @@ Or, you can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("remotes")
 remotes::install_github("yhata86/fluxfixer")
 ```
@@ -30,6 +32,7 @@ remotes::install_github("yhata86/fluxfixer")
 Then, load and attach the package.
 
 ``` r
+
 library(fluxfixer)
 ```
 
@@ -62,15 +65,15 @@ determine zero-flow conditions (SP: Successive predawn method; PD: Daily
 predawn method; MW: Moving window method; DR: Double regression method;
 ED: Environmental dependent method).
 
-| Variable                                  | Type                 | SP  | PD  | MW  | DR  | ED  |
-|:------------------------------------------|:---------------------|:---:|:---:|:---:|:---:|:---:|
-| Timestamp                                 | POSIX.ct or POSIX.lt |  ✓  |  ✓  |  ✓  |  ✓  |  ✓  |
-| $\Delta T\ \left(^{\circ}C \right)$       | Numeric              |  ✓  |  ✓  |  ✓  |  ✓  |  ✓  |
-| Global solar radiation (W m⁻²)            | Numeric              |     |  ✓  |  ✓  |  ✓  |  ✓  |
-| Air temperature $\left(^{\circ}C \right)$ | Numeric              |     |     |     |     |  ✓  |
-| Vapor pressure deficit (hPa)              | Numeric              |     |     |     |     |  ✓  |
+| Variable | Type | SP | PD | MW | DR | ED |
+|:---|:---|:--:|:--:|:--:|:--:|:--:|
+| Timestamp | POSIX.ct or POSIX.lt | ✓ | ✓ | ✓ | ✓ | ✓ |
+| $`\Delta T~(^\circ \mathrm{C})`$ | Numeric | ✓ | ✓ | ✓ | ✓ | ✓ |
+| Global solar radiation (W m⁻²) | Numeric |  | ✓ | ✓ | ✓ | ✓ |
+| Air temperature $`(^\circ \mathrm{C})`$ | Numeric |  |  |  |  | ✓ |
+| Vapor pressure deficit (hPa) | Numeric |  |  |  |  | ✓ |
 
-$\Delta T$ is the temperature difference between sap flow probes. You
+$`\Delta T`$ is the temperature difference between sap flow probes. You
 can select the multiple methods at once during the automatic processing.
 
 Here are the more details of each variable column.
@@ -80,10 +83,10 @@ Here are the more details of each variable column.
   (typically 15 to 60 min) is allowed, but the timestamps must be
   equally spaced and arranged chronologically.
 
-- $\Delta T$: A numeric value of the temperature difference between sap
-  flow probes. The units should be in $^{\circ}C$. It is acceptable to
-  include missing values, but the label representing the missing value
-  must be unique such as `-9999`.
+- $`\Delta T`$: A numeric value of the temperature difference between
+  sap flow probes. The units should be in $`^\circ \mathrm{C}`$. It is
+  acceptable to include missing values, but the label representing the
+  missing value must be unique such as `-9999`.
 
 - Global solar radiation: A numeric value indicating incident short-wave
   radiation. The units should be in W m⁻². If you choose the PD, MW, DR,
@@ -104,8 +107,8 @@ Here are the more details of each variable column.
   details in `?calc_sw_in_toa()`.
 
 - Air temperature: A numeric value and its units should be
-  in$^{\circ}C$. If you select the ED method, this time series must be
-  included and gap-filled previously.
+  in$`^\circ \mathrm{C}`$. If you select the ED method, this time series
+  must be included and gap-filled previously.
 
 - Vapor pressure deficit (VPD): A numeric value representing the
   difference between saturated water vapor pressure and the actual
@@ -177,7 +180,7 @@ augment `lat`, `lon`, and `std_meridian` are provided.
 
 This section shows how to use the function
 [`run_fluxfixer()`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
-by post-processing half-hourly $\Delta T$ time series observed in
+by post-processing half-hourly $`\Delta T`$ time series observed in
 Malaysia from Sep. 2012 to Aug. 2013.
 
 Even in the case you want to execute
@@ -190,6 +193,7 @@ as the zero-flow conditions estimation and sap flux density calculation.
 Let’s start by loading the sample data frame.
 
 ``` r
+
 ## Load sample data
 data("dt_noisy")
 ```
@@ -197,10 +201,10 @@ data("dt_noisy")
 This data frame contains the columns below.
 
 - `time`: Timestamp of the measurement end timing in local time
-- `dt`: $\Delta T$ time series ($^{\circ}C$)
+- `dt`: $`\Delta T`$ time series ($`^\circ \mathrm{C}`$)
 - `p`: Precipitation (mm)
 - `sw_in`: Global solar radiation (W m⁻²)
-- `ta`: Air temperature ($^{\circ}C$)
+- `ta`: Air temperature ($`^\circ \mathrm{C}`$)
 - `vpd`: Vapor pressure deficit (hPa)
 - `ws`: Horizontal wind speed (m s⁻¹)
 - `swc`: Soil water content (m^3 m⁻³)}
@@ -215,6 +219,7 @@ Or, you can check the time series in a specific period by the code
 below.
 
 ``` r
+
 ## Just for the visualization
 # install.packages("ggplot2)
 library(ggplot2)
@@ -257,6 +262,7 @@ Now, you are able to set appropriate arguments in
 and execute it.
 
 ``` r
+
 ## Specify the period of the short-term drift
 time_drft_head <- as.POSIXct("2013/05/14 13:30", tz = "Etc/GMT-8")
 time_drft_tail <- as.POSIXct("2013/05/17 15:00", tz = "Etc/GMT-8")
@@ -285,28 +291,28 @@ The `result` data frame contains columns below.
 - `time`: The same timestamp as the input timestamp specified by
   `colname_time`.
 
-- `raw`: The same input $\Delta T$ time series specified by
+- `raw`: The same input $`\Delta T`$ time series specified by
   `colname_target`.
 
-- `processed`: The post-processed $\Delta T$ time series
+- `processed`: The post-processed $`\Delta T`$ time series
 
 - `qc`: A quality-control (QC) flag time series indicating the history
   of modifications to each data point. See more details in
   [`?run_fluxfixer`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
 
-- `dtmax_sp`: $\Delta T_{max}$ (the maximum temperature difference
-  between sap flow probes under zero-flow conditions) time series
-  calculated by the SP method.
+- `dtmax_sp`: $`\Delta T_\mathrm{max}`$ (the maximum temperature
+  difference between sap flow probes under zero-flow conditions) time
+  series calculated by the SP method.
 
-- `fd_sp`: $F_{d}$ (sap flux density) time series using $\Delta T_{max}$
-  calculated by the SP method.
+- `fd_sp`: $`F_\mathrm{d}`$ (sap flux density) time series using
+  $`\Delta T_\mathrm{max}`$ calculated by the SP method.
 
 You can confirm whether this function post-processed the raw time series
 appropriately by drawing the graph.
 
 ![](images/README-example_gf-1.png)
 
-The blue and orange points represent the raw and processed $\Delta T$
+The blue and orange points represent the raw and processed $`\Delta T`$
 time series. The function was able to remove error values and outliers,
 correct the short-term drift, fill missing values, and do detrending.
 
@@ -314,6 +320,7 @@ You can also check the time series in a specific period by the code
 below.
 
 ``` r
+
 ## Set the period you want to check
 time_head <- as.POSIXct("2012/09/01 00:30", tz = "Etc/GMT-8")
 time_tail <- as.POSIXct("2013/09/01 00:00", tz = "Etc/GMT-8")
@@ -342,6 +349,7 @@ For those who jumped into this section directly, please load the sample
 data first.
 
 ``` r
+
 ## Load sample data
 data("dt_noisy")
 ```
@@ -360,11 +368,12 @@ short-term drift correction, and the high-frequency noise removal.
 [`check_absolute_limits()`](https://yhata86.github.io/fluxfixer/reference/check_absolute_limits.md)
 removes out-of-range values by setting lower and upper limits. By
 default, this function removes the values less than 3 or more than 50,
-assuming the input vector is a $\Delta T$ time series. You can set these
-threshold values according to the reasonable range of the input time
-series by specifying `thres_al_min` and `thres_al_max` arguments.
+assuming the input vector is a $`\Delta T`$ time series. You can set
+these threshold values according to the reasonable range of the input
+time series by specifying `thres_al_min` and `thres_al_max` arguments.
 
 ``` r
+
 ## Conduct the absolute limit test
 df_all <-
   dt_noisy %>% 
@@ -372,7 +381,7 @@ df_all <-
 ```
 
 You got the new column, `dt_al`, in the data frame. This column
-indicates the $\Delta T$ time series after the out-of-range value
+indicates the $`\Delta T`$ time series after the out-of-range value
 removal.
 
 ##### Short-term drift correction (optional)
@@ -395,6 +404,7 @@ short-term signal drift in May 2013. So, you need to conduct this
 optional process.
 
 ``` r
+
 ## Specify the period of the short-term drift
 time_drft_head <- as.POSIXct("2013/05/14 13:30", tz = "Etc/GMT-8")
 time_drft_tail <- as.POSIXct("2013/05/17 15:00", tz = "Etc/GMT-8")
@@ -408,7 +418,7 @@ df_all <-
                                             vctr_time_drft_tail = time_drft_tail))
 ```
 
-The column `dt_sdc` represents the $\Delta T$ time series after the
+The column `dt_sdc` represents the $`\Delta T`$ time series after the
 correction.
 
 ##### High-frequency noise removal (optional)
@@ -461,6 +471,7 @@ For the sample data process, the sensor replacement occurred in May
 2013. So, you are recommended to set the sub-period.
 
 ``` r
+
 ## Specify the sensor replacement timing
 time_prd_tail <- as.POSIXct("2013/05/14 13:00", tz = "Etc/GMT-8")
 
@@ -476,10 +487,10 @@ df_all <-
   dplyr::bind_cols(df_all, .)
 ```
 
-The column `z_cleaned` represents the standardized $\Delta T$ time
+The column `z_cleaned` represents the standardized $`\Delta T`$ time
 series after the Z-score outlier removal.
 
-In some cases, for sap flow measurements, the input $\Delta T$ time
+In some cases, for sap flow measurements, the input $`\Delta T`$ time
 series may yield a signal that is attenuated for only a short period,
 for example, when rainfall continues for days, causing the moving window
 mean (or standard deviation) to increase (or decrease). In such cases,
@@ -514,9 +525,9 @@ random forest model. Output values are obtained from 500 (default;
 specified by `n_tree`) trees, and the first quartile (Q₁), third
 quartile (Q₃), and interquartile range (IQR) of the output values at
 each time point are calculated. If the targeted value is less than
-$Q_{1} - 1.5IQR$ or more than $Q_{3} + 1.5IQR$ (default), the data point
-is identified as an outlier and removed. The coefficient 1.5 can be
-changed by `coef_iqr`.
+$`\mathrm{Q_1 − 1.5IQR}`$ or more than $`\mathrm{Q_3 + 1.5IQR}`$
+(default), the data point is identified as an outlier and removed. The
+coefficient 1.5 can be changed by `coef_iqr`.
 
 The sample data frame contains time series of environmental factors,
 including precipitation (`p`), global solar radiation (`sw_in`), air
@@ -525,6 +536,7 @@ speed (`ws`), and soil water content (`swc`). Using these drivers, you
 can construct a more precise random forest model.
 
 ``` r
+
 ## Conduct the random forest outlier removal
 df_rf <-
   remove_rf_outlier(df = df_all,
@@ -537,7 +549,7 @@ df_all <-
 ```
 
 The column `z_rf` in the `df_all` data frame represents the standardized
-$\Delta T$ time series after the random forest outlier removal.
+$`\Delta T`$ time series after the random forest outlier removal.
 
 If you want to remove more outliers remaining in the output time series
 by visual inspection, consider using
@@ -562,6 +574,7 @@ convert the cleaned Z-score time series before inputting it to
 [`calc_ref_stats()`](https://yhata86.github.io/fluxfixer/reference/calc_ref_stats.md).
 
 ``` r
+
 ## Calculate the reference values of average and standard deviation
 vctr_stats_ref <-
         data.frame(z_target = df_all$z_rf,
@@ -594,6 +607,7 @@ point. If the input targeted value is missing, the predicted value is
 used for the imputation.
 
 ``` r
+
 ## Fill all the missing values by the random forest model
 df_gf <-
   fill_gaps(df = df_all,
@@ -606,7 +620,7 @@ df_all <-
 ```
 
 The column `z_gf` in the `df_all` data frame represents the gap-filled
-standardized $\Delta T$ time series.
+standardized $`\Delta T`$ time series.
 
 #### Time series retrieval
 
@@ -627,6 +641,7 @@ as `TRUE`, input the reference average calculated by
 into `avg_ref`, and let `correct_damping` remain `FALSE`.
 
 ``` r
+
 ## Retrieve the time series in its original units
 df_all <-
   df_all %>%
@@ -636,7 +651,7 @@ df_all <-
                                            avg_ref = vctr_stats_ref[1]))
 ```
 
-The column `dt_processed` represents the quality-controlled $\Delta T$
+The column `dt_processed` represents the quality-controlled $`\Delta T`$
 time series, and the same as the output time series by
 [`run_fluxfixer()`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
 in the previous section. Well done!
@@ -647,62 +662,66 @@ dissipation sap flow data.
 #### Zero-flow conditions determination
 
 [`calc_dtmax()`](https://yhata86.github.io/fluxfixer/reference/calc_dtmax.md)
-provides multiple $\Delta T_{max}$ time series estimated by different
-methods below:
+provides multiple $`\Delta T_\mathrm{max}`$ time series estimated by
+different methods below:
 
-- The successive predawn (SP) method defines the $\Delta T_{max}$ for a
-  day as the maximum $\Delta T$ within a 24-hour period that begins at
-  5:00 a.m. (default; just before daybreak in temperate zones and
-  specified by `thres_hour_sp`). In other words, the day starts at
-  predawn, not midnight, and the maximum value for that period is
-  assumed to be $\Delta T_{max}$. This method has the advantage of being
-  able to calculate $\Delta T_{max}$ quickly while minimizing the effect
-  of nocturnal transpiration on $\Delta T_{max}$ estimation.
+- The successive predawn (SP) method defines the
+  $`\Delta T_\mathrm{max}`$ for a day as the maximum $`\Delta T`$ within
+  a 24-hour period that begins at 5:00 a.m. (default; just before
+  daybreak in temperate zones and specified by `thres_hour_sp`). In
+  other words, the day starts at predawn, not midnight, and the maximum
+  value for that period is assumed to be $`\Delta T_\mathrm{max}`$. This
+  method has the advantage of being able to calculate
+  $`\Delta T_\mathrm{max}`$ quickly while minimizing the effect of
+  nocturnal transpiration on $`\Delta T_\mathrm{max}`$ estimation.
 
-- The daily predawn (PD) method defines the $\Delta T_{max}$ for a day
-  as the maximum $\Delta T$ between midnight and the morning (8:00 a.m.
-  in local time, specified by `thres_hour_pd`) when the global solar
-  radiation is below the threshold value, specified by `thres_radi`. See
-  more details in [Peters et
+- The daily predawn (PD) method defines the $`\Delta T_\mathrm{max}`$
+  for a day as the maximum $`\Delta T`$ between midnight and the morning
+  (8:00 a.m. in local time, specified by `thres_hour_pd`) when the
+  global solar radiation is below the threshold value, specified by
+  `thres_radi`. See more details in [Peters et
   al. (2018)](https://doi.org/10.1111/nph.15241).
 
 - The moving window (MW) method selects the maximum value of
-  $\Delta T_{max}$, estimated by the PD method, using a moving window
-  with an eleven-day length (default; specified by `wndw_size_dtmax`).
-  The selected $\Delta T_{max}$ is considered to be the final
-  $\Delta T_{max}$. See more details in [Peters et
-  al. (2018)](https://doi.org/10.1111/nph.15241).
+  $`\Delta T_\mathrm{max}`$, estimated by the PD method, using a moving
+  window with an eleven-day length (default; specified by
+  `wndw_size_dtmax`). The selected $`\Delta T_\mathrm{max}`$ is
+  considered to be the final $`\Delta T_\mathrm{max}`$. See more details
+  in [Peters et al. (2018)](https://doi.org/10.1111/nph.15241).
 
 - The double regression (DR) method first calculates the moving window
-  mean value of $\Delta T_{max}$, estimated by the PD method, with an
-  eleven-day length (default; specified by `wndw_size_dtmax`). The
-  $\Delta T_{max}$ that is lower than the mean is omitted, and then the
-  moving window mean is recalculated as the final $\Delta T_{max}$. See
-  more details in [Peters et
+  mean value of $`\Delta T_\mathrm{max}`$, estimated by the PD method,
+  with an eleven-day length (default; specified by `wndw_size_dtmax`).
+  The $`\Delta T_\mathrm{max}`$ that is lower than the mean is omitted,
+  and then the moving window mean is recalculated as the final
+  $`\Delta T_\mathrm{max}`$. See more details in [Peters et
   al. (2018)](https://doi.org/10.1111/nph.15241).
 
-- The environmental dependent (ED) method filters the $\Delta T_{max}$,
-  estimated by the PD method, using the environmental conditions when
-  plants let their sap flow nearly zero. A stable $\Delta T$, with a low
-  coefficient of variation, and low air temperature or vapor pressure
-  deficit over a two-hour period, characterizes these zero-flow
-  conditions. The threshold values can be changed by `thres_cv`,
-  `thres_ta`, and `thres_vpd` arguments. See more details in [Oishi et
+- The environmental dependent (ED) method filters the
+  $`\Delta T_\mathrm{max}`$, estimated by the PD method, using the
+  environmental conditions when plants let their sap flow nearly zero. A
+  stable $`\Delta T`$, with a low coefficient of variation, and low air
+  temperature or vapor pressure deficit over a two-hour period,
+  characterizes these zero-flow conditions. The threshold values can be
+  changed by `thres_cv`, `thres_ta`, and `thres_vpd` arguments. See more
+  details in [Oishi et
   al. (2016)](https://doi.org/10.1016/j.softx.2016.07.003) and [Peters
   et al. (2018)](https://doi.org/10.1111/nph.15241). After the
-  filtering, the daily $\Delta T_{max}$ is interpolated if necessary.
+  filtering, the daily $`\Delta T_\mathrm{max}`$ is interpolated if
+  necessary.
 
 By default,
 [`calc_dtmax()`](https://yhata86.github.io/fluxfixer/reference/calc_dtmax.md)
-only outputs $\Delta T_{max}$ time series by the SP method. You can
-select any combination of the methods by specifying `method`, such as
-`method = c("sp", "pd")`. Make sure you indicate the vectors of the
+only outputs $`\Delta T_\mathrm{max}`$ time series by the SP method. You
+can select any combination of the methods by specifying `method`, such
+as `method = c("sp", "pd")`. Make sure you indicate the vectors of the
 meteorological variables required for the selected methods into
 `vctr_radi`, `vctr_ta`, and `vctr_vpd` arguments. See the table in the
 “Data preparation” section to check which variables are needed for each
 method.
 
 ``` r
+
 ## Calculate dTmax by the SP and PD methods
 df_dtmax <-
   calc_dtmax(vctr_time = df_all$time,
@@ -716,35 +735,39 @@ df_all <-
   dplyr::bind_cols(df_all, .)
 ```
 
-The columns `dtmax_sp` and `dtmax_pd` represent the $\Delta T_{max}$
-time series calculated by the SP and PD method, respectively.
+The columns `dtmax_sp` and `dtmax_pd` represent the
+$`\Delta T_\mathrm{max}`$ time series calculated by the SP and PD
+method, respectively.
 
 #### Sap flux density calculation
 
 This is the final step.
 [`calc_fd()`](https://yhata86.github.io/fluxfixer/reference/calc_fd.md)
-calculates $F_{d}$ (sap flux density) time series, including heartwood
-correction. $F_{d}$ is estimated using a power-type function introduced
-by Granier ([1985](http://doi.org/10.1051/forest:19850204),
+calculates $`F_\mathrm{d}`$ (sap flux density) time series, including
+heartwood correction. $`F_\mathrm{d}`$ is estimated using a power-type
+function introduced by Granier
+([1985](http://doi.org/10.1051/forest:19850204),
 [1987](http://doi.org/10.1093/treephys/3.4.309)). First, a dimensionless
-index K is obtained from $\Delta T$ and $\Delta T_{max}$. Second, K is
-raised to the power `beta` and then multiplied by `alpha`, obtaining
-$F_{d}$.
+index K is obtained from $`\Delta T`$ and $`\Delta T_\mathrm{max}`$.
+Second, K is raised to the power `beta` and then multiplied by `alpha`,
+obtaining $`F_\mathrm{d}`$.
 
 If the sapwood width is shorter than the probe insertion length,
-$\Delta T$ can be overestimated, resulting in an underestimation of
-$F_{d}$. Therefore, heartwood correction is required to correct
-$\Delta T$. Optionally, before calculating $F_{d}$, $\Delta T$ can be
-replaced with the corrected $\Delta T$ by specifying the ratio of the
-probe length to sapwood width. This correction assumes that the
-$\Delta T$ measured by the part of the probe that is inserted into the
-heartwood is always $\Delta T_{max}$. See more details in [Clearwater et
+$`\Delta T`$ can be overestimated, resulting in an underestimation of
+$`F_\mathrm{d}`$. Therefore, heartwood correction is required to correct
+$`\Delta T`$. Optionally, before calculating $`F_\mathrm{d}`$,
+$`\Delta T`$ can be replaced with the corrected $`\Delta T`$ by
+specifying the ratio of the probe length to sapwood width. This
+correction assumes that the $`\Delta T`$ measured by the part of the
+probe that is inserted into the heartwood is always
+$`\Delta T_\mathrm{max}`$. See more details in [Clearwater et
 al. (1999)](http://doi.org/10.1093/treephys/19.10.681).
 
 For the sample data process, there is no need to do the heartwood
 correction. So, you let `do_heartwood_correction` remain `FALSE`.
 
 ``` r
+
 ## Calculate Fd using the dTmax estimated by the SP and PD methods
 df_all <-
   df_all %>% 
@@ -754,9 +777,9 @@ df_all <-
                                 vctr_dtmax = dtmax_pd))
 ```
 
-The columns `fd_sp` and `fd_pd` represent the calculated $F_{d}$ time
-series using the $\Delta T_{max}$ estimated by the SP and PD method,
-respectively.
+The columns `fd_sp` and `fd_pd` represent the calculated
+$`F_\mathrm{d}`$ time series using the $`\Delta T_\mathrm{max}`$
+estimated by the SP and PD method, respectively.
 
 Congratulations! Now you can use these functions and
 [`run_fluxfixer()`](https://yhata86.github.io/fluxfixer/reference/run_fluxfixer.md)
@@ -765,3 +788,12 @@ data quality control tasks less painful.
 
 If you have any questions, please check each function’s help page first,
 then feel free to contact me.
+
+## References
+
+Please cite the paper below if you use fluxfixer.
+
+Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+thermal dissipation sap flow data with high quality control. SoftwareX,
+34, 102740.
+[doi:10.1016/j.softx.2026.102740](http://doi.org/10.1016/j.softx.2026.102740)

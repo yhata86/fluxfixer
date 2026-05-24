@@ -98,6 +98,13 @@ deviation are retrieved. If reference values of the average and/or
 standard deviation are used, the output time series are detrended and/or
 applied to signal damping correction.
 
+## References
+
+Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+thermal dissipation sap flow data with high quality control. SoftwareX,
+34, 102740.
+[doi:10.1016/j.softx.2026.102740](https://doi.org/10.1016/j.softx.2026.102740)
+
 ## See also
 
 calc_ref_stats

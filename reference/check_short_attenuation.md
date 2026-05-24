@@ -105,6 +105,13 @@ signal attenuation periods are output. The start and end of the periods
 are defined by the timings when the first-order differenced standard
 deviation time series changes its sign before and after each peak.
 
+## References
+
+Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+thermal dissipation sap flow data with high quality control. SoftwareX,
+34, 102740.
+[doi:10.1016/j.softx.2026.102740](https://doi.org/10.1016/j.softx.2026.102740)
+
 ## Author
 
 Yoshiaki Hata

@@ -537,6 +537,13 @@ number of day) obtained from the timestamp column, as well as
 variable only when augment \`lat\`, \`lon\`, and \`std_meridian\` are
 provided.
 
+## References
+
+Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+thermal dissipation sap flow data with high quality control. SoftwareX,
+34, 102740.
+[doi:10.1016/j.softx.2026.102740](https://doi.org/10.1016/j.softx.2026.102740)
+
 ## See also
 
 \`remove_manually\`, \`check_absolute_limits\`, \`modify_short_drift\`,

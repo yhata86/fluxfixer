@@ -57,6 +57,7 @@ You can install the latest version of fluxfixer from
 [CRAN](https://cran.r-project.org/) with:
 
 ``` r
+
 install.packages("fluxfixer")
 ```
 
@@ -64,6 +65,7 @@ Or, you can install the development version from
 [GitHub](https://github.com/) with:
 
 ``` r
+
 # install.packages("remotes")
 remotes::install_github("yhata86/fluxfixer")
 ```
@@ -75,8 +77,9 @@ Sep. 2012 to Aug. 2013, and obtained a half-hourly time series below:
 
 ![](reference/figures/README-example_raw-1.png)
 
-where $\Delta T$ is the temperature difference between sap flow probes,
-which will be used in calculating the sap flux density ($F_{d}$).
+where $`\Delta T`$ is the temperature difference between sap flow
+probes, which will be used in calculating the sap flux density
+($`F_\mathrm{d}`$).
 
 You may feel upset since the time series has:
 
@@ -88,10 +91,11 @@ You may feel upset since the time series has:
 Do not worry. fluxfixer can rescue this time series and output a
 continuous, stationary time series.
 
-To begin with, you prepare a dataset containing raw $\Delta T$ and other
-environmental variables, and specify the timestamps of the events.
+To begin with, you prepare a dataset containing raw $`\Delta T`$ and
+other environmental variables, and specify the timestamps of the events.
 
 ``` r
+
 ## Load sample data
 data("dt_noisy")
 
@@ -108,6 +112,7 @@ Then, the only thing you need is to execute
 as:
 
 ``` r
+
 ## Run all processes automatically
 result <-
   run_fluxfixer(df = dt_noisy,
@@ -124,9 +129,9 @@ below.
 
 ![](reference/figures/README-example_gf-1.png)
 
-The output data frame also contains $F_{d}$ time series, which you
-ultimately want. Here is an example of the post-processed half-hourly
-$F_{d}$ time series in Feb. 2013.
+The output data frame also contains $`F_\mathrm{d}`$ time series, which
+you ultimately want. Here is an example of the post-processed
+half-hourly $`F_\mathrm{d}`$ time series in Feb. 2013.
 
 ![](reference/figures/README-example_fd-1.png)
 
@@ -138,3 +143,12 @@ cycle of the non-imputed time series successfully.
 
 This package is open-source and released under the MIT License. See the
 LICENSE file for more details.
+
+## References
+
+Please cite the paper below if you use fluxfixer.
+
+Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+thermal dissipation sap flow data with high quality control. SoftwareX,
+34, 102740.
+[doi:10.1016/j.softx.2026.102740](http://doi.org/10.1016/j.softx.2026.102740)

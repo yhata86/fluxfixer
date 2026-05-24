@@ -56,6 +56,13 @@ filter_highfreq_noise(
 A vector of the noise-filtered time series. The length of the time
 series is the same as the input time series.
 
+## References
+
+Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+thermal dissipation sap flow data with high quality control. SoftwareX,
+34, 102740.
+[doi:10.1016/j.softx.2026.102740](https://doi.org/10.1016/j.softx.2026.102740)
+
 ## Author
 
 Yoshiaki Hata

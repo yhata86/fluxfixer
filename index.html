@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="favicon.ico">
 <link rel="manifest" href="site.webmanifest">
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Advanced Framework for Sap Flow Data Post-Process">
 <meta name="description" content="Provides a flexible framework for post-processing thermal dissipation sap flow data using statistical methods and machine learning. This framework includes anomaly correction, outlier removal, gap-filling, trend removal, signal damping correction, and sap flux density calculation. The functions in this package can also apply to other time series with various artifacts.">
@@ -108,7 +108,7 @@
 </h2>
 <p>Assume that you have conducted a sap flow measurement in Malaysia from Sep. 2012 to Aug. 2013, and obtained a half-hourly time series below:</p>
 <p><img src="reference/figures/README-example_raw-1.png" alt="" width="100%"></p>
-<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math> is the temperature difference between sap flow probes, which will be used in calculating the sap flux density (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi mathvariant="normal">d</mi></msub><annotation encoding="application/x-tex">F_\mathrm{d}</annotation></semantics></math>).</p>
+<p>where <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math> is the temperature difference between sap flow probes, which will be used in calculating the sap flux density (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi mathvariant="normal">d</mi></msub><annotation encoding="application/x-tex">F_\mathrm{d}</annotation></semantics></math>).</p>
 <p>You may feel upset since the time series has:</p>
 <ul>
 <li>many values near zero due to power supply shortages</li>
@@ -116,7 +116,7 @@
 <li>long-term trend of the daily maximum value because of sensor degradation</li>
 </ul>
 <p>Do not worry. fluxfixer can rescue this time series and output a continuous, stationary time series.</p>
-<p>To begin with, you prepare a dataset containing raw <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math> and other environmental variables, and specify the timestamps of the events.</p>
+<p>To begin with, you prepare a dataset containing raw <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math> and other environmental variables, and specify the timestamps of the events.</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co">## Load sample data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"dt_noisy"</span><span class="op">)</span></span>
@@ -148,6 +148,12 @@
 <h2 id="license">License<a class="anchor" aria-label="anchor" href="#license"></a>
 </h2>
 <p>This package is open-source and released under the MIT License. See the LICENSE file for more details.</p>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Please cite the paper below if you use fluxfixer.</p>
+<p>Hata, Y. &amp; Kumagai, T. (2026) fluxfixer: An R package for producing thermal dissipation sap flow data with high quality control. SoftwareX, 34, 102740. <a href="http://doi.org/10.1016/j.softx.2026.102740" class="external-link">doi:10.1016/j.softx.2026.102740</a></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">

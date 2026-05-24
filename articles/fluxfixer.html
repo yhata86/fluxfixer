@@ -12,8 +12,8 @@
 <link rel="icon" sizes="any" href="../favicon.ico">
 <link rel="manifest" href="../site.webmanifest">
 <script src="../deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<link href="../deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
-<script src="../deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
+<link href="../deps/bootstrap-5.3.8/bootstrap.min.css" rel="stylesheet">
+<script src="../deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="../deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="../deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="../deps/headroom-0.11.0/headroom.min.js"></script><script src="../deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="../deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="../deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="../deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="../deps/search-1.0.0/fuse.min.js"></script><script src="../deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="../pkgdown.js"></script><meta property="og:title" content="fluxfixer">
 </head>
@@ -146,7 +146,7 @@ method; ED: Environmental dependent method).</p>
 <td align="center">✓</td>
 </tr>
 <tr class="even">
-<td align="left"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi><mspace width="0.222em"></mspace><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi></mi><mo>∘</mo></msup><mi mathvariant="normal">C</mi><mo stretchy="true" form="postfix">)</mo></mrow></mrow><annotation encoding="application/x-tex">\Delta T~(^\circ \mathrm{C})</annotation></semantics></math></td>
+<td align="left"><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi><mspace width="0.222em"></mspace><msup><mo stretchy="false" form="prefix">(</mo><mo>∘</mo></msup><mi mathvariant="normal">C</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">\Delta T~(^\circ \mathrm{C})</annotation></semantics></math></td>
 <td align="left">Numeric</td>
 <td align="center">✓</td>
 <td align="center">✓</td>
@@ -165,7 +165,7 @@ method; ED: Environmental dependent method).</p>
 </tr>
 <tr class="even">
 <td align="left">Air temperature
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mo stretchy="true" form="prefix">(</mo><msup><mi></mi><mo>∘</mo></msup><mi mathvariant="normal">C</mi><mo stretchy="true" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(^\circ \mathrm{C})</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mo stretchy="false" form="prefix">(</mo><mo>∘</mo></msup><mi mathvariant="normal">C</mi><mo stretchy="false" form="postfix">)</mo></mrow><annotation encoding="application/x-tex">(^\circ \mathrm{C})</annotation></semantics></math>
 </td>
 <td align="left">Numeric</td>
 <td align="center"></td>
@@ -185,7 +185,7 @@ method; ED: Environmental dependent method).</p>
 </tr>
 </tbody>
 </table>
-<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 is the temperature difference between sap flow probes. You can select
 the multiple methods at once during the automatic processing.</p>
 <p>Here are the more details of each variable column.</p>
@@ -194,7 +194,7 @@ the multiple methods at once during the automatic processing.</p>
 the timings of the end of each measurement in local time. Any interval
 (typically 15 to 60 min) is allowed, but the timestamps must be equally
 spaced and arranged chronologically.</p></li>
-<li><p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>:
+<li><p><math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>:
 A numeric value of the temperature difference between sap flow probes.
 The units should be in
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi></mi><mo>∘</mo></msup><mi mathvariant="normal">C</mi></mrow><annotation encoding="application/x-tex">^\circ \mathrm{C}</annotation></semantics></math>.
@@ -292,7 +292,7 @@ variable only when augment <code>lat</code>, <code>lon</code>, and
 </h3>
 <p>This section shows how to use the function
 <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code> by post-processing half-hourly
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series observed in Malaysia from Sep. 2012 to Aug. 2013.</p>
 <p>Even in the case you want to execute <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code> for
 non-sap-flow time series, the process is similar. But you need to set an
@@ -311,7 +311,7 @@ flux density calculation.</p>
 time</li>
 <li>
 <code>dt</code>:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series
 (<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mi></mi><mo>∘</mo></msup><mi mathvariant="normal">C</mi></mrow><annotation encoding="application/x-tex">^\circ \mathrm{C}</annotation></semantics></math>)</li>
 <li>
@@ -394,29 +394,29 @@ estimate zero-flow conditions.</p>
 <li><p><code>time</code>: The same timestamp as the input timestamp
 specified by <code>colname_time</code>.</p></li>
 <li><p><code>raw</code>: The same input
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series specified by <code>colname_target</code>.</p></li>
 <li><p><code>processed</code>: The post-processed
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series</p></li>
 <li><p><code>qc</code>: A quality-control (QC) flag time series
 indicating the history of modifications to each data point. See more
 details in <code><a href="../reference/run_fluxfixer.html">?run_fluxfixer</a></code></p></li>
 <li><p><code>dtmax_sp</code>:
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 (the maximum temperature difference between sap flow probes under
 zero-flow conditions) time series calculated by the SP method.</p></li>
 <li><p><code>fd_sp</code>:
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi mathvariant="normal">d</mi></msub><annotation encoding="application/x-tex">F_\mathrm{d}</annotation></semantics></math>
 (sap flux density) time series using
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 calculated by the SP method.</p></li>
 </ul>
 <p>You can confirm whether this function post-processed the raw time
 series appropriately by drawing the graph.</p>
 <p><img src="images/README-example_gf-1.png"></p>
 <p>The blue and orange points represent the raw and processed
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series. The function was able to remove error values and outliers,
 correct the short-term drift, fill missing values, and do
 detrending.</p>
@@ -466,7 +466,7 @@ short-term drift correction, and the high-frequency noise removal.</p>
 <p><code><a href="../reference/check_absolute_limits.html">check_absolute_limits()</a></code> removes out-of-range values by
 setting lower and upper limits. By default, this function removes the
 values less than 3 or more than 50, assuming the input vector is a
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series. You can set these threshold values according to the
 reasonable range of the input time series by specifying
 <code>thres_al_min</code> and <code>thres_al_max</code> arguments.</p>
@@ -477,7 +477,7 @@ reasonable range of the input time series by specifying
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>dt_al <span class="op">=</span> <span class="fu"><a href="../reference/check_absolute_limits.html">check_absolute_limits</a></span><span class="op">(</span>vctr_target <span class="op">=</span> <span class="va">dt</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>You got the new column, <code>dt_al</code>, in the data frame. This
 column indicates the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series after the out-of-range value removal.</p>
 </div>
 <div class="section level5">
@@ -511,7 +511,7 @@ optional process.</p>
 <span>                                            vctr_time_drft_head <span class="op">=</span> <span class="va">time_drft_head</span>,</span>
 <span>                                            vctr_time_drft_tail <span class="op">=</span> <span class="va">time_drft_tail</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The column <code>dt_sdc</code> represents the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series after the correction.</p>
 </div>
 <div class="section level5">
@@ -576,10 +576,10 @@ sensor replacement.</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html" class="external-link">select</a></span><span class="op">(</span><span class="va">z_cleaned</span>, <span class="va">avg_cleaned</span>, <span class="va">sd_cleaned</span><span class="op">)</span> <span class="op"><a href="../reference/pipe.html">%&gt;%</a></span> </span>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">df_all</span>, <span class="va">.</span><span class="op">)</span></span></code></pre></div>
 <p>The column <code>z_cleaned</code> represents the standardized
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series after the Z-score outlier removal.</p>
 <p>In some cases, for sap flow measurements, the input
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series may yield a signal that is attenuated for only a short
 period, for example, when rainfall continues for days, causing the
 moving window mean (or standard deviation) to increase (or decrease). In
@@ -637,7 +637,7 @@ construct a more precise random forest model.</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>z_rf <span class="op">=</span> <span class="va">df_rf</span><span class="op">$</span><span class="va">stats</span><span class="op">$</span><span class="va">cleaned</span><span class="op">)</span></span></code></pre></div>
 <p>The column <code>z_rf</code> in the <code>df_all</code> data frame
 represents the standardized
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series after the random forest outlier removal.</p>
 <p>If you want to remove more outliers remaining in the output time
 series by visual inspection, consider using
@@ -700,7 +700,7 @@ imputation.</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html" class="external-link">mutate</a></span><span class="op">(</span>z_gf <span class="op">=</span> <span class="va">df_gf</span><span class="op">$</span><span class="va">stats</span><span class="op">$</span><span class="va">gapfilled</span><span class="op">)</span></span></code></pre></div>
 <p>The column <code>z_gf</code> in the <code>df_all</code> data frame
 represents the gap-filled standardized
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series.</p>
 </div>
 <div class="section level4">
@@ -729,7 +729,7 @@ and let <code>correct_damping</code> remain <code>FALSE</code>.</p>
 <span>                                           avg_ref <span class="op">=</span> <span class="va">vctr_stats_ref</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>The column <code>dt_processed</code> represents the
 quality-controlled
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 time series, and the same as the output time series by
 <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code> in the previous section. Well done!</p>
 <p>In the following parts, you will learn the processes specific to
@@ -739,58 +739,58 @@ thermal dissipation sap flow data.</p>
 <h4 id="zero-flow-conditions-determination">Zero-flow conditions determination<a class="anchor" aria-label="anchor" href="#zero-flow-conditions-determination"></a>
 </h4>
 <p><code><a href="../reference/calc_dtmax.html">calc_dtmax()</a></code> provides multiple
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 time series estimated by different methods below:</p>
 <ul>
 <li><p>The successive predawn (SP) method defines the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 for a day as the maximum
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 within a 24-hour period that begins at 5:00 a.m. (default; just before
 daybreak in temperate zones and specified by
 <code>thres_hour_sp</code>). In other words, the day starts at predawn,
 not midnight, and the maximum value for that period is assumed to be
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>.
 This method has the advantage of being able to calculate
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 quickly while minimizing the effect of nocturnal transpiration on
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 estimation.</p></li>
 <li><p>The daily predawn (PD) method defines the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 for a day as the maximum
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 between midnight and the morning (8:00 a.m. in local time, specified by
 <code>thres_hour_pd</code>) when the global solar radiation is below the
 threshold value, specified by <code>thres_radi</code>. See more details
 in <a href="https://doi.org/10.1111/nph.15241" class="external-link">Peters et
 al. (2018)</a>.</p></li>
 <li><p>The moving window (MW) method selects the maximum value of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>,
 estimated by the PD method, using a moving window with an eleven-day
 length (default; specified by <code>wndw_size_dtmax</code>). The
 selected
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 is considered to be the final
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>.
 See more details in <a href="https://doi.org/10.1111/nph.15241" class="external-link">Peters
 et al. (2018)</a>.</p></li>
 <li><p>The double regression (DR) method first calculates the moving
 window mean value of
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>,
 estimated by the PD method, with an eleven-day length (default;
 specified by <code>wndw_size_dtmax</code>). The
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 that is lower than the mean is omitted, and then the moving window mean
 is recalculated as the final
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>.
 See more details in <a href="https://doi.org/10.1111/nph.15241" class="external-link">Peters
 et al. (2018)</a>.</p></li>
 <li><p>The environmental dependent (ED) method filters the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>,
 estimated by the PD method, using the environmental conditions when
 plants let their sap flow nearly zero. A stable
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>,
 with a low coefficient of variation, and low air temperature or vapor
 pressure deficit over a two-hour period, characterizes these zero-flow
 conditions. The threshold values can be changed by
@@ -798,11 +798,11 @@ conditions. The threshold values can be changed by
 arguments. See more details in <a href="https://doi.org/10.1016/j.softx.2016.07.003" class="external-link">Oishi et
 al. (2016)</a> and <a href="https://doi.org/10.1111/nph.15241" class="external-link">Peters et
 al. (2018)</a>. After the filtering, the daily
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 is interpolated if necessary.</p></li>
 </ul>
 <p>By default, <code><a href="../reference/calc_dtmax.html">calc_dtmax()</a></code> only outputs
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 time series by the SP method. You can select any combination of the
 methods by specifying <code>method</code>, such as
 <code>method = c("sp", "pd")</code>. Make sure you indicate the vectors
@@ -824,7 +824,7 @@ which variables are needed for each method.</p>
 <span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_cols.html" class="external-link">bind_cols</a></span><span class="op">(</span><span class="va">df_all</span>, <span class="va">.</span><span class="op">)</span></span></code></pre></div>
 <p>The columns <code>dtmax_sp</code> and <code>dtmax_pd</code> represent
 the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 time series calculated by the SP and PD method, respectively.</p>
 </div>
 <div class="section level4">
@@ -836,29 +836,29 @@ time series calculated by the SP and PD method, respectively.</p>
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi mathvariant="normal">d</mi></msub><annotation encoding="application/x-tex">F_\mathrm{d}</annotation></semantics></math>
 is estimated using a power-type function introduced by Granier (<a href="http://doi.org/10.1051/forest:19850204" class="external-link">1985</a>, <a href="http://doi.org/10.1093/treephys/3.4.309" class="external-link">1987</a>). First, a
 dimensionless index K is obtained from
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 and
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>.
 Second, K is raised to the power <code>beta</code> and then multiplied
 by <code>alpha</code>, obtaining
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi mathvariant="normal">d</mi></msub><annotation encoding="application/x-tex">F_\mathrm{d}</annotation></semantics></math>.</p>
 <p>If the sapwood width is shorter than the probe insertion length,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 can be overestimated, resulting in an underestimation of
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi mathvariant="normal">d</mi></msub><annotation encoding="application/x-tex">F_\mathrm{d}</annotation></semantics></math>.
 Therefore, heartwood correction is required to correct
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>.
 Optionally, before calculating
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi mathvariant="normal">d</mi></msub><annotation encoding="application/x-tex">F_\mathrm{d}</annotation></semantics></math>,
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 can be replaced with the corrected
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 by specifying the ratio of the probe length to sapwood width. This
 correction assumes that the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>T</mi></mrow><annotation encoding="application/x-tex">\Delta T</annotation></semantics></math>
 measured by the part of the probe that is inserted into the heartwood is
 always
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>.
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>.
 See more details in <a href="http://doi.org/10.1093/treephys/19.10.681" class="external-link">Clearwater et
 al. (1999)</a>.</p>
 <p>For the sample data process, there is no need to do the heartwood
@@ -876,7 +876,7 @@ correction. So, you let <code>do_heartwood_correction</code> remain
 calculated
 <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>F</mi><mi mathvariant="normal">d</mi></msub><annotation encoding="application/x-tex">F_\mathrm{d}</annotation></semantics></math>
 time series using the
-<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi mathvariant="normal">Δ</mi><msub><mi>T</mi><mrow><mi mathvariant="normal">m</mi><mi mathvariant="normal">a</mi><mi mathvariant="normal">x</mi></mrow></msub></mrow><annotation encoding="application/x-tex">\Delta T_\mathrm{max}</annotation></semantics></math>
 estimated by the SP and PD method, respectively.</p>
 <p>Congratulations! Now you can use these functions and
 <code><a href="../reference/run_fluxfixer.html">run_fluxfixer()</a></code> more appropriately and flexibly. I hope the
@@ -885,6 +885,14 @@ fluxfixer will make your data quality control tasks less painful.</p>
 first, then feel free to contact me.</p>
 </div>
 </div>
+</div>
+<div class="section level2">
+<h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
+</h2>
+<p>Please cite the paper below if you use fluxfixer.</p>
+<p>Hata, Y. &amp; Kumagai, T. (2026) fluxfixer: An R package for
+producing thermal dissipation sap flow data with high quality control.
+SoftwareX, 34, 102740. <a href="http://doi.org/10.1016/j.softx.2026.102740" class="external-link">doi:10.1016/j.softx.2026.102740</a></p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

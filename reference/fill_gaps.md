@@ -118,6 +118,13 @@ forest model. Predicted time series are equal to the average of 500
 (default) tree outputs at each time point. If the input targeted value
 is missing, the predicted value is used for the imputation.
 
+## References
+
+Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+thermal dissipation sap flow data with high quality control. SoftwareX,
+34, 102740.
+[doi:10.1016/j.softx.2026.102740](https://doi.org/10.1016/j.softx.2026.102740)
+
 ## Author
 
 Yoshiaki Hata

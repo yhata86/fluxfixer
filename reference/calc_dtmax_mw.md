@@ -122,6 +122,21 @@ predawn method, using a moving window with an eleven-day length. The
 selected dTmax is considered to be the final dTmax. See more details in
 Peters et al. (2018; New Phytologist).
 
+## References
+
+- Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+  thermal dissipation sap flow data with high quality control.
+  SoftwareX, 34, 102740.
+  [doi:10.1016/j.softx.2026.102740](https://doi.org/10.1016/j.softx.2026.102740)
+
+- Peters, R. L., Fonti P., Frank, D. C., Poyatos, R., Pappas, C.,
+  Kahmen, A., Carraro, V., Prendin, A. L., Schneider, L., Baltzer, J.
+  L., Baron-Gafford, G. A., Dietrich, L., Heinrich, I., Minor, R. L.,
+  Sonnentag, O., Matheny, A. M., Wightman, M. & Steppe, K. (2018)
+  Quantification of uncertainties in conifer sap flow measured with the
+  thermal dissipation method. New Phytologist, 219(4), 1283-1299.
+  [doi:10.1111/nph.15241](https://doi.org/10.1111/nph.15241)
+
 ## See also
 
 \`calc_dtmax\`, \`calc_dtmax_sp\`, \`calc_dtmax_pd\`, \`calc_dtmax_dr\`,

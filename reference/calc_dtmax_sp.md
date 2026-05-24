@@ -67,6 +67,13 @@ This method has the advantage of being able to calculate dTmax quickly
 while minimizing the effect of nocturnal transpiration on dTmax
 estimation.
 
+## References
+
+Hata, Y. & Kumagai, T. (2026) fluxfixer: An R package for producing
+thermal dissipation sap flow data with high quality control. SoftwareX,
+34, 102740.
+[doi:10.1016/j.softx.2026.102740](https://doi.org/10.1016/j.softx.2026.102740)
+
 ## See also
 
 \`calc_dtmax\`, \`calc_dtmax_pd\`, \`calc_dtmax_mw\`, \`calc_dtmax_dr\`,
